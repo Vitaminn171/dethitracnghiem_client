@@ -147,6 +147,7 @@ public class UserInformation extends javax.swing.JPanel {
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel8.setText("lyquocan17");
+        jLabel8.setName(""); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -299,7 +300,7 @@ public class UserInformation extends javax.swing.JPanel {
 
     private void jButton_changePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_changePassActionPerformed
         // TODO add your handling code here:
-        changePwd = new ChangePass();
+        changePwd = new ChangePassword();
         changePwd.setVisible(true);
         
     }//GEN-LAST:event_jButton_changePassActionPerformed

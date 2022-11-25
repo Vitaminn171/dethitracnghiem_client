@@ -139,8 +139,8 @@ public class Result extends javax.swing.JFrame {
 
         jLabel_examinee_data.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_examinee_data.setText("Examinee");
-        jLabel_examinee_data.setMaximumSize(new java.awt.Dimension(70, 25));
-        jLabel_examinee_data.setMinimumSize(new java.awt.Dimension(70, 25));
+        jLabel_examinee_data.setMaximumSize(new java.awt.Dimension(0, 0));
+        jLabel_examinee_data.setMinimumSize(new java.awt.Dimension(0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;

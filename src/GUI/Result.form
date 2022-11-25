@@ -125,10 +125,10 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Examinee"/>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[70, 25]"/>
+          <Dimension value="[0, 0]"/>
         </Property>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[70, 25]"/>
+          <Dimension value="[0, 0]"/>
         </Property>
       </Properties>
       <Constraints>
