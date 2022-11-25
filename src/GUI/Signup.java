@@ -4,24 +4,40 @@
  */
 package GUI;
 
+import BLL.Controller;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.sun.source.tree.BreakTree;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import org.jdesktop.swingx.calendar.DateSelectionModel;
+import org.jdesktop.swingx.table.DatePickerCellEditor;
 
 /**
  *
  * @author Quoc An
  */
 public class Signup extends javax.swing.JFrame {
-
+    
     /**
-     * Creates new form Signup
+     * Creates new form Signyp
      */
     ButtonGroup G;
+    public boolean flag = false;
+    
+    
     public Signup() {
         initComponents();
         this.setTitle("Quiz Exam");
@@ -35,10 +51,13 @@ public class Signup extends javax.swing.JFrame {
         
         jFormattedTextField_fullname.putClientProperty( "JComponent.roundRect", true );
         jFormattedTextField_fullname.putClientProperty( "JTextField.placeholderText","Fullname");
+      
         
-        jXDatePicker_birth.putClientProperty( "JComponent.roundRect", true );
-        jXDatePicker_birth.putClientProperty( "JTextField.placeholderText","date");
-        jXDatePicker_birth.setFormats("dd/MM/yyyy");
+        jXDatePicker1.putClientProperty( "JXDatePicker.roundRect", true );
+        jXDatePicker1.putClientProperty( "JXDatePicker.placeholderText","date");
+        jXDatePicker1.setFormats("dd/MM/yyyy");
+        
+        
 
         jPasswordField_password.putClientProperty( "JComponent.roundRect", true );
         jPasswordField_password.putClientProperty( "JTextField.placeholderText","Password");
@@ -46,11 +65,23 @@ public class Signup extends javax.swing.JFrame {
         jButton_cancel.putClientProperty( "JButton.buttonType", "roundRect" );
         
         jButton_submit.putClientProperty( "JButton.buttonType", "roundRect" );
+
         
         G = new ButtonGroup();
         G.add(jRadioButton_male);
         G.add(jRadioButton_female);
         
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(getClass().getResource("/GUI/Image/eye.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Image dimg = img.getScaledInstance(25, 25,Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        jButton_eye.setIcon(imageIcon);
+        
+
         /* 
         if(jRadioButton_male.isSelected()){
             //TODO
@@ -58,10 +89,12 @@ public class Signup extends javax.swing.JFrame {
             //TODO
         }else{
             JOptionPane.showMessageDialog(this, "error");
-        }
-        */
-        
     }
+        */
+
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,62 +104,174 @@ public class Signup extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        datePickerAddon1 = new org.jdesktop.swingx.plaf.DatePickerAddon();
-        datePickerAddon2 = new org.jdesktop.swingx.plaf.DatePickerAddon();
-        datePickerAddon3 = new org.jdesktop.swingx.plaf.DatePickerAddon();
-        datePickerCellEditor1 = new org.jdesktop.swingx.table.DatePickerCellEditor();
         buttonGroup1 = new javax.swing.ButtonGroup();
-        buttonGroup2 = new javax.swing.ButtonGroup();
-        buttonGroup3 = new javax.swing.ButtonGroup();
-        buttonGroup4 = new javax.swing.ButtonGroup();
+        datePickerAddon1 = new org.jdesktop.swingx.plaf.DatePickerAddon();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jFormattedTextField_username = new javax.swing.JFormattedTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jPasswordField_password = new javax.swing.JPasswordField();
+        jLabel4 = new javax.swing.JLabel();
         jFormattedTextField_fullname = new javax.swing.JFormattedTextField();
+        jLabel5 = new javax.swing.JLabel();
         jFormattedTextField_email = new javax.swing.JFormattedTextField();
-        jXDatePicker_birth = new org.jdesktop.swingx.JXDatePicker();
+        jLabel6 = new javax.swing.JLabel();
+        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        jLabel7 = new javax.swing.JLabel();
         jRadioButton_male = new javax.swing.JRadioButton();
         jRadioButton_female = new javax.swing.JRadioButton();
-        jLabel_gender = new javax.swing.JLabel();
-        jLabel_username = new javax.swing.JLabel();
-        jLabel_fullname = new javax.swing.JLabel();
-        jLabel_password = new javax.swing.JLabel();
-        jLabel_email = new javax.swing.JLabel();
-        jLabel_birth = new javax.swing.JLabel();
-        jPasswordField_password = new javax.swing.JPasswordField();
-        jButton_submit = new javax.swing.JButton();
         jButton_cancel = new javax.swing.JButton();
+        jButton_submit = new javax.swing.JButton();
+        jButton_eye = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1000, 400));
+        jPanel1.setVerifyInputWhenFocusTarget(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Create account");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("CREATE ACCOUNT");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(30, 50, 20, 20);
+        jPanel1.add(jLabel1, gridBagConstraints);
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Username");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        jPanel1.add(jLabel2, gridBagConstraints);
 
         jFormattedTextField_username.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jFormattedTextField_username.setMinimumSize(new java.awt.Dimension(120, 40));
+        jFormattedTextField_username.setPreferredSize(new java.awt.Dimension(250, 40));
         jFormattedTextField_username.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFormattedTextField_usernameActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
+        jPanel1.add(jFormattedTextField_username, gridBagConstraints);
 
-        jFormattedTextField_fullname.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Password");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        jPanel1.add(jLabel3, gridBagConstraints);
+
+        jPasswordField_password.setMinimumSize(new java.awt.Dimension(120, 40));
+        jPasswordField_password.setPreferredSize(new java.awt.Dimension(250, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
+        jPanel1.add(jPasswordField_password, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setText("Full name");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        jPanel1.add(jLabel4, gridBagConstraints);
+
+        jFormattedTextField_fullname.setMinimumSize(new java.awt.Dimension(120, 40));
+        jFormattedTextField_fullname.setPreferredSize(new java.awt.Dimension(250, 40));
         jFormattedTextField_fullname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFormattedTextField_fullnameActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
+        jPanel1.add(jFormattedTextField_fullname, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setText("Email");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        jPanel1.add(jLabel5, gridBagConstraints);
 
         jFormattedTextField_email.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jFormattedTextField_email.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField_emailActionPerformed(evt);
-            }
-        });
+        jFormattedTextField_email.setMinimumSize(new java.awt.Dimension(120, 40));
+        jFormattedTextField_email.setName(""); // NOI18N
+        jFormattedTextField_email.setPreferredSize(new java.awt.Dimension(250, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
+        jPanel1.add(jFormattedTextField_email, gridBagConstraints);
 
-        jXDatePicker_birth.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setText("Birthday");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        jPanel1.add(jLabel6, gridBagConstraints);
+
+        jXDatePicker1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jXDatePicker1.setMinimumSize(new java.awt.Dimension(120, 40));
+        jXDatePicker1.setPreferredSize(new java.awt.Dimension(250, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
+        jPanel1.add(jXDatePicker1, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setText("Gender");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        jPanel1.add(jLabel7, gridBagConstraints);
 
         jRadioButton_male.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jRadioButton_male.setText("Male");
@@ -135,133 +280,90 @@ public class Signup extends javax.swing.JFrame {
                 jRadioButton_maleActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
+        jPanel1.add(jRadioButton_male, gridBagConstraints);
 
         jRadioButton_female.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jRadioButton_female.setText("Female");
-
-        jLabel_gender.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel_gender.setText("Gender");
-
-        jLabel_username.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel_username.setText("Username");
-
-        jLabel_fullname.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel_fullname.setText("Fullname");
-
-        jLabel_password.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel_password.setText("Password");
-
-        jLabel_email.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel_email.setText("Email");
-
-        jLabel_birth.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel_birth.setText("Birthday");
-
-        jPasswordField_password.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-        jButton_submit.setBackground(new java.awt.Color(34, 133, 225));
-        jButton_submit.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        jButton_submit.setForeground(new java.awt.Color(255, 255, 255));
-        jButton_submit.setText("Submit");
-        jButton_submit.setBorderPainted(false);
-        jButton_submit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_submitActionPerformed(evt);
-            }
-        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel1.add(jRadioButton_female, gridBagConstraints);
 
         jButton_cancel.setBackground(new java.awt.Color(255, 102, 102));
         jButton_cancel.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jButton_cancel.setForeground(new java.awt.Color(255, 255, 255));
         jButton_cancel.setText("Cancel");
         jButton_cancel.setBorderPainted(false);
+        jButton_cancel.setPreferredSize(new java.awt.Dimension(100, 40));
         jButton_cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_cancelActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 30, 30, 0);
+        jPanel1.add(jButton_cancel, gridBagConstraints);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPasswordField_password, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_birth)
-                    .addComponent(jLabel_email)
-                    .addComponent(jLabel_password)
-                    .addComponent(jFormattedTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField_fullname, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(113, 113, 113))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jFormattedTextField_username, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(70, 70, 70)))
-                    .addComponent(jLabel_gender)
-                    .addComponent(jLabel_username)
-                    .addComponent(jLabel_fullname)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton_cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton_submit, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jRadioButton_male)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton_female))
-                        .addComponent(jXDatePicker_birth, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel_username)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFormattedTextField_username, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel_password)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField_password, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel_fullname)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFormattedTextField_fullname, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel_email)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFormattedTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel_birth)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jXDatePicker_birth, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel_gender)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton_male)
-                    .addComponent(jRadioButton_female))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_submit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(52, Short.MAX_VALUE))
-        );
+        jButton_submit.setBackground(new java.awt.Color(34, 133, 225));
+        jButton_submit.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jButton_submit.setForeground(new java.awt.Color(255, 255, 255));
+        jButton_submit.setText("Submit");
+        jButton_submit.setBorderPainted(false);
+        jButton_submit.setPreferredSize(new java.awt.Dimension(100, 40));
+        jButton_submit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_submitActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 30, 0);
+        jPanel1.add(jButton_submit, gridBagConstraints);
+
+        jButton_eye.setBackground(new java.awt.Color(255, 255, 255));
+        jButton_eye.setForeground(new java.awt.Color(204, 204, 204));
+        jButton_eye.setBorderPainted(false);
+        jButton_eye.setMaximumSize(new java.awt.Dimension(40, 40));
+        jButton_eye.setMinimumSize(new java.awt.Dimension(20, 20));
+        jButton_eye.setOpaque(true);
+        jButton_eye.setPreferredSize(new java.awt.Dimension(25, 25));
+        jButton_eye.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_eyeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel1.add(jButton_eye, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
         );
 
         pack();
@@ -275,13 +377,67 @@ public class Signup extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jFormattedTextField_fullnameActionPerformed
 
-    private void jFormattedTextField_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField_emailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField_emailActionPerformed
-
     private void jRadioButton_maleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_maleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton_maleActionPerformed
+
+    private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
+        // TODO add your handling code here:
+        String username = jFormattedTextField_username.getText();
+        String email = jFormattedTextField_email.getText();
+        String fullname = jFormattedTextField_fullname.getText();
+        String pass = String.valueOf(jPasswordField_password.getPassword());
+
+        try{
+            Date birth = jXDatePicker1.getDate();//get birthday to check it must before today
+            
+            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+            String dateString = formater.format(jXDatePicker1.getDate());//get string date 
+            
+            if(jFormattedTextField_email.getText().length() != 0 || 
+                    jFormattedTextField_fullname.getText().length() != 0 ||
+                    jFormattedTextField_username.getText().length() != 0 ||
+                    jPasswordField_password.getPassword().length != 0 ||
+                    jXDatePicker1.getDate().toString().length() != 0 ||
+                    G.getSelection().isSelected() != false
+                    ){
+                boolean gender;
+                Date currentDate = new Date();
+                if(jRadioButton_male.isSelected()){
+                    gender = true; //male Selected
+                }else if(jRadioButton_female.isSelected()){
+                    gender = false; //female Selected
+                }
+                if(!Controller.validateEmail(email)){
+                    JOptionPane.showMessageDialog(this, "Invalid email!");
+                }
+                if(!Controller.validatePassword(pass)){
+                    JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
+                }
+                if(!birth.before(currentDate)){
+                    JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Created account success!");
+                    Login login = new Login();
+                    this.dispose();
+                    login.setVisible(true);
+                }
+
+
+
+                //TODO push data to outputstream to BLL.Controller
+
+
+
+            }else{
+                JOptionPane.showMessageDialog(this, "Do not leave fields blank!");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Do not input invalid data!");
+        }
+        
+    }//GEN-LAST:event_jButton_submitActionPerformed
 
     private void jButton_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cancelActionPerformed
         // TODO add your handling code here:
@@ -290,39 +446,16 @@ public class Signup extends javax.swing.JFrame {
         login.setVisible(true);
     }//GEN-LAST:event_jButton_cancelActionPerformed
 
-    private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
+    private void jButton_eyeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_eyeActionPerformed
         // TODO add your handling code here:
-        if(jFormattedTextField_email.getText().length() != 0 && 
-                jFormattedTextField_fullname.getText().length() != 0 &&
-                jFormattedTextField_username.getText().length() != 0 &&
-                jPasswordField_password.getPassword().length != 0 &&
-                jXDatePicker_birth.getDate().toString().length() != 0 &&
-                G.getSelection().isSelected() != false){
-            String username = jFormattedTextField_username.getText();
-            String email = jFormattedTextField_email.getText();
-            String fullname = jFormattedTextField_fullname.getText();
-            String pass = Arrays.toString(jPasswordField_password.getPassword());
-            Date birth = jXDatePicker_birth.getDate();
-            boolean gender;
-            if(jRadioButton_male.isSelected()){
-                gender = true; //male Selected
-            }else if(jRadioButton_female.isSelected()){
-                gender = false; //female Selected
-            }
-            JOptionPane.showMessageDialog(this, "Created account success!");
-            this.dispose();
-            Login login = new Login();
-            login.setVisible(true);
-            
-            
-            //TODO signup
-            
-            
-            
+        if(!flag){
+            jPasswordField_password.setEchoChar((char)0);
+            flag = true;
         }else{
-            JOptionPane.showMessageDialog(this, "Do not leave fields blank!");
+            jPasswordField_password.setEchoChar('•');
+            flag = false;
         }
-    }//GEN-LAST:event_jButton_submitActionPerformed
+    }//GEN-LAST:event_jButton_eyeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -338,29 +471,24 @@ public class Signup extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.ButtonGroup buttonGroup3;
-    private javax.swing.ButtonGroup buttonGroup4;
     private org.jdesktop.swingx.plaf.DatePickerAddon datePickerAddon1;
-    private org.jdesktop.swingx.plaf.DatePickerAddon datePickerAddon2;
-    private org.jdesktop.swingx.plaf.DatePickerAddon datePickerAddon3;
-    private org.jdesktop.swingx.table.DatePickerCellEditor datePickerCellEditor1;
     private javax.swing.JButton jButton_cancel;
+    private javax.swing.JButton jButton_eye;
     private javax.swing.JButton jButton_submit;
     private javax.swing.JFormattedTextField jFormattedTextField_email;
     private javax.swing.JFormattedTextField jFormattedTextField_fullname;
     private javax.swing.JFormattedTextField jFormattedTextField_username;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel_birth;
-    private javax.swing.JLabel jLabel_email;
-    private javax.swing.JLabel jLabel_fullname;
-    private javax.swing.JLabel jLabel_gender;
-    private javax.swing.JLabel jLabel_password;
-    private javax.swing.JLabel jLabel_username;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField_password;
     private javax.swing.JRadioButton jRadioButton_female;
     private javax.swing.JRadioButton jRadioButton_male;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker_birth;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     // End of variables declaration//GEN-END:variables
 }
