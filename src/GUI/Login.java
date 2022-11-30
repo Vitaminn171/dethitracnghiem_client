@@ -4,9 +4,14 @@
  */
 package GUI;
 
+import static BLL.Controller.*;
+import DTO.UserDTO;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.google.gson.Gson;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
 
 /**
@@ -180,14 +185,8 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_loginActionPerformed
         // TODO add your handling code here:
-        if(jFormattedTextField1.getText().length() != 0 && jPasswordField2.getPassword().length != 0){
-            char[] pass1 = jFormattedTextField1.getText().toCharArray();
-            char[] pass2 = jPasswordField2.getPassword();
-            
-            //TODO login
-        }else{
-            JOptionPane.showMessageDialog(this, "Do not leave blank fields!");
-        }
+        Login();
+        
     }//GEN-LAST:event_jButton_loginActionPerformed
 
     /**
@@ -211,4 +210,26 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField2;
     // End of variables declaration//GEN-END:variables
+
+    private void Login() {
+        if(jFormattedTextField1.getText().length() != 0 && jPasswordField2.getPassword().length != 0){
+            String username = jFormattedTextField1.getText();
+            String pass = String.valueOf(jPasswordField2.getPassword());
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUsername(String.valueOf(jFormattedTextField1));
+            userDTO.setPassword(String.valueOf(jPasswordField2.getPassword()));// need to hash password 
+            Map<String, String> inputMap = new HashMap<String, String>();
+            inputMap.put("username", username);
+            inputMap.put("password", pass);//need to hash pass
+            inputMap.put("func", "login");
+            Gson gson = new Gson();
+                // Serialization
+            String json = gson.toJson(inputMap);//need to hash data json before send to server
+            String receive = SendAndReceiveData(json, getContentPane());
+            System.out.println(receive);
+            //TODO login
+        }else{
+            JOptionPane.showMessageDialog(this, "Do not leave blank fields!");
+        }
+    }
 }
