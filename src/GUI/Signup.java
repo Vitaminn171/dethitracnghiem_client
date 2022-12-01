@@ -5,6 +5,7 @@
 package GUI;
 
 import BLL.Controller;
+import BLL.MD5;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.sun.source.tree.BreakTree;
 import java.awt.Dimension;
@@ -18,6 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -387,55 +390,14 @@ public class Signup extends javax.swing.JFrame {
         String email = jFormattedTextField_email.getText();
         String fullname = jFormattedTextField_fullname.getText();
         String pass = String.valueOf(jPasswordField_password.getPassword());
-
-        try{
-            Date birth = jXDatePicker1.getDate();//get birthday to check it must before today
-            
-            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-            String dateString = formater.format(jXDatePicker1.getDate());//get string date 
-            
-            if(jFormattedTextField_email.getText().length() != 0 || 
-                    jFormattedTextField_fullname.getText().length() != 0 ||
-                    jFormattedTextField_username.getText().length() != 0 ||
-                    jPasswordField_password.getPassword().length != 0 ||
-                    jXDatePicker1.getDate().toString().length() != 0 ||
-                    G.getSelection().isSelected() != false
-                    ){
-                boolean gender;
-                Date currentDate = new Date();
-                if(jRadioButton_male.isSelected()){
-                    gender = true; //male Selected
-                }else if(jRadioButton_female.isSelected()){
-                    gender = false; //female Selected
-                }
-                if(!Controller.validateEmail(email)){
-                    JOptionPane.showMessageDialog(this, "Invalid email!");
-                }
-                if(!Controller.validatePassword(pass)){
-                    JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
-                }
-                if(!birth.before(currentDate)){
-                    JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Created account success!");
-                    Login login = new Login();
-                    this.dispose();
-                    login.setVisible(true);
-                }
-
-
-
-                //TODO push data to outputstream to BLL.Controller
-
-
-
-            }else{
-                JOptionPane.showMessageDialog(this, "Do not leave fields blank!");
-            }
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(this, "Do not input invalid data!");
+        Date birthDate = jXDatePicker1.getDate();//get birthday to check it must before today
+        boolean gender = false;
+        if(jRadioButton_male.isSelected()){
+            gender = true; //male Selected
+        }else if(jRadioButton_female.isSelected()){
+            gender = false; //female Selected
         }
+        checkValidate(username, pass, email, fullname, birthDate, gender);
         
     }//GEN-LAST:event_jButton_submitActionPerformed
 
@@ -468,6 +430,72 @@ public class Signup extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void checkValidate(String username, String password, String email, String fullname, Date birthDate, boolean gender){
+        try{
+            
+            
+            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+            String dateString = formater.format(jXDatePicker1.getDate());//get string date 
+            
+            if(email.length() != 0 || 
+                    fullname.length() != 0 ||
+                    username.length() != 0 ||
+                    password.length() != 0 ||
+                    birthDate.toString().length() != 0 ||
+                    G.getSelection().isSelected() != false
+                    ){
+                Date currentDate = new Date();
+                
+                if(!Controller.validateEmail(email)){
+                    JOptionPane.showMessageDialog(this, "Invalid email!");
+                }
+                if(!Controller.validatePassword(password)){
+                    JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
+                }
+                if(!birthDate.before(currentDate)){
+                    JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Created account success!");
+                    Signup(username, password, email, fullname, dateString, gender);
+                    Login login = new Login();
+                    this.dispose();
+                    login.setVisible(true);
+                }
+
+
+
+                //TODO push data to outputstream to BLL.Controller
+
+
+
+            }else{
+                JOptionPane.showMessageDialog(this, "Do not leave fields blank!");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Do not input invalid data!");
+        }
+    }
+    
+    private void Signup(String username, String password, String email, String fullname, String dateString, boolean gender) {
+        String hashPass = MD5.getMd5(password);//hash md5 for password
+        
+        Map<String, String> inputMap = new HashMap<String, String>();
+        inputMap.put("username", username);//push username to inputMap
+        inputMap.put("password", hashPass);//push password hashed to inputMap
+        inputMap.put("fullname", fullname);//push fullname to inputMap
+        inputMap.put("email", email);//push email to inputMap
+        inputMap.put("birth", dateString);//push birthday to inputMap
+        inputMap.put("gender", String.valueOf(gender));//push gender to inputMap
+        inputMap.put("func", "signup");//push function to inputMap
+        
+        Controller controller = new Controller();
+        String data = controller.convertToJSON(inputMap);
+        controller.SendData(data);
+        
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -491,4 +519,6 @@ public class Signup extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton_male;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     // End of variables declaration//GEN-END:variables
+
+    
 }

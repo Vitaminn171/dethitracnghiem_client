@@ -4,7 +4,8 @@
  */
 package GUI;
 
-import static BLL.Controller.*;
+import BLL.Controller;
+import BLL.MD5;
 import DTO.UserDTO;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.google.gson.Gson;
@@ -23,6 +24,9 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login_test
      */
+    
+    
+    
     public Login() {
         initComponents();
         this.setTitle("Quiz Exam");
@@ -37,6 +41,11 @@ public class Login extends javax.swing.JFrame {
         jFormattedTextField1.putClientProperty( "JTextField.padding",12);
         jPasswordField2.putClientProperty( "JComponent.roundRect", true );
         jPasswordField2.putClientProperty( "JTextField.placeholderText","Password");
+        
+        
+        
+            
+        
     }
 
     /**
@@ -192,6 +201,9 @@ public class Login extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    public static Thread t;
+    public String json;
+    Controller controller = new Controller();
     public static void main(String args[]) {
         FlatLightLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -199,6 +211,7 @@ public class Login extends javax.swing.JFrame {
                 new Login().setVisible(true);
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -215,19 +228,15 @@ public class Login extends javax.swing.JFrame {
         if(jFormattedTextField1.getText().length() != 0 && jPasswordField2.getPassword().length != 0){
             String username = jFormattedTextField1.getText();
             String pass = String.valueOf(jPasswordField2.getPassword());
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUsername(String.valueOf(jFormattedTextField1));
-            userDTO.setPassword(String.valueOf(jPasswordField2.getPassword()));// need to hash password 
+            String hashPass = MD5.getMd5(pass);//hash md5 for password
+            
             Map<String, String> inputMap = new HashMap<String, String>();
-            inputMap.put("username", username);
-            inputMap.put("password", pass);//need to hash pass
-            inputMap.put("func", "login");
-            Gson gson = new Gson();
-                // Serialization
-            String json = gson.toJson(inputMap);//need to hash data json before send to server
-            String receive = SendAndReceiveData(json, getContentPane());
-            System.out.println(receive);
-            //TODO login
+            inputMap.put("username", username);//push username to inputMap
+            inputMap.put("password", hashPass);//push password hashed to inputMap
+            inputMap.put("func", "login");//push function to inputMap     
+            
+            controller.SendData(controller.convertToJSON(inputMap));//send data to server
+            //TODO: need to hash data before send to server
         }else{
             JOptionPane.showMessageDialog(this, "Do not leave blank fields!");
         }

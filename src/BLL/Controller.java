@@ -15,11 +15,11 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,11 +27,11 @@ import javax.swing.JOptionPane;
  */
 public class Controller {
     public static Socket socket =null;
-    public static BufferedReader in;
-    public static BufferedWriter out;
-    
     public static Gson gson = new Gson();
-    
+    public static Thread t;
+    static BufferedWriter out;
+    static BufferedReader in;
+    static ExecutorService excutor;
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
     Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     
@@ -55,58 +55,120 @@ public class Controller {
         return matcher.find();
     }
     
-    public static boolean startConnectToServer(){
-        
+   
+    
+    public static void startConnectToServer(){
         try{
+            //TODO: use api to auto get ip from server
+            
+            
             socket = new Socket("localhost", 1234);//kết nối tới server
             System.out.println("connecting...");
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            
+            
+//          Send send = new Send(socket, out, );
+            Receive recv = new Receive(socket, in);
            
+//            
+//            
+            excutor = Executors.newFixedThreadPool(2);
+//          excutor.execute(send);
+            excutor.execute(recv);
+            
+            
         } catch (UnknownHostException e) {
             e.printStackTrace();
-            return false;
+            
         }
          catch (IOException e) {
-            System.out.println("Server chưa online");
-            closeConnectToServer();
-            return false;
+            System.out.println("Server not available!");
+            
+            
         }
-        return true;
+        
     }
     
-    public static boolean closeConnectToServer(){
+    public static void closeConnectToServer() throws IOException{
         //close
-        try{
-            in.close();
-            out.close();
-            socket.close();
-        } catch (IOException e) {
-            //e.printStackTrace();
-            return false;
-        } catch (NullPointerException ex){
-            return false;
-        }
-        return true;
+        excutor.close();
+        in.close();
+        out.close();
+        socket.close();
+        System.out.println("closeConnectToServer");
+
+        
     }
     
-    public static String SendAndReceiveData(String data, Container parentComponent){
-        String receive = "";
-        try{
+    public void SendData(String data) { 
+        try {
             out.write(data);
             out.newLine();
             out.flush();
-            //System.out.println(data);
-            receive = in.readLine();
-            System.out.println(receive);
         } catch (IOException e) {
-            System.out.println("Server closed!!!");
-            JOptionPane.showMessageDialog(parentComponent,"Server not available!");
-            System.exit(0);
         }
-        return receive;//trả kết quả chuỗi cho hàm
+    }
+    
+    public String convertToJSON(Map<String,String> data){
+        Gson gson = new Gson();
+        String json = gson.toJson(data);
+        return json;
     }
 
+    
+ 
+    
    
     
 }
+
+class Send implements Runnable{
+    private Socket socket;
+    private BufferedWriter out;
+    private String jsonString;
+    public Send(Socket s, BufferedWriter o, String jsonString){
+        this.socket = s;
+        this.out = o;
+        this.jsonString = jsonString;
+    }
+    public void run (){
+        
+        try{
+            while(true){
+                try{
+                    
+                    if(jsonString.equals("bye"))
+                    break;
+                }catch(Exception e){
+                    
+                }
+                
+            }
+            this.socket.close();
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+}
+
+class Receive implements Runnable{
+    private Socket socket;
+    private BufferedReader in;
+    public Receive(Socket s, BufferedReader r){
+        this.socket = s;
+        this.in = r;
+    }
+    public void run(){
+        try {
+            while(true){
+                String data = in.readLine();
+                System.out.println("Received: " + data);
+            }
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
