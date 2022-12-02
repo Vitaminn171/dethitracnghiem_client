@@ -21,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -148,7 +150,7 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(30, 50, 20, 20);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel2.setText("Username");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -156,10 +158,10 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 36, 0, 0);
         jPanel1.add(jLabel2, gridBagConstraints);
 
-        jFormattedTextField_username.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jFormattedTextField_username.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jFormattedTextField_username.setMinimumSize(new java.awt.Dimension(120, 40));
         jFormattedTextField_username.setPreferredSize(new java.awt.Dimension(250, 40));
         jFormattedTextField_username.addActionListener(new java.awt.event.ActionListener() {
@@ -175,7 +177,7 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
         jPanel1.add(jFormattedTextField_username, gridBagConstraints);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel3.setText("Password");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -183,9 +185,10 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 36, 0, 0);
         jPanel1.add(jLabel3, gridBagConstraints);
 
+        jPasswordField_password.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jPasswordField_password.setMinimumSize(new java.awt.Dimension(120, 40));
         jPasswordField_password.setPreferredSize(new java.awt.Dimension(250, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -196,7 +199,7 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
         jPanel1.add(jPasswordField_password, gridBagConstraints);
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel4.setText("Full name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -204,9 +207,10 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 36, 0, 0);
         jPanel1.add(jLabel4, gridBagConstraints);
 
+        jFormattedTextField_fullname.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jFormattedTextField_fullname.setMinimumSize(new java.awt.Dimension(120, 40));
         jFormattedTextField_fullname.setPreferredSize(new java.awt.Dimension(250, 40));
         jFormattedTextField_fullname.addActionListener(new java.awt.event.ActionListener() {
@@ -222,7 +226,7 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
         jPanel1.add(jFormattedTextField_fullname, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel5.setText("Email");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -230,10 +234,10 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 36, 0, 0);
         jPanel1.add(jLabel5, gridBagConstraints);
 
-        jFormattedTextField_email.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jFormattedTextField_email.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jFormattedTextField_email.setMinimumSize(new java.awt.Dimension(120, 40));
         jFormattedTextField_email.setName(""); // NOI18N
         jFormattedTextField_email.setPreferredSize(new java.awt.Dimension(250, 40));
@@ -245,17 +249,17 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
         jPanel1.add(jFormattedTextField_email, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel6.setText("Birthday");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 36, 0, 0);
         jPanel1.add(jLabel6, gridBagConstraints);
 
-        jXDatePicker1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jXDatePicker1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jXDatePicker1.setMinimumSize(new java.awt.Dimension(120, 40));
         jXDatePicker1.setPreferredSize(new java.awt.Dimension(250, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -266,17 +270,17 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
         jPanel1.add(jXDatePicker1, gridBagConstraints);
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel7.setText("Gender");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 36, 0, 0);
         jPanel1.add(jLabel7, gridBagConstraints);
 
-        jRadioButton_male.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jRadioButton_male.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jRadioButton_male.setText("Male");
         jRadioButton_male.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -292,7 +296,7 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 30, 0, 0);
         jPanel1.add(jRadioButton_male, gridBagConstraints);
 
-        jRadioButton_female.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jRadioButton_female.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jRadioButton_female.setText("Female");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -459,9 +463,11 @@ public class Signup extends javax.swing.JFrame {
                 else{
                     JOptionPane.showMessageDialog(this, "Created account success!");
                     Signup(username, password, email, fullname, dateString, gender);
-                    Login login = new Login();
+                    OTP otp = new OTP();
+                    otp.setVisible(true);
+//                    Login login = new Login();
                     this.dispose();
-                    login.setVisible(true);
+//                    login.setVisible(true);
                 }
 
 
@@ -492,7 +498,12 @@ public class Signup extends javax.swing.JFrame {
         
         Controller controller = new Controller();
         String data = controller.convertToJSON(inputMap);
-        controller.SendData(data);
+        try {
+            String dataReceive = controller.SendReceiveData(data);
+            System.out.println(dataReceive);
+        } catch (IOException ex) {
+            Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
     }

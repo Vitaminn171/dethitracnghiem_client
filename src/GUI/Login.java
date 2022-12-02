@@ -11,8 +11,11 @@ import com.formdev.flatlaf.FlatLightLaf;
 import com.google.gson.Gson;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -86,6 +89,7 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(30, 60, 7, 60);
         jPanel1.add(jLabel2, gridBagConstraints);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Welcome back, please login to your account.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -97,7 +101,7 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 60);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        jFormattedTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jFormattedTextField1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jFormattedTextField1.setPreferredSize(new java.awt.Dimension(150, 40));
         jFormattedTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,6 +120,7 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(30, 60, 0, 60);
         jPanel1.add(jFormattedTextField1, gridBagConstraints);
 
+        jPasswordField2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jPasswordField2.setPreferredSize(new java.awt.Dimension(150, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -235,7 +240,13 @@ public class Login extends javax.swing.JFrame {
             inputMap.put("password", hashPass);//push password hashed to inputMap
             inputMap.put("func", "login");//push function to inputMap     
             
-            controller.SendData(controller.convertToJSON(inputMap));//send data to server
+            try {
+                String dataReceive = controller.SendReceiveData(controller.convertToJSON(inputMap));
+                System.out.println(dataReceive);
+            } catch (IOException ex) {
+                Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             //TODO: need to hash data before send to server
         }else{
             JOptionPane.showMessageDialog(this, "Do not leave blank fields!");

@@ -75,23 +75,17 @@ public class Exam_All extends javax.swing.JPanel {
         jPanel1.setMaximumSize(new java.awt.Dimension(0, 0));
         jPanel1.setMinimumSize(new java.awt.Dimension(0, 0));
         jPanel1.setName(""); // NOI18N
-        jPanel1.setPreferredSize(null);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "ID", "Title", "Creator", "Highest Score", "Avg Score", "Lowest Score"
             }
         ));
         jTable1.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
-        jTable1.setPreferredSize(null);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -174,6 +168,7 @@ public class Exam_All extends javax.swing.JPanel {
         String s=source.getModel().getValueAt(row, 0)+"";
 
         JOptionPane.showMessageDialog(null, s);
+        
     }//GEN-LAST:event_jTable1MouseClicked
 
 

@@ -4,6 +4,8 @@
  */
 package BLL;
 
+import DTO.UserDTO;
+import GUI.Login;
 import com.google.gson.Gson;
 import java.awt.Container;
 import java.io.BufferedReader;
@@ -13,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Map;
@@ -20,6 +23,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  *
@@ -36,17 +43,24 @@ public class Controller {
     Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     
     public static final Pattern VALID_PASSWORD_REGEX = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$");
-//^                                   # start of line
-//  (?=.*[0-9])                       # positive lookahead, digit [0-9]
-//  (?=.*[a-z])                       # positive lookahead, one lowercase character [a-z]
-//  (?=.*[A-Z])                       # positive lookahead, one uppercase character [A-Z]
-//  (?=.*[!@#&()–[{}]:;',?/*~$^+=<>]) # positive lookahead, one of the special character in this [..]
-//  .                                 # matches anything
-//  {8,20}                            # length at least 8 characters and maximum of 20 characters
-//$                                   # end of line
+    //^                                   # start of line
+    //  (?=.*[0-9])                       # positive lookahead, digit [0-9]
+    //  (?=.*[a-z])                       # positive lookahead, one lowercase character [a-z]
+    //  (?=.*[A-Z])                       # positive lookahead, one uppercase character [A-Z]
+    //  (?=.*[!@#&()–[{}]:;',?/*~$^+=<>]) # positive lookahead, one of the special character in this [..]
+    //  .                                 # matches anything
+    //  {8,20}                            # length at least 8 characters and maximum of 20 characters
+    //$                                   # end of line
 
+    public static final Pattern VALID_OTP_REGEX = Pattern.compile("^[0-9]{1,6}$");
+    
     public static boolean validateEmail(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
+    }
+    
+    public static boolean validateOTP(String OTPStr) {
+        Matcher matcher = VALID_OTP_REGEX.matcher(OTPStr);
         return matcher.find();
     }
     
@@ -58,35 +72,39 @@ public class Controller {
    
     
     public static void startConnectToServer(){
-        try{
+        try {
             //TODO: use api to auto get ip from server
-            
-            
-            socket = new Socket("localhost", 1234);//kết nối tới server
+            // Lên trang mà server để local ip để lấy về
+            Document doc = Jsoup.connect("https://retoolapi.dev/FFY4oG/data/1")
+                    .ignoreContentType(true).ignoreHttpErrors(true)
+                    .header("Content-Type", "application/json")
+                    .method(Connection.Method.GET).execute().parse();
+            JSONObject jsonObject = new JSONObject(doc.text());
+            System.out.println(jsonObject.get("ip")); //local ip của server
+            InetAddress svAddress = InetAddress.getByName(jsonObject.get("ip").toString());
+            socket = new Socket(svAddress, 6666);//kết nối tới server
             System.out.println("connecting...");
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            
-            
+
 //          Send send = new Send(socket, out, );
-            Receive recv = new Receive(socket, in);
-           
-//            
-//            
-            excutor = Executors.newFixedThreadPool(2);
-//          excutor.execute(send);
-            excutor.execute(recv);
+//            Receive recv = new Receive(socket, in);
             
-            
+//
+////            
+////            
+//            excutor = Executors.newFixedThreadPool(2);
+////          excutor.execute(send);
+//            excutor.execute(recv);
+
         } catch (UnknownHostException e) {
             e.printStackTrace();
-            
-        }
-         catch (IOException e) {
+
+        } catch (IOException e) {
             System.out.println("Server not available!");
-            
-            
+
         }
+
         
     }
     
@@ -101,14 +119,14 @@ public class Controller {
         
     }
     
-    public void SendData(String data) { 
-        try {
-            out.write(data);
-            out.newLine();
-            out.flush();
-        } catch (IOException e) {
-        }
+    public String SendReceiveData(String data) throws IOException { 
+        out.write(data);
+        out.newLine();
+        out.flush();
+        String dataReceive = in.readLine();
+        return dataReceive;
     }
+    
     
     public String convertToJSON(Map<String,String> data){
         Gson gson = new Gson();
@@ -123,52 +141,57 @@ public class Controller {
     
 }
 
-class Send implements Runnable{
-    private Socket socket;
-    private BufferedWriter out;
-    private String jsonString;
-    public Send(Socket s, BufferedWriter o, String jsonString){
-        this.socket = s;
-        this.out = o;
-        this.jsonString = jsonString;
-    }
-    public void run (){
-        
-        try{
-            while(true){
-                try{
-                    
-                    if(jsonString.equals("bye"))
-                    break;
-                }catch(Exception e){
-                    
-                }
-                
-            }
-            this.socket.close();
-        }catch(IOException e){
-            System.out.println(e.getMessage());
-        }
-    }
-    
-}
-
-class Receive implements Runnable{
-    private Socket socket;
-    private BufferedReader in;
-    public Receive(Socket s, BufferedReader r){
-        this.socket = s;
-        this.in = r;
-    }
-    public void run(){
-        try {
-            while(true){
-                String data = in.readLine();
-                System.out.println("Received: " + data);
-            }
-        }catch(IOException e){
-            System.out.println(e.getMessage());
-        }
-    }
-}
+//class Send implements Runnable{
+//    private Socket socket;
+//    private BufferedWriter out;
+//    private String jsonString;
+//    public Send(Socket s, BufferedWriter o, String jsonString){
+//        this.socket = s;
+//        this.out = o;
+//        this.jsonString = jsonString;
+//    }
+//    public void run (){
+//        
+//        try{
+//            while(true){
+//                try{
+//                    
+//                    if(jsonString.equals("bye"))
+//                    break;
+//                }catch(Exception e){
+//                    
+//                }
+//                
+//            }
+//            this.socket.close();
+//        }catch(IOException e){
+//            System.out.println(e.getMessage());
+//        }
+//    }
+//    
+//}
+//
+//class Receive implements Runnable{
+//    private Socket socket;
+//    private BufferedReader in;
+//    public DTO.UserDTO user;
+//    public Receive(Socket s, BufferedReader r){
+//        this.socket = s;
+//        this.in = r;
+//    }
+//    
+//    public void run(){
+//        try {
+//            while(true){
+//                String data = in.readLine();
+//                
+//                
+//                user.setUsername(data);
+//                System.out.println("Received: " + data);
+//            }
+//        }catch(IOException e){
+//            System.out.println(e.getMessage());
+//        }
+//    }
+//}
 
