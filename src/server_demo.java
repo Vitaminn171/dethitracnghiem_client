@@ -1,72 +1,77 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author Quoc An
- */
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 public class server_demo {
+
     private static ServerSocket server = null;
-    private static Socket socket = null;
+    private static Socket socket1 = null;
     private static BufferedReader in = null;
     private static BufferedWriter out = null;
 
     public static void main(String[] args) {
         try {
-            server = new ServerSocket(1234);
+            //server lấy local IP bằng cách tạo socket đến 1 website tạm
+            Socket socket = new Socket("thongtindaotao.sgu.edu.vn", 80);
+            String localIP = socket.getLocalAddress().toString().substring(1);
+            // SV tự generate API tại https://retool.com/api-generator/
+            String api = "https://retoolapi.dev/FFY4oG/data/1"; // Ghi vào dòng 1 trong DB
+            String jsonData = "{\"ip\":\"" + localIP + "\"}";
+            
+            //Đưa local ip lên trang tạm
+            Jsoup.connect(api)
+                    .ignoreContentType(true).ignoreHttpErrors(true)
+                    .header("Content-Type", "application/json")
+                    .requestBody(jsonData)
+                    .method(Connection.Method.PUT).execute();
+            System.out.println("Server local ip: " + localIP);
+            
+            server = new ServerSocket(6666);
             System.out.println("Server started...");
-            socket = server.accept();
-            System.out.println("Client " + socket.getInetAddress() + " connected...");
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            socket1 = server.accept();
+            System.out.println("Client " + socket1.getInetAddress() + " connected...");
             
-            
-            while(true) {
+            in = new BufferedReader(new InputStreamReader(socket1.getInputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(socket1.getOutputStream()));
+
+            while (true) {
                 // Server nhận dữ liệu từ client qua stream
                 String line = in.readLine();
-                if (line.equals("bye"))
+                if (line.equals("bye")) {
                     break;
-                
+                }
+
                 StringBuilder newline = new StringBuilder();
                 newline.append(line);
                 line = newline.toString();
                 System.out.println(line);
-                
 
-               
                 out.write(line);
                 out.newLine();
                 out.flush();
 
-                
-            
-                
             }
             System.out.println("Server closed connection");
             // Đóng kết nối
             in.close();
             out.close();
-            socket.close();
+            socket1.close();
             server.close();
-        } catch (IOException e) { 
-            System.err.println(e); 
+        } catch (IOException e) {
+            System.err.println(e);
         }
     }
 
-
 }
-//https://tiki.vn/dien-thoai-samsung-galaxy-s22-ultra-5g-8gb-128gb-hang-chinh-hang-p162593114.html?
-//itm_campaign=HMP_YPD_TKA_PLA_UNK_ALL_UNK_UNK_UNK_UNK_X.119346_Y.1152823_Z.2854061_CN.Product-Ads-Manual&itm_medium=CPC&itm_source=tiki-ads&spid=162593120
+
