@@ -29,6 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.jdesktop.swingx.calendar.DateSelectionModel;
 import org.jdesktop.swingx.table.DatePickerCellEditor;
+import org.json.JSONObject;
 
 /**
  *
@@ -461,11 +462,26 @@ public class Signup extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
                 }
                 else{
-                    JOptionPane.showMessageDialog(this, "Created account success!");
-                    Signup(username, password, email, fullname, dateString, gender);
-                    OTP otp = new OTP();
+                    String hashPass = MD5.getMd5(password);//hash md5 for password
+        
+                    Map<String, String> inputMap = new HashMap<String, String>();
+                    inputMap.put("username", username);//push username to inputMap
+                    inputMap.put("password", hashPass);//push password hashed to inputMap
+                    inputMap.put("fullname", fullname);//push fullname to inputMap
+                    inputMap.put("email", email);//push email to inputMap
+                    inputMap.put("birth", dateString);//push birthday to inputMap
+                    inputMap.put("gender", String.valueOf(gender));//push gender to inputMap
+                    inputMap.put("func", "signup");//push function to inputMap
+                    inputMap.put("status", "true");
+                    Controller controller = new Controller();
+                    String data = controller.convertToJSON(inputMap);
+                    JSONObject json =  new JSONObject(data);
+                    //Signup(username, password, email, fullname, dateString, gender);
+                    OTP otp = new OTP(json);
                     otp.setVisible(true);
+                    //Signup(data, controller);
 //                    Login login = new Login();
+                    //Signup(username, password, email, fullname, dateString, gender);
                     this.dispose();
 //                    login.setVisible(true);
                 }
@@ -484,27 +500,20 @@ public class Signup extends javax.swing.JFrame {
         }
     }
     
-    private void Signup(String username, String password, String email, String fullname, String dateString, boolean gender) {
-        String hashPass = MD5.getMd5(password);//hash md5 for password
-        
-        Map<String, String> inputMap = new HashMap<String, String>();
-        inputMap.put("username", username);//push username to inputMap
-        inputMap.put("password", hashPass);//push password hashed to inputMap
-        inputMap.put("fullname", fullname);//push fullname to inputMap
-        inputMap.put("email", email);//push email to inputMap
-        inputMap.put("birth", dateString);//push birthday to inputMap
-        inputMap.put("gender", String.valueOf(gender));//push gender to inputMap
-        inputMap.put("func", "signup");//push function to inputMap
-        
-        Controller controller = new Controller();
-        String data = controller.convertToJSON(inputMap);
+    public void Signup(String data, Controller controller) {
+        //Controller controller = new Controller();
         try {
             String dataReceive = controller.SendReceiveData(data);
             System.out.println(dataReceive);
+            JSONObject jsonReceive = new JSONObject(dataReceive);
+            if(jsonReceive.getString("status").equals("true")){
+                JOptionPane.showMessageDialog(this, "Created account success!");
+            }else{
+                JOptionPane.showMessageDialog(this, "Created account fail!");
+            }
         } catch (IOException ex) {
             Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         
     }
 

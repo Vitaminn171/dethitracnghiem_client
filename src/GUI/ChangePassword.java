@@ -5,6 +5,7 @@
 package GUI;
 
 import BLL.Controller;
+import BLL.MD5;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -12,9 +13,14 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import org.json.JSONObject;
 
 /**
  *
@@ -179,18 +185,28 @@ public class ChangePassword extends javax.swing.JFrame {
     private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
         // TODO add your handling code here:
         if(jPasswordField1.getPassword().length != 0 && jPasswordField2.getPassword().length != 0){
-            char[] pass1 = jPasswordField1.getPassword();
-            char[] pass2 = jPasswordField2.getPassword();
-            if(!Arrays.toString(pass1).equals(Arrays.toString(pass2))){
+            Controller controller = new Controller();
+            String password = String.valueOf(jPasswordField1.getPassword());
+            String password1 = String.valueOf(jPasswordField1.getPassword());
+            if(!password.equals(password1)){
                 JOptionPane.showMessageDialog(this, "Password doesn't match! Please retype.");
+            if(!Controller.validatePassword(password)){
+                JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
+            }
             }else{
-                String pass = String.valueOf(jPasswordField1.getPassword());
-                if(!Controller.validatePassword(pass)){
-                    JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
-                }else{
-                    JOptionPane.showMessageDialog(this, "Change password success!");
-                    this.dispose();
-                }
+                String hashPass = MD5.getMd5(password);//hash md5 for password
+
+                Map<String, String> inputMap = new HashMap<String, String>();
+                inputMap.put("func", "changePass");//push username to inputMap
+                inputMap.put("password", hashPass);//push password hashed to inputMap
+                inputMap.put("status", "true");
+                String data = controller.convertToJSON(inputMap);
+                JSONObject json =  new JSONObject(data);
+                
+                OTP otp = new OTP(json);
+                otp.setVisible(true);
+                this.dispose();
+                
             }
             
         }else{
@@ -225,6 +241,25 @@ public class ChangePassword extends javax.swing.JFrame {
                 new ChangePassword().setVisible(true);
             }
         });
+    }
+    
+    public void changePass(String data, Controller controller){
+        String pass = String.valueOf(jPasswordField1.getPassword());
+        
+            
+                try {
+                    String dataReceive = controller.SendReceiveData(data);
+                    System.out.println(dataReceive);
+                    JSONObject jsonReceive = new JSONObject(dataReceive);
+                    if(jsonReceive.getString("status").equals("true")){
+                        JOptionPane.showMessageDialog(this, "Change password success!");
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Change password fail!");
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -14,6 +14,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,8 @@ public class OTP extends javax.swing.JFrame {
     double timeLeft = 5000; //5 seconds
     int timeLeft2=5;
     Timer timer;
-    public OTP() {
+    boolean flag;
+    public OTP(JSONObject json) {
         initComponents();
         
         
@@ -52,22 +54,31 @@ public class OTP extends javax.swing.JFrame {
         //double timeLeft = 5000; //5 seconds
         
         
-
-        ActionListener countDown=new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                timeLeft -= 100;
-                SimpleDateFormat df=new SimpleDateFormat("mm:ss:S");
-                jLabel1.setText(df.format(timeLeft));
-                if(timeLeft<=0)
-                {
-                    timer.stop();
-                }
-            }
-        };
-        timer=new Timer(100, countDown);
+//
+//        ActionListener countDown=new ActionListener()
+//        {
+//            public void actionPerformed(ActionEvent e)
+//            {
+//                timeLeft -= 100;
+//                SimpleDateFormat df=new SimpleDateFormat("mm:ss:S");
+//                jLabel1.setText(df.format(timeLeft));
+//                if(timeLeft<=0)
+//                {
+//                    timer.stop();
+//                }
+//            }
+//        };
+//        timer=new Timer(100, countDown);
+        
+        
+        jButton_submit.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            checkOtpValid(jFormattedTextField1.getText(), json);
+         }
+      });
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -133,7 +144,7 @@ public class OTP extends javax.swing.JFrame {
 
     private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
         // TODO add your handling code here:
-        checkOtpValid(jFormattedTextField1.getText());
+        
     }//GEN-LAST:event_jButton_submitActionPerformed
 
     /**
@@ -141,40 +152,78 @@ public class OTP extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         FlatLightLaf.setup();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new OTP().setVisible(true);
-            }
-        });
+        
     }
     
-    public void checkOtpValid(String otpData){
+    public void checkOtpValid(String otpData, JSONObject json){
         
         if(!Controller.validateOTP(otpData)){
             JOptionPane.showMessageDialog(this, "OTP invalid type! Need to be 6 digits");
         }else{
             try {
-                otpVerify(otpData);
+                otpVerify(otpData, json);
             } catch (IOException ex) {
                 Logger.getLogger(OTP.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
     
-    public void otpVerify(String otpData) throws IOException{
+    public void otpVerify(String otpData, JSONObject json) throws IOException{
         Controller controller = new Controller();
         Map<String, String> inputMap = new HashMap<String, String>();
-        inputMap.put("func", "otp");//push username to inputMap
-        inputMap.put("otp", otpData);//push password hashed to inputMap
+        inputMap.put("func", "otp");
+        inputMap.put("func_1", json.getString("func"));
+        inputMap.put("otpData", otpData);
+        inputMap.put("status", "true");
         String data = controller.convertToJSON(inputMap);
         
 //        JSONObject json = new JSONObject(data);
-        controller.SendReceiveData(controller.convertToJSON(inputMap));
+        controller.SendReceiveData(data);
         String receiveData = controller.SendReceiveData(controller.convertToJSON(inputMap));
-        JSONObject json = new JSONObject(receiveData);//string convert into json object
+        JSONObject jsonDataOtpReceive = new JSONObject(receiveData);//string convert into json object
+        String receive;
+        if(jsonDataOtpReceive.getString("status").equals("true")){
+            switch (json.getString("func")) {
+                case "signup":{
+                    Signup signup = new Signup();
+                    signup.Signup(String.valueOf(json), controller);
+                    break;
+                }
+                case "changePass":{
+                    ChangePassword changePass = new ChangePassword();
+                    changePass.changePass(String.valueOf(json), controller);
+                    break;
+                    }
+            }
+            this.dispose();
+        }else{
+            
+            JOptionPane.showMessageDialog(this, "Wrong OTP!");
+            switch (json.getString("func")) {
+                case "signup":
+                    Login login = new Login();
+                    login.setVisible(true);
+                    break;
+                case "changePass":
+                    Dashboard dashboard = new Dashboard();
+                    dashboard.setVisible(true);
+                    break;
+            }
+        }  
         
-        
-        System.out.println(json.get("otp"));
+        switch (json.getString("func")) {
+                case "signup":
+                  receive = controller.SendReceiveData(data);
+                  break;
+                case "changePass":
+                  System.out.println("Tuesday");
+                  break;
+            }
+       
+    }
+    
+    public boolean check(){
+        return flag;
     }
     
 
