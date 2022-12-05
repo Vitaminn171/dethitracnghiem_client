@@ -5,13 +5,21 @@
 package GUI;
 
 import java.awt.Image;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import org.json.JSONObject;
 
 /**
  *
@@ -23,7 +31,7 @@ public class UserInformation extends javax.swing.JPanel {
      * Creates new form UserInformation
      */
     JFrame changePwd;
-    public UserInformation() {
+    public UserInformation(JSONObject json) {
         initComponents();
         BufferedImage img = null;
         BufferedImage img_edit = null;
@@ -44,7 +52,26 @@ public class UserInformation extends javax.swing.JPanel {
         jButton_changePass.putClientProperty("JButton.buttonType", "borderless");
         jButton_logout.putClientProperty("JButton.buttonType", "borderless");
         
+        //set data to jlabel
         
+        jLabel_username.setText(json.getString("username"));
+        jLabel_fullname.setText(json.getString("fullname"));
+        jLabel_email.setText(json.getString("email"));
+        jLabel_birth.setText(json.getString("birth"));
+        jLabel_gender.setText(json.getString("gender"));
+        jLabel_blockStatus.setText(json.getString("blockStatus"));
+        
+        jButton_edit.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+             try {
+                 EditUserInfor edit = new EditUserInfor(json);
+                 edit.setVisible(true);
+                 
+             } catch (ParseException ex) {
+                 Logger.getLogger(UserInformation.class.getName()).log(Level.SEVERE, null, ex);
+             }
+         }
+      });
     }
 
     /**
@@ -65,12 +92,12 @@ public class UserInformation extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        jLabel_username = new javax.swing.JLabel();
+        jLabel_email = new javax.swing.JLabel();
+        jLabel_fullname = new javax.swing.JLabel();
+        jLabel_birth = new javax.swing.JLabel();
+        jLabel_gender = new javax.swing.JLabel();
+        jLabel_blockStatus = new javax.swing.JLabel();
         jButton_edit = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -173,66 +200,66 @@ public class UserInformation extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(18, 5, 132, 0);
         jPanel2.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel8.setText("lyquocan17");
-        jLabel8.setName(""); // NOI18N
+        jLabel_username.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel_username.setText("lyquocan17");
+        jLabel_username.setName(""); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 129;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(130, 6, 0, 0);
-        jPanel2.add(jLabel8, gridBagConstraints);
+        jPanel2.add(jLabel_username, gridBagConstraints);
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel9.setText("lyquocan171@gmail.com");
+        jLabel_email.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel_email.setText("lyquocan171@gmail.com");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 19;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 6, 0, 0);
-        jPanel2.add(jLabel9, gridBagConstraints);
+        jPanel2.add(jLabel_email, gridBagConstraints);
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel10.setText("ly quoc an");
+        jLabel_fullname.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel_fullname.setText("ly quoc an");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 139;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 6, 0, 0);
-        jPanel2.add(jLabel10, gridBagConstraints);
+        jPanel2.add(jLabel_fullname, gridBagConstraints);
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel11.setText("17/01/2001");
+        jLabel_birth.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel_birth.setText("17/01/2001");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 127;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 6, 0, 0);
-        jPanel2.add(jLabel11, gridBagConstraints);
+        jPanel2.add(jLabel_birth, gridBagConstraints);
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel12.setText("Male");
+        jLabel_gender.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel_gender.setText("Male");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 183;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 6, 0, 0);
-        jPanel2.add(jLabel12, gridBagConstraints);
+        jPanel2.add(jLabel_gender, gridBagConstraints);
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel13.setText("No");
+        jLabel_blockStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel_blockStatus.setText("No");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.ipadx = 197;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 6, 132, 0);
-        jPanel2.add(jLabel13, gridBagConstraints);
+        jPanel2.add(jLabel_blockStatus, gridBagConstraints);
 
         jButton_edit.setText(" ");
         jButton_edit.setBorderPainted(false);
@@ -354,7 +381,9 @@ public class UserInformation extends javax.swing.JPanel {
 
     private void jButton_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_editActionPerformed
         // TODO add your handling code here:
-        
+       Window window = SwingUtilities.getWindowAncestor(this);
+       window.dispose();
+       this.setVisible(false);
         
     }//GEN-LAST:event_jButton_editActionPerformed
 
@@ -364,18 +393,18 @@ public class UserInformation extends javax.swing.JPanel {
     private javax.swing.JButton jButton_edit;
     private javax.swing.JButton jButton_logout;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel_birth;
+    private javax.swing.JLabel jLabel_blockStatus;
+    private javax.swing.JLabel jLabel_email;
+    private javax.swing.JLabel jLabel_fullname;
+    private javax.swing.JLabel jLabel_gender;
+    private javax.swing.JLabel jLabel_username;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
