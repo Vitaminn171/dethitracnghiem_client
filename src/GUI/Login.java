@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.json.JSONObject;
 
 /**
  *
@@ -238,11 +239,19 @@ public class Login extends javax.swing.JFrame {
             Map<String, String> inputMap = new HashMap<String, String>();
             inputMap.put("username", username);//push username to inputMap
             inputMap.put("password", hashPass);//push password hashed to inputMap
-            inputMap.put("func", "login");//push function to inputMap     
-            
+            inputMap.put("func", "login");//push function to inputMap      
+            inputMap.put("status", "true");//push function to inputMap 
             try {
                 String dataReceive = controller.SendReceiveData(controller.convertToJSON(inputMap));
                 System.out.println(dataReceive);
+                JSONObject json = new JSONObject(dataReceive);
+                if(json.get("status").equals("true")){ //status = true -> login
+                    Dashboard dashboard = new Dashboard();
+                    this.dispose();
+                    dashboard.setVisible(true);
+                }else{
+                    
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
             }
