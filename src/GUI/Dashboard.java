@@ -4,14 +4,19 @@
  */
 package GUI;
 
+import BLL.Controller;
+import DTO.UserDTO;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
+import org.json.JSONObject;
 
 /**
  *
@@ -28,11 +33,32 @@ public class Dashboard extends javax.swing.JFrame {
         this.setTitle("Quiz Exam");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        JPanel UserInformation = new UserInformation();
-        JPanel Exam_All = new Exam_All();
-        jTabbedPane1.addTab("User Information", UserInformation);
-        jTabbedPane1.addTab("Exam", Exam_All);
-        
+        Controller controller = new Controller();
+        Map<String, String> inputMap = new HashMap<String, String>();
+            inputMap.put("action", "get_user_information");
+            inputMap.put("func", "user");//push function to inputMap   
+            inputMap.put("username", "quocan123");
+            inputMap.put("fullname", "lyquocan");
+            inputMap.put("email", "lyquocan123@gmail.com");
+            inputMap.put("birth", "12/1/2022");
+            inputMap.put("gender", "true");
+            inputMap.put("blockStatus", "none");
+            
+            
+            
+            try {
+                String dataReceive = controller.SendReceiveData(controller.convertToJSON(inputMap));
+                System.out.println(dataReceive);
+                JSONObject json = new JSONObject(dataReceive);
+               
+                
+                JPanel UserInformation = new UserInformation(json);
+                JPanel Exam_All = new Exam_All();
+                jTabbedPane1.addTab("User Information", UserInformation);
+                jTabbedPane1.addTab("Exam", Exam_All);
+            } catch (IOException ex) {
+                Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
+            }    
     }
 
     /**
