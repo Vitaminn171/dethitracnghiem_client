@@ -58,11 +58,18 @@ public class Exam_All extends javax.swing.JPanel {
 //            inputMap.put("status", "true");
 //            inputMap.put("data", array.toString().replace("\\", ""));
 
+
+        //send data
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("username", username);
         jsonSend.put("func", "getSubject");      
         jsonSend.put("status", "true");
+        //send data
+        
+        
+        //demo data receive
         jsonSend.put("data", array);
+        //demo data receive
 
         ArrayList listSubject = new ArrayList();
 
@@ -110,11 +117,18 @@ public class Exam_All extends javax.swing.JPanel {
                 }
                 //clear data exam before select another subject 
                 
+                
+                //send data to get exam with subject or get ALL with subject selected "ALL"
                 String subjectSelected = jComboBox_subject.getSelectedItem().toString();
                 JSONObject jsonSend_1 = new JSONObject();
+                //send data
                 jsonSend_1.put("username", username);
                 jsonSend_1.put("func", "getExam");
                 jsonSend_1.put("subject", subjectSelected);
+                //send data
+                
+                
+                //demo data receive
                 JSONArray array_1 = new JSONArray();
                 for (int i = 0; i < 5; i++) {
                     JSONObject jsonObj = new JSONObject();
@@ -128,9 +142,14 @@ public class Exam_All extends javax.swing.JPanel {
                     array_1.put(jsonObj);
                 }
                 jsonSend_1.put("data", array_1);
+                //demo data receive
+                
+                
+                
                 String dataReceive_1;
                 
                 try {
+                    //receive data and push it to table 
                     dataReceive_1 = controller.SendReceiveData(jsonSend_1.toString());
                     JSONObject jSONObject_1 = new JSONObject(dataReceive_1);
                     System.out.println(dataReceive_1);
@@ -145,8 +164,9 @@ public class Exam_All extends javax.swing.JPanel {
                                             jOBJ.get("highestScore").toString(),
                                             jOBJ.get("lowestScore").toString(),
                                             jOBJ.get("avgScore").toString()};
-                        //jOBJ.get("subject").toString());
                         
+                        
+                        //add exam to each row
                         model.addRow(row);
                     }
                 } catch (IOException ex) {
