@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -67,11 +69,11 @@ public class Exam_All extends javax.swing.JPanel {
         String dataReceive = controller.SendReceiveData(jsonSend.toString());
         JSONObject jSONObject = new JSONObject(dataReceive);
         JSONArray arrayReceive = jSONObject.getJSONArray("data");
-                        // get json array inside json object 
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject jOBJ = arrayReceive.getJSONObject(i);
-                            listSubject.add(jOBJ.get("subject").toString());
-                            }
+        // get json array inside json object 
+        for (int i = 0; i < arrayReceive.length(); i++) {
+            JSONObject jOBJ = arrayReceive.getJSONObject(i);
+            listSubject.add(jOBJ.get("subject").toString());
+        }
         
         BufferedImage img = null;
         try {
@@ -83,28 +85,75 @@ public class Exam_All extends javax.swing.JPanel {
         ImageIcon imageIcon = new ImageIcon(dimg);
         jButton_search.setIcon(imageIcon);
         
-        //get id while clicked row data
-        Object[] row1 = { "data1", "asdasd", "dasdasdata3", "datasdasda4" };
-        Object[] row2 = { "data2", "asd", "asdasdasd", "asdaqrf" };
-        Object[] row3 = { "data3", "sdfg", "sdfg", "sdfgsdfg" };
-        Object[] row4 = { "data4", "datwera2", "wedata3", "sadf" };
+        
+        
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         
-        model.addRow(row1);
-        model.addRow(row2);
-        model.addRow(row3);
-        model.addRow(row4);
+      
         
         
         for(int i = 0; i < listSubject.size(); i++){
             jComboBox_subject.addItem(listSubject.get(i).toString());
         }
         
+        
         //get subject when click in combo box 
         jComboBox_subject.addActionListener (new ActionListener () {
             public void actionPerformed(ActionEvent e) {
-                System.out.println(jComboBox_subject.getSelectedItem().toString());
+                
+                //clear data exam before select another subject 
+                int rowCount = model.getRowCount();
+                //Remove rows one by one from the end of the table
+                for (int i = rowCount - 1; i >= 0; i--) {
+                    model.removeRow(i);
+                }
+                //clear data exam before select another subject 
+                
+                String subjectSelected = jComboBox_subject.getSelectedItem().toString();
+                JSONObject jsonSend_1 = new JSONObject();
+                jsonSend_1.put("username", username);
+                jsonSend_1.put("func", "getExam");
+                jsonSend_1.put("subject", subjectSelected);
+                JSONArray array_1 = new JSONArray();
+                for (int i = 0; i < 5; i++) {
+                    JSONObject jsonObj = new JSONObject();
+                    jsonObj.put("examID", i);
+                    jsonObj.put("examTitle", "English");
+                    jsonObj.put("numOfquiz", 10);
+                    jsonObj.put("creator", "an");
+                    jsonObj.put("highestScore", 10);
+                    jsonObj.put("lowestScore", 0);
+                    jsonObj.put("avgScore", 5);
+                    array_1.put(jsonObj);
+                }
+                jsonSend_1.put("data", array_1);
+                String dataReceive_1;
+                
+                try {
+                    dataReceive_1 = controller.SendReceiveData(jsonSend_1.toString());
+                    JSONObject jSONObject_1 = new JSONObject(dataReceive_1);
+                    System.out.println(dataReceive_1);
+                    JSONArray arrayReceive_1 = jSONObject_1.getJSONArray("data");
+                    // get json array inside json object
+                    for (int i = 0; i < arrayReceive_1.length(); i++) {
+                        JSONObject jOBJ = arrayReceive_1.getJSONObject(i);
+                        Object[] row = { jOBJ.get("examID").toString(), 
+                                            jOBJ.get("examTitle").toString(), 
+                                            jOBJ.get("numOfquiz").toString(), 
+                                            jOBJ.get("creator").toString(), 
+                                            jOBJ.get("highestScore").toString(),
+                                            jOBJ.get("lowestScore").toString(),
+                                            jOBJ.get("avgScore").toString()};
+                        //jOBJ.get("subject").toString());
+                        
+                        model.addRow(row);
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Server error!");
+                }
+                
             }
         });
         
@@ -139,9 +188,17 @@ public class Exam_All extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Title", "Creator", "Highest Score", "Avg Score", "Lowest Score"
+                "ID", "Title", "Creator", "Num of Quizz", "Highest Score", "Avg Score", "Lowest Score"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jTable1.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
