@@ -58,8 +58,14 @@ public class UserInformation extends javax.swing.JPanel {
         jLabel_fullname.setText(json.getString("fullname"));
         jLabel_email.setText(json.getString("email"));
         jLabel_birth.setText(json.getString("birth"));
-        jLabel_gender.setText(json.getString("gender"));
-        jLabel_blockStatus.setText(json.getString("blockStatus"));
+        String gender = "";
+       if(json.getBoolean("gender")){
+           gender = "male";
+       }else{
+           gender = "female";
+       }
+        jLabel_gender.setText(gender);
+        jLabel_blockStatus.setText(String.valueOf(json.getBoolean("blockStatus")));
         
         jButton_edit.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
@@ -377,6 +383,7 @@ public class UserInformation extends javax.swing.JPanel {
     private void jButton_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_logoutActionPerformed
         // TODO add your handling code here:
         System.exit(0);
+        
     }//GEN-LAST:event_jButton_logoutActionPerformed
 
     private void jButton_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_editActionPerformed

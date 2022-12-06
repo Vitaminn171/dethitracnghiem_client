@@ -464,20 +464,31 @@ public class Signup extends javax.swing.JFrame {
                 else{
                     String hashPass = MD5.getMd5(password);//hash md5 for password
         
-                    Map<String, String> inputMap = new HashMap<String, String>();
-                    inputMap.put("username", username);//push username to inputMap
-                    inputMap.put("password", hashPass);//push password hashed to inputMap
-                    inputMap.put("fullname", fullname);//push fullname to inputMap
-                    inputMap.put("email", email);//push email to inputMap
-                    inputMap.put("birth", dateString);//push birthday to inputMap
-                    inputMap.put("gender", String.valueOf(gender));//push gender to inputMap
-                    inputMap.put("func", "signup");//push function to inputMap
-                    inputMap.put("status", "true");
+//                    Map<String, String> inputMap = new HashMap<String, String>();
+//                    inputMap.put("username", username);//push username to inputMap
+//                    inputMap.put("password", hashPass);//push password hashed to inputMap
+//                    inputMap.put("fullname", fullname);//push fullname to inputMap
+//                    inputMap.put("email", email);//push email to inputMap
+//                    inputMap.put("birth", dateString);//push birthday to inputMap
+//                    inputMap.put("gender", String.valueOf(gender));//push gender to inputMap
+//                    inputMap.put("func", "signup");//push function to inputMap
+//                    inputMap.put("status", "true");
+                    
+                    
+                    JSONObject jsonSend = new JSONObject();
+                    jsonSend.put("username", username);
+                    jsonSend.put("password", hashPass);
+                    jsonSend.put("fullname", fullname);
+                    jsonSend.put("email", email);
+                    jsonSend.put("birth", dateString);
+                    jsonSend.put("gender", gender);
+                    jsonSend.put("func", "signup");
+                    jsonSend.put("status", true);
+                    
                     Controller controller = new Controller();
-                    String data = controller.convertToJSON(inputMap);
-                    JSONObject json =  new JSONObject(data);
+                    
                     //Signup(username, password, email, fullname, dateString, gender);
-                    OTP otp = new OTP(json);
+                    OTP otp = new OTP(jsonSend);
                     otp.setVisible(true);
                     //Signup(data, controller);
 //                    Login login = new Login();
@@ -506,10 +517,13 @@ public class Signup extends javax.swing.JFrame {
             String dataReceive = controller.SendReceiveData(data);
             System.out.println(dataReceive);
             JSONObject jsonReceive = new JSONObject(dataReceive);
-            if(jsonReceive.getString("status").equals("true")){
+            if(jsonReceive.getBoolean("status")){
                 JOptionPane.showMessageDialog(this, "Created account success!");
+                new Login().setVisible(true);
+                
             }else{
-                JOptionPane.showMessageDialog(this, "Created account fail!");
+                JOptionPane.showMessageDialog(this, "Created account fail!" + jsonReceive.getString("message"));
+                new Signup().setVisible(true);
             }
         } catch (IOException ex) {
             Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);

@@ -175,6 +175,12 @@ public class OTP extends javax.swing.JFrame {
         inputMap.put("func_1", json.getString("func"));
         inputMap.put("otpData", otpData);
         inputMap.put("status", "true");
+        
+        JSONObject jsonSend = new JSONObject();
+        jsonSend.put("func", "otp");
+        jsonSend.put("func_1", json.getString("func"));
+        jsonSend.put("otpData", otpData);
+        jsonSend.put("status", true);
         String data = controller.convertToJSON(inputMap);
         
 //        JSONObject json = new JSONObject(data);
@@ -182,11 +188,11 @@ public class OTP extends javax.swing.JFrame {
         String receiveData = controller.SendReceiveData(controller.convertToJSON(inputMap));
         JSONObject jsonDataOtpReceive = new JSONObject(receiveData);//string convert into json object
         String receive;
-        if(jsonDataOtpReceive.getString("status").equals("true")){
+        if(jsonDataOtpReceive.getBoolean("status")){
             switch (json.getString("func")) {
                 case "signup":{
                     Signup signup = new Signup();
-                    signup.Signup(String.valueOf(json), controller);
+                    signup.Signup(json.toString(), controller);
                     break;
                 }
                 case "changePass":{
@@ -210,16 +216,7 @@ public class OTP extends javax.swing.JFrame {
                     break;
             }
         }  
-        
-        switch (json.getString("func")) {
-                case "signup":
-                  receive = controller.SendReceiveData(data);
-                  break;
-                case "changePass":
-                  System.out.println("Tuesday");
-                  break;
-            }
-       
+  
     }
     
     public boolean check(){

@@ -236,21 +236,28 @@ public class Login extends javax.swing.JFrame {
             String pass = String.valueOf(jPasswordField2.getPassword());
             String hashPass = MD5.getMd5(pass);//hash md5 for password
             
-            Map<String, String> inputMap = new HashMap<String, String>();
-            inputMap.put("username", username);//push username to inputMap
-            inputMap.put("password", hashPass);//push password hashed to inputMap
-            inputMap.put("func", "login");//push function to inputMap      
-            inputMap.put("status", "true");//push function to inputMap 
+//            Map<String, String> inputMap = new HashMap<String, String>();
+//            inputMap.put("username", username);//push username to inputMap
+//            inputMap.put("password", hashPass);//push password hashed to inputMap
+//            inputMap.put("func", "login");//push function to inputMap      
+//            inputMap.put("status", "true");//push function to inputMap 
+//            
+            JSONObject jsonSend = new JSONObject();
+            jsonSend.put("username", username);
+            jsonSend.put("password", hashPass);
+            jsonSend.put("func", "login");   
+            jsonSend.put("status", true); 
             try {
-                String dataReceive = controller.SendReceiveData(controller.convertToJSON(inputMap));
+                String dataReceive = controller.SendReceiveData(jsonSend.toString());
                 System.out.println(dataReceive);
                 JSONObject json = new JSONObject(dataReceive);
-                if(json.get("status").equals("true")){ //status = true -> login
+                
+                if(json.getBoolean("status")){ //status = true -> login
                     Dashboard dashboard = new Dashboard();
                     this.dispose();
                     dashboard.setVisible(true);
                 }else{
-                    
+                     JOptionPane.showMessageDialog(this, "Can't login!");
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);

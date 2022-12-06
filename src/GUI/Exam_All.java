@@ -5,14 +5,26 @@
 
 package GUI;
 
+import BLL.Controller;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.awt.Image;
+import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+
 import javax.swing.table.DefaultTableModel;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -22,10 +34,45 @@ public class Exam_All extends javax.swing.JPanel {
 
     /** Creates new form Exam_All */
     //get subject in database
-    String subject[] = { "All", "Physic", "Math", "Chemistry", "English" };
-    public Exam_All() {
+    
+    public Exam_All(String username) throws IOException {
         initComponents();
         //subject = { "Physic", "Math", "Chemistry", "English" };
+        Controller controller = new Controller();
+        
+        
+        Gson gson = new Gson();
+        JSONArray array = new JSONArray();
+        for (int i = 0; i < 10; i++) {
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("subject", String.valueOf(i));
+            array.put(jsonObj);
+        }
+        
+        
+//        Map<String, String> inputMap = new HashMap<String, String>();
+//            inputMap.put("username", username);
+//            inputMap.put("func", "getSubject");//push function to inputMap      
+//            inputMap.put("status", "true");
+//            inputMap.put("data", array.toString().replace("\\", ""));
+
+        JSONObject jsonSend = new JSONObject();
+        jsonSend.put("username", username);
+        jsonSend.put("func", "getSubject");      
+        jsonSend.put("status", "true");
+        jsonSend.put("data", array);
+
+        ArrayList listSubject = new ArrayList();
+
+        String dataReceive = controller.SendReceiveData(jsonSend.toString());
+        JSONObject jSONObject = new JSONObject(dataReceive);
+        JSONArray arrayReceive = jSONObject.getJSONArray("data");
+                        // get json array inside json object 
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject jOBJ = arrayReceive.getJSONObject(i);
+                            listSubject.add(jOBJ.get("subject").toString());
+                            }
+        
         BufferedImage img = null;
         try {
             img = ImageIO.read(getClass().getResource("/GUI/Image/search-icon-2.png"));
@@ -43,13 +90,23 @@ public class Exam_All extends javax.swing.JPanel {
         Object[] row4 = { "data4", "datwera2", "wedata3", "sadf" };
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-
+        
         model.addRow(row1);
         model.addRow(row2);
         model.addRow(row3);
         model.addRow(row4);
         
         
+        for(int i = 0; i < listSubject.size(); i++){
+            jComboBox_subject.addItem(listSubject.get(i).toString());
+        }
+        
+        //get subject when click in combo box 
+        jComboBox_subject.addActionListener (new ActionListener () {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(jComboBox_subject.getSelectedItem().toString());
+            }
+        });
         
     }
 
@@ -119,7 +176,7 @@ public class Exam_All extends javax.swing.JPanel {
         jPanel1.add(jButton_search, gridBagConstraints);
 
         jComboBox_subject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jComboBox_subject.setModel(new javax.swing.DefaultComboBoxModel<>(subject));
+        jComboBox_subject.setModel(new javax.swing.DefaultComboBoxModel<>());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -162,6 +219,7 @@ public class Exam_All extends javax.swing.JPanel {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
+        //get id while clicked row data
         JTable source = (JTable)evt.getSource();
         int row = source.rowAtPoint( evt.getPoint() );
         //int column = source.columnAtPoint( evt.getPoint() );

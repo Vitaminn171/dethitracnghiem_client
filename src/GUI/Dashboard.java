@@ -34,26 +34,37 @@ public class Dashboard extends javax.swing.JFrame {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         Controller controller = new Controller();
-        Map<String, String> inputMap = new HashMap<String, String>();
-            inputMap.put("action", "get_user_information");
-            inputMap.put("func", "user");//push function to inputMap   
-            inputMap.put("username", "quocan123");
-            inputMap.put("fullname", "lyquocan");
-            inputMap.put("email", "lyquocan123@gmail.com");
-            inputMap.put("birth", "12/1/2022");
-            inputMap.put("gender", "true");
-            inputMap.put("blockStatus", "none");
-            
+        
+        //data demo
+//        Map<String, String> inputMap = new HashMap<String, String>();
+//            inputMap.put("action", "get_user_information");
+//            inputMap.put("func", "user");//push function to inputMap   
+//            inputMap.put("username", "quocan123");
+//            inputMap.put("fullname", "lyquocan");
+//            inputMap.put("email", "lyquocan123@gmail.com");
+//            inputMap.put("birth", "12/1/2022");
+//            inputMap.put("gender", "true");
+//            inputMap.put("blockStatus", "none");
+            JSONObject jsonSend = new JSONObject();
+            jsonSend.put("action", "get_user_information");
+            jsonSend.put("func", "user");//push function to inputMap   
+            jsonSend.put("username", "quocan123");
+            jsonSend.put("fullname", "lyquocan");
+            jsonSend.put("email", "lyquocan123@gmail.com");
+            jsonSend.put("birth", "12/1/2022");
+            jsonSend.put("gender", true);
+            jsonSend.put("blockStatus", false);
+        //data demo
             
             
             try {
-                String dataReceive = controller.SendReceiveData(controller.convertToJSON(inputMap));
+                String dataReceive = controller.SendReceiveData(jsonSend.toString());
                 System.out.println(dataReceive);
                 JSONObject json = new JSONObject(dataReceive);
                
                 
                 JPanel UserInformation = new UserInformation(json);
-                JPanel Exam_All = new Exam_All();
+                JPanel Exam_All = new Exam_All(jsonSend.getString("username"));
                 jTabbedPane1.addTab("User Information", UserInformation);
                 jTabbedPane1.addTab("Exam", Exam_All);
             } catch (IOException ex) {

@@ -423,22 +423,31 @@ public class EditUserInfor extends javax.swing.JFrame {
     private void Edit(String username, String email, String fullname, String dateString, boolean gender) {
         
         
-        Map<String, String> inputMap = new HashMap<String, String>();
-        inputMap.put("username", username);//push username to inputMap
-        inputMap.put("fullname", fullname);//push fullname to inputMap
-        inputMap.put("email", email);//push email to inputMap
-        inputMap.put("birth", dateString);//push birthday to inputMap
-        inputMap.put("gender", String.valueOf(gender));//push gender to inputMap
-        inputMap.put("func", "editUserInfor");//push function to inputMap
-        inputMap.put("status", "true");//push function to inputMap
+//        Map<String, String> inputMap = new HashMap<String, String>();
+//        inputMap.put("username", username);//push username to inputMap
+//        inputMap.put("fullname", fullname);//push fullname to inputMap
+//        inputMap.put("email", email);//push email to inputMap
+//        inputMap.put("birth", dateString);//push birthday to inputMap
+//        inputMap.put("gender", String.valueOf(gender));//push gender to inputMap
+//        inputMap.put("func", "editUserInfor");//push function to inputMap
+//        inputMap.put("status", "true");//push function to inputMap
+        
+        JSONObject jsonSend = new JSONObject();
+        jsonSend.put("username", username);
+        jsonSend.put("fullname", fullname);
+        jsonSend.put("email", email);
+        jsonSend.put("birth", dateString);
+        jsonSend.put("gender", gender);
+        jsonSend.put("func", "editUserInfor");
+        jsonSend.put("status", true);
         
         Controller controller = new Controller();
-        String data = controller.convertToJSON(inputMap);
+        
         try {
-            String dataReceive = controller.SendReceiveData(data);
+            String dataReceive = controller.SendReceiveData(jsonSend.toString());
             System.out.println(dataReceive);
             JSONObject json = new JSONObject(dataReceive);
-            if(json.getString("status").equals("true")){
+            if(json.getBoolean("status")){
                 JOptionPane.showMessageDialog(this, "Change information success!");
                 this.dispose();
                 Dashboard dashboard = new Dashboard();
