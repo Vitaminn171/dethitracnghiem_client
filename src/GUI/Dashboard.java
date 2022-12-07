@@ -28,7 +28,7 @@ public class Dashboard extends javax.swing.JFrame {
      * Creates new form Dashboard
      */
     
-    public Dashboard(String username) throws IOException {
+    public Dashboard(String username) throws IOException, Exception {
         initComponents();
         this.setTitle("Quiz Exam");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

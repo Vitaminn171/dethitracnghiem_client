@@ -511,7 +511,7 @@ public class Signup extends javax.swing.JFrame {
         }
     }
     
-    public void Signup(String data, Controller controller) {
+    public void Signup(String data, Controller controller) throws Exception {
         //Controller controller = new Controller();
         try {
             String dataReceive = controller.SendReceiveData(data);

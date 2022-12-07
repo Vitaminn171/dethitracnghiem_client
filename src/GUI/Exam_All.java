@@ -39,7 +39,7 @@ public class Exam_All extends javax.swing.JPanel {
     /** Creates new form Exam_All */
     //get subject in database
     
-    public Exam_All(String username) throws IOException {
+    public Exam_All(String username) throws IOException, Exception {
         initComponents();
         //subject = { "Physic", "Math", "Chemistry", "English" };
         Controller controller = new Controller();
@@ -156,6 +156,8 @@ public class Exam_All extends javax.swing.JPanel {
                                    
                                 } catch (IOException ex) {
                                     Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (Exception ex) {
+                                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }  
                         }
@@ -163,6 +165,8 @@ public class Exam_All extends javax.swing.JPanel {
                 } catch (IOException ex) {
                     Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "Server error!");
+                } catch (Exception ex) {
+                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
             }

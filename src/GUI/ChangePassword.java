@@ -254,7 +254,7 @@ public class ChangePassword extends javax.swing.JFrame {
 //        });
     }
     
-    public void changePass(String data, Controller controller){
+    public void changePass(String data, Controller controller) throws Exception{
         String pass = String.valueOf(jPasswordField1.getPassword());
         
             
@@ -262,7 +262,7 @@ public class ChangePassword extends javax.swing.JFrame {
                     String dataReceive = controller.SendReceiveData(data);
                     System.out.println(dataReceive);
                     JSONObject jsonReceive = new JSONObject(dataReceive);
-                    if(jsonReceive.getString("status").equals("true")){
+                    if(jsonReceive.getBoolean("status")){
                         JOptionPane.showMessageDialog(this, "Change password success!");
                     }else{
                         JOptionPane.showMessageDialog(this, "Change password fail!");

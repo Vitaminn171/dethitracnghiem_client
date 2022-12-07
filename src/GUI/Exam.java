@@ -40,7 +40,7 @@ public class Exam extends javax.swing.JFrame {
     static Timer timer;
     int i = 0;
     public ButtonGroup G;
-    public Exam(JSONObject jsonExam, String username) throws IOException {
+    public Exam(JSONObject jsonExam, String username) throws IOException, Exception {
         initComponents();
         this.setTitle("Quiz Exam");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -201,6 +201,8 @@ public class Exam extends javax.swing.JFrame {
                     result.setVisible(true);
                 } catch (IOException ex) {
                     Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
             }
@@ -258,6 +260,8 @@ public class Exam extends javax.swing.JFrame {
                         Result result = new Result(jsonResult);
                         result.setVisible(true);
                     } catch (IOException ex) {
+                        Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (Exception ex) {
                         Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -500,7 +504,7 @@ public class Exam extends javax.swing.JFrame {
     
  
     
-    private JSONObject getExamQuest(Controller controller, String username, int id) throws IOException{
+    private JSONObject getExamQuest(Controller controller, String username, int id) throws IOException, Exception{
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("username", username);
         jsonSend.put("func", "getExam");

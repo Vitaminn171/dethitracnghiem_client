@@ -199,8 +199,12 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_signupActionPerformed
 
     private void jButton_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_loginActionPerformed
-        // TODO add your handling code here:
-        Login();
+        try {
+            // TODO add your handling code here:
+            Login();
+        } catch (Exception ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_jButton_loginActionPerformed
 
@@ -230,7 +234,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordField2;
     // End of variables declaration//GEN-END:variables
 
-    private void Login() {
+    private void Login() throws Exception {
         if(jFormattedTextField1.getText().length() != 0 && jPasswordField2.getPassword().length != 0){
             String username = jFormattedTextField1.getText();
             String pass = String.valueOf(jPasswordField2.getPassword());

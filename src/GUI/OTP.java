@@ -73,7 +73,11 @@ public class OTP extends javax.swing.JFrame {
         
         jButton_submit.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
-            checkOtpValid(jFormattedTextField1.getText(), json);
+             try {
+                 checkOtpValid(jFormattedTextField1.getText(), json);
+             } catch (Exception ex) {
+                 Logger.getLogger(OTP.class.getName()).log(Level.SEVERE, null, ex);
+             }
          }
       });
     }
@@ -155,7 +159,7 @@ public class OTP extends javax.swing.JFrame {
         
     }
     
-    public void checkOtpValid(String otpData, JSONObject json){
+    public void checkOtpValid(String otpData, JSONObject json) throws Exception{
         
         if(!Controller.validateOTP(otpData)){
             JOptionPane.showMessageDialog(this, "OTP invalid type! Need to be 6 digits");
@@ -168,7 +172,7 @@ public class OTP extends javax.swing.JFrame {
         }
     }
     
-    public void otpVerify(String otpData, JSONObject json) throws IOException{
+    public void otpVerify(String otpData, JSONObject json) throws IOException, Exception{
         Controller controller = new Controller();
 //        Map<String, String> inputMap = new HashMap<String, String>();
 //        inputMap.put("func", "otp");

@@ -418,7 +418,7 @@ public class EditUserInfor extends javax.swing.JFrame {
         }
     }
     
-    private void Edit(String username, String email, String fullname, String dateString, boolean gender, String oldUsername) {
+    private void Edit(String username, String email, String fullname, String dateString, boolean gender, String oldUsername) throws Exception {
         
         
 //        Map<String, String> inputMap = new HashMap<String, String>();
