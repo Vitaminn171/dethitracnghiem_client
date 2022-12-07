@@ -119,11 +119,20 @@ public class Controller {
         
     }
     
-    public String SendReceiveData(String data) throws IOException { 
+    public String SendReceiveData(String data) throws IOException, Exception {
+        Key key= AES.generateRandomKey();
+        String encryptedData= AES.encrypt(data, key);
+        String keyValue= AES.convertKeytoString(key);
+        data= keyValue+"///"+encryptedData;
         out.write(data);
         out.newLine();
         out.flush();
         String dataReceive = in.readLine();
+        if (dataReceive.contains("///")) {
+            String dataReceiveKey= dataReceive.split("///")[0];
+            String encryptedDataReceive = dataReceive.split("///")[1];
+            dataReceive=AES.decrypt(encryptedDataReceive, AES.generateKey(dataReceiveKey));
+        }
         return dataReceive;
     }
     
