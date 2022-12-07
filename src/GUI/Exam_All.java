@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.awt.Image;
 import java.awt.List;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -23,6 +24,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
@@ -44,12 +46,7 @@ public class Exam_All extends javax.swing.JPanel {
         
         
         Gson gson = new Gson();
-        JSONArray array = new JSONArray();
-        for (int i = 0; i < 10; i++) {
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("subject", String.valueOf(i));
-            array.put(jsonObj);
-        }
+        
         
         
 //        Map<String, String> inputMap = new HashMap<String, String>();
@@ -63,13 +60,10 @@ public class Exam_All extends javax.swing.JPanel {
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("username", username);
         jsonSend.put("func", "getSubject");      
-        jsonSend.put("status", "true");
         //send data
         
         
-        //demo data receive
-        jsonSend.put("data", array);
-        //demo data receive
+        
 
         ArrayList listSubject = new ArrayList();
 
@@ -81,20 +75,9 @@ public class Exam_All extends javax.swing.JPanel {
             JSONObject jOBJ = arrayReceive.getJSONObject(i);
             listSubject.add(jOBJ.get("subject").toString());
         }
-        
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(getClass().getResource("/GUI/Image/search-icon-2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Image dimg = img.getScaledInstance(25, 25,Image.SCALE_SMOOTH);
-        ImageIcon imageIcon = new ImageIcon(dimg);
-        jButton_search.setIcon(imageIcon);
-        
-        
-        
-        
+           
+        //jButton_search.setIcon(setImageIcon("/GUI/Image/search-icon-2.png",25,25));
+ 
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         
       
@@ -125,24 +108,7 @@ public class Exam_All extends javax.swing.JPanel {
                 jsonSend_1.put("username", username);
                 jsonSend_1.put("func", "getExam");
                 jsonSend_1.put("subject", subjectSelected);
-                //send data
                 
-                
-                //demo data receive
-                JSONArray array_1 = new JSONArray();
-                for (int i = 0; i < 5; i++) {
-                    JSONObject jsonObj = new JSONObject();
-                    jsonObj.put("examID", i);
-                    jsonObj.put("examTitle", "English");
-                    jsonObj.put("numOfquiz", 10);
-                    jsonObj.put("creator", "an");
-                    jsonObj.put("highestScore", 10);
-                    jsonObj.put("lowestScore", 0);
-                    jsonObj.put("avgScore", 5);
-                    array_1.put(jsonObj);
-                }
-                jsonSend_1.put("data", array_1);
-                //demo data receive
                 
                 
                 
@@ -169,6 +135,31 @@ public class Exam_All extends javax.swing.JPanel {
                         //add exam to each row
                         model.addRow(row);
                     }
+                    
+                    jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            //int row = jTable1.rowAtPoint(evt.getPoint());
+                            //int col = jTable1.columnAtPoint(evt.getPoint());
+                            int row = jTable1.rowAtPoint( evt.getPoint() );
+                            //int column = source.columnAtPoint( evt.getPoint() );
+                            String s = jTable1.getModel().getValueAt(row, 0)+"";
+                            String title = jTable1.getModel().getValueAt(row, 1)+"";
+
+                            int a = JOptionPane.showConfirmDialog(null,"Start the exam ID " + s + ", with title " + title + " ?");  
+                            if(a == JOptionPane.YES_OPTION){  
+                                JSONObject jsonExam = arrayReceive_1.getJSONObject(Integer.parseInt(s));
+                                
+                                
+                                try {
+                                    new Exam(jsonExam,username).setVisible(true);
+                                   
+                                } catch (IOException ex) {
+                                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }  
+                        }
+                    });
                 } catch (IOException ex) {
                     Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "Server error!");
@@ -176,6 +167,9 @@ public class Exam_All extends javax.swing.JPanel {
                 
             }
         });
+        
+        
+        
         
     }
 
@@ -192,9 +186,7 @@ public class Exam_All extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton_search = new javax.swing.JButton();
         jComboBox_subject = new javax.swing.JComboBox<>();
-        jFormattedTextField_search = new javax.swing.JFormattedTextField();
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -239,19 +231,6 @@ public class Exam_All extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
-        jButton_search.setBackground(new java.awt.Color(34, 133, 225));
-        jButton_search.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jButton_search.setForeground(new java.awt.Color(0, 0, 0));
-        jButton_search.setText("  Find");
-        jButton_search.setBorderPainted(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
-        jPanel1.add(jButton_search, gridBagConstraints);
-
         jComboBox_subject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jComboBox_subject.setModel(new javax.swing.DefaultComboBoxModel<>());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -262,21 +241,6 @@ public class Exam_All extends javax.swing.JPanel {
         gridBagConstraints.ipady = 15;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
         jPanel1.add(jComboBox_subject, gridBagConstraints);
-
-        jFormattedTextField_search.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jFormattedTextField_search.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField_searchActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 211;
-        gridBagConstraints.ipady = 15;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
-        jPanel1.add(jFormattedTextField_search, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -290,27 +254,28 @@ public class Exam_All extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jFormattedTextField_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField_searchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField_searchActionPerformed
-
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         //get id while clicked row data
-        JTable source = (JTable)evt.getSource();
-        int row = source.rowAtPoint( evt.getPoint() );
-        //int column = source.columnAtPoint( evt.getPoint() );
-        String s=source.getModel().getValueAt(row, 0)+"";
-
-        JOptionPane.showMessageDialog(null, s);
+        
         
     }//GEN-LAST:event_jTable1MouseClicked
 
+    
+    private ImageIcon setImageIcon(String path, int x, int y){
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(getClass().getResource(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Image dimg = img.getScaledInstance(x, y,Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        return imageIcon;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_search;
     private javax.swing.JComboBox<String> jComboBox_subject;
-    private javax.swing.JFormattedTextField jFormattedTextField_search;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

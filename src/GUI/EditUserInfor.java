@@ -11,6 +11,8 @@ import com.sun.source.tree.BreakTree;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.ParseException;
@@ -83,21 +85,27 @@ public class EditUserInfor extends javax.swing.JFrame {
         Date date=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1); 
         jXDatePicker1.setDate(date);
         
-        if(json.getString("gender").equals("true")){
+        if(json.getBoolean("gender")){
             jRadioButton_male.setSelected(true);
         }else{
             jRadioButton_female.setSelected(true);
         }
         
-        /* 
-        if(jRadioButton_male.isSelected()){
-            //TODO
-        }else if(jRadioButton_female.isSelected()){
-            //TODO
-        }else{
-            JOptionPane.showMessageDialog(this, "error");
-    }
-        */
+       jButton_submit.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            String username = jFormattedTextField_username.getText();
+            String email = jFormattedTextField_email.getText();
+            String fullname = jFormattedTextField_fullname.getText();
+            Date birthDate = jXDatePicker1.getDate();//get birthday to check it must before today
+            boolean gender = false;
+            if(jRadioButton_male.isSelected()){
+                gender = true; //male Selected
+            }else if(jRadioButton_female.isSelected()){
+                gender = false; //female Selected
+            }
+            checkValidate(username, email, fullname, birthDate, gender, json.getString("username"));
+        }
+      });
 
     }
     
@@ -345,17 +353,7 @@ public class EditUserInfor extends javax.swing.JFrame {
 
     private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
         // TODO add your handling code here:
-        String username = jFormattedTextField_username.getText();
-        String email = jFormattedTextField_email.getText();
-        String fullname = jFormattedTextField_fullname.getText();
-        Date birthDate = jXDatePicker1.getDate();//get birthday to check it must before today
-        boolean gender = false;
-        if(jRadioButton_male.isSelected()){
-            gender = true; //male Selected
-        }else if(jRadioButton_female.isSelected()){
-            gender = false; //female Selected
-        }
-        checkValidate(username, email, fullname, birthDate, gender);
+        
         
     }//GEN-LAST:event_jButton_submitActionPerformed
 
@@ -379,7 +377,7 @@ public class EditUserInfor extends javax.swing.JFrame {
             
     }
     
-    private void checkValidate(String username, String email, String fullname, Date birthDate, boolean gender){
+    private void checkValidate(String username, String email, String fullname, Date birthDate, boolean gender, String oldUsername){
         try{
             
             
@@ -403,7 +401,7 @@ public class EditUserInfor extends javax.swing.JFrame {
                 }
                 else{
                     //JOptionPane.showMessageDialog(this, "Created account success!");
-                    Edit(username, email, fullname, dateString, gender);
+                    Edit(username, email, fullname, dateString, gender, oldUsername);
                 }
 
 
@@ -420,7 +418,7 @@ public class EditUserInfor extends javax.swing.JFrame {
         }
     }
     
-    private void Edit(String username, String email, String fullname, String dateString, boolean gender) {
+    private void Edit(String username, String email, String fullname, String dateString, boolean gender, String oldUsername) {
         
         
 //        Map<String, String> inputMap = new HashMap<String, String>();
@@ -434,12 +432,13 @@ public class EditUserInfor extends javax.swing.JFrame {
         
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("username", username);
+        jsonSend.put("oldUsername", oldUsername);
         jsonSend.put("fullname", fullname);
         jsonSend.put("email", email);
         jsonSend.put("birth", dateString);
         jsonSend.put("gender", gender);
         jsonSend.put("func", "editUserInfor");
-        jsonSend.put("status", true);
+        
         
         Controller controller = new Controller();
         
@@ -450,7 +449,7 @@ public class EditUserInfor extends javax.swing.JFrame {
             if(json.getBoolean("status")){
                 JOptionPane.showMessageDialog(this, "Change information success!");
                 this.dispose();
-                Dashboard dashboard = new Dashboard();
+                Dashboard dashboard = new Dashboard(username);
                 dashboard.setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(this, "Change information failed!");

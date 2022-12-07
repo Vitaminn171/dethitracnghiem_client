@@ -78,6 +78,12 @@ public class UserInformation extends javax.swing.JPanel {
              }
          }
       });
+         jButton_changePass.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+             ChangePassword changePwd = new ChangePassword(json.getString("username"));
+             changePwd.setVisible(true);
+         }
+      });
     }
 
     /**
@@ -375,9 +381,7 @@ public class UserInformation extends javax.swing.JPanel {
 
     private void jButton_changePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_changePassActionPerformed
         // TODO add your handling code here:
-        changePwd = new ChangePassword();
-        changePwd.setVisible(true);
-        
+
     }//GEN-LAST:event_jButton_changePassActionPerformed
 
     private void jButton_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_logoutActionPerformed

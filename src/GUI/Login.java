@@ -245,15 +245,14 @@ public class Login extends javax.swing.JFrame {
             JSONObject jsonSend = new JSONObject();
             jsonSend.put("username", username);
             jsonSend.put("password", hashPass);
-            jsonSend.put("func", "login");   
-            jsonSend.put("status", true); 
+            jsonSend.put("func", "login");
             try {
                 String dataReceive = controller.SendReceiveData(jsonSend.toString());
                 System.out.println(dataReceive);
                 JSONObject json = new JSONObject(dataReceive);
                 
                 if(json.getBoolean("status")){ //status = true -> login
-                    Dashboard dashboard = new Dashboard();
+                    Dashboard dashboard = new Dashboard(username);
                     this.dispose();
                     dashboard.setVisible(true);
                 }else{

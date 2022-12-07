@@ -9,9 +9,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONObject;
 
 /**
  *
@@ -22,7 +25,7 @@ public class Result extends javax.swing.JFrame {
     /**
      * Creates new form Result
      */
-    public Result() {
+    public Result(JSONObject jsonResult) {
         initComponents();
         this.setTitle("Quiz Exam Result");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -33,6 +36,26 @@ public class Result extends javax.swing.JFrame {
         
         jButton1.putClientProperty( "JButton.buttonType", "roundRect" );
         jButton1.putClientProperty( "JButton.focusWidth", 1 );
+        
+        jLabel_examinee_data.setText(jsonResult.getString("examinee"));
+        jLabel_score_data.setText(jsonResult.getString("score"));
+        jLabel_correct_data.setText(jsonResult.getString("correct"));
+        jLabel_wrong_data.setText(jsonResult.getString("wrong"));
+        
+        jButton1.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            try {
+            // TODO add your handling code here:
+            //this.dispose();
+            Dashboard dashboard = new Dashboard(jsonResult.getString("examinee"));
+            dashboard.setVisible(true);
+            getContentPane().setVisible(false);
+        } catch (IOException ex) {
+            Logger.getLogger(Result.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         }
+      });
+        
     }
 
     /**
@@ -50,13 +73,11 @@ public class Result extends javax.swing.JFrame {
         jLabel_score = new javax.swing.JLabel();
         jLabel_correct = new javax.swing.JLabel();
         jLabel_wrong = new javax.swing.JLabel();
-        jLabel_time = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel_examinee_data = new javax.swing.JLabel();
         jLabel_score_data = new javax.swing.JLabel();
         jLabel_correct_data = new javax.swing.JLabel();
         jLabel_wrong_data = new javax.swing.JLabel();
-        jLabel_time_data = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -110,16 +131,6 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
         getContentPane().add(jLabel_wrong, gridBagConstraints);
-
-        jLabel_time.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel_time.setText("Time :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
-        getContentPane().add(jLabel_time, gridBagConstraints);
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton1.setText("OK");
@@ -188,32 +199,11 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(18, 16, 0, 42);
         getContentPane().add(jLabel_wrong_data, gridBagConstraints);
 
-        jLabel_time_data.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel_time_data.setText("time");
-        jLabel_time_data.setMaximumSize(null);
-        jLabel_time_data.setMinimumSize(null);
-        jLabel_time_data.setPreferredSize(null);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 16, 0, 42);
-        getContentPane().add(jLabel_time_data, gridBagConstraints);
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // TODO add your handling code here:
-            //this.dispose();
-            Dashboard dashboard = new Dashboard();
-            dashboard.setVisible(true);
-        } catch (IOException ex) {
-            Logger.getLogger(Result.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       this.dispose();
+        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -222,11 +212,11 @@ public class Result extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         FlatLightLaf.setup();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Result().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new Result().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -238,8 +228,6 @@ public class Result extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_examinee_data;
     private javax.swing.JLabel jLabel_score;
     private javax.swing.JLabel jLabel_score_data;
-    private javax.swing.JLabel jLabel_time;
-    private javax.swing.JLabel jLabel_time_data;
     private javax.swing.JLabel jLabel_wrong;
     private javax.swing.JLabel jLabel_wrong_data;
     // End of variables declaration//GEN-END:variables

@@ -28,7 +28,7 @@ public class Dashboard extends javax.swing.JFrame {
      * Creates new form Dashboard
      */
     
-    public Dashboard() throws IOException {
+    public Dashboard(String username) throws IOException {
         initComponents();
         this.setTitle("Quiz Exam");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -48,12 +48,8 @@ public class Dashboard extends javax.swing.JFrame {
             JSONObject jsonSend = new JSONObject();
             jsonSend.put("action", "get_user_information");
             jsonSend.put("func", "user");//push function to inputMap   
-            jsonSend.put("username", "quocan123");
-            jsonSend.put("fullname", "lyquocan");
-            jsonSend.put("email", "lyquocan123@gmail.com");
-            jsonSend.put("birth", "12/1/2022");
-            jsonSend.put("gender", true);
-            jsonSend.put("blockStatus", false);
+            jsonSend.put("username", username);
+            
         //data demo
             
             
@@ -119,15 +115,15 @@ public class Dashboard extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         FlatLightLaf.setup();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new Dashboard().setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                try {
+//                    new Dashboard(username).setVisible(true);
+//                } catch (IOException ex) {
+//                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

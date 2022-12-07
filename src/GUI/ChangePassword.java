@@ -10,6 +10,8 @@ import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
@@ -33,7 +35,7 @@ public class ChangePassword extends javax.swing.JFrame {
     /**
      * Creates new form ChangePassword
      */
-    public ChangePassword() {
+    public ChangePassword(String username) {
         initComponents();
         this.setTitle("Quiz Exam Change Password");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -54,6 +56,42 @@ public class ChangePassword extends javax.swing.JFrame {
         Image dimg = img.getScaledInstance(25, 25,Image.SCALE_SMOOTH);
         ImageIcon imageIcon = new ImageIcon(dimg);
         jButton_eye.setIcon(imageIcon);
+        
+        jButton_submit.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+             if(jPasswordField1.getPassword().length != 0 && jPasswordField2.getPassword().length != 0){
+            Controller controller = new Controller();
+            String password = String.valueOf(jPasswordField1.getPassword());
+            String password1 = String.valueOf(jPasswordField1.getPassword());
+            if(!password.equals(password1)){
+                JOptionPane.showMessageDialog(null, "Password doesn't match! Please retype.");
+            if(!Controller.validatePassword(password)){
+                JOptionPane.showMessageDialog(null, "Password too weak or invalid!");
+            }
+            }else{
+                String hashPass = MD5.getMd5(password);//hash md5 for password
+
+//                Map<String, String> inputMap = new HashMap<String, String>();
+//                inputMap.put("func", "changePass");//push username to inputMap
+//                inputMap.put("password", hashPass);//push password hashed to inputMap
+                
+                JSONObject jsonSend = new JSONObject();
+                jsonSend.put("func", "changePass");
+                jsonSend.put("password", hashPass);
+                jsonSend.put("username", username);
+                
+                
+                OTP otp = new OTP(jsonSend);
+                otp.setVisible(true);
+                getContentPane().setVisible(false);
+                
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "Do not leave the password field blank!");
+        }
+         }
+      });
     }
 
     /**
@@ -184,34 +222,7 @@ public class ChangePassword extends javax.swing.JFrame {
 
     private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
         // TODO add your handling code here:
-        if(jPasswordField1.getPassword().length != 0 && jPasswordField2.getPassword().length != 0){
-            Controller controller = new Controller();
-            String password = String.valueOf(jPasswordField1.getPassword());
-            String password1 = String.valueOf(jPasswordField1.getPassword());
-            if(!password.equals(password1)){
-                JOptionPane.showMessageDialog(this, "Password doesn't match! Please retype.");
-            if(!Controller.validatePassword(password)){
-                JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
-            }
-            }else{
-                String hashPass = MD5.getMd5(password);//hash md5 for password
-
-                Map<String, String> inputMap = new HashMap<String, String>();
-                inputMap.put("func", "changePass");//push username to inputMap
-                inputMap.put("password", hashPass);//push password hashed to inputMap
-                inputMap.put("status", "true");
-                String data = controller.convertToJSON(inputMap);
-                JSONObject json =  new JSONObject(data);
-                
-                OTP otp = new OTP(json);
-                otp.setVisible(true);
-                this.dispose();
-                
-            }
-            
-        }else{
-            JOptionPane.showMessageDialog(this, "Do not leave the password field blank!");
-        }
+        
         
     }//GEN-LAST:event_jButton_submitActionPerformed
 
@@ -236,11 +247,11 @@ public class ChangePassword extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         FlatLightLaf.setup();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ChangePassword().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new ChangePassword().setVisible(true);
+//            }
+//        });
     }
     
     public void changePass(String data, Controller controller){

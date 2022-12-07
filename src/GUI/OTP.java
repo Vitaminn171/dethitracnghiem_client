@@ -170,22 +170,21 @@ public class OTP extends javax.swing.JFrame {
     
     public void otpVerify(String otpData, JSONObject json) throws IOException{
         Controller controller = new Controller();
-        Map<String, String> inputMap = new HashMap<String, String>();
-        inputMap.put("func", "otp");
-        inputMap.put("func_1", json.getString("func"));
-        inputMap.put("otpData", otpData);
-        inputMap.put("status", "true");
+//        Map<String, String> inputMap = new HashMap<String, String>();
+//        inputMap.put("func", "otp");
+//        inputMap.put("func_1", json.getString("func"));
+//        inputMap.put("otpData", otpData);
+//        inputMap.put("status", "true");
         
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("func", "otp");
         jsonSend.put("func_1", json.getString("func"));
         jsonSend.put("otpData", otpData);
-        jsonSend.put("status", true);
-        String data = controller.convertToJSON(inputMap);
+        jsonSend.put("username", json.getString("username"));
+        
         
 //        JSONObject json = new JSONObject(data);
-        controller.SendReceiveData(data);
-        String receiveData = controller.SendReceiveData(controller.convertToJSON(inputMap));
+        String receiveData = controller.SendReceiveData(jsonSend.toString());
         JSONObject jsonDataOtpReceive = new JSONObject(receiveData);//string convert into json object
         String receive;
         if(jsonDataOtpReceive.getBoolean("status")){
@@ -196,7 +195,7 @@ public class OTP extends javax.swing.JFrame {
                     break;
                 }
                 case "changePass":{
-                    ChangePassword changePass = new ChangePassword();
+                    ChangePassword changePass = new ChangePassword(json.getString("username"));
                     changePass.changePass(String.valueOf(json), controller);
                     break;
                     }
@@ -211,7 +210,7 @@ public class OTP extends javax.swing.JFrame {
                     login.setVisible(true);
                     break;
                 case "changePass":
-                    Dashboard dashboard = new Dashboard();
+                    Dashboard dashboard = new Dashboard(json.getString("username"));
                     dashboard.setVisible(true);
                     break;
             }
