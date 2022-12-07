@@ -162,9 +162,6 @@ public class Exam_All extends javax.swing.JPanel {
                             }  
                         }
                     });
-                } catch (IOException ex) {
-                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, "Server error!");
                 } catch (Exception ex) {
                     Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -86,17 +86,7 @@ public class Controller {
             System.out.println("connecting...");
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-//          Send send = new Send(socket, out, );
-//            Receive recv = new Receive(socket, in);
-            
-//
-////            
-////            
-//            excutor = Executors.newFixedThreadPool(2);
-////          excutor.execute(send);
-//            excutor.execute(recv);
-
+            new Login().setVisible(true);
         } catch (UnknownHostException e) {
             e.printStackTrace();
 
@@ -110,7 +100,7 @@ public class Controller {
     
     public static void closeConnectToServer() throws IOException{
         //close
-        excutor.close();
+        
         in.close();
         out.close();
         socket.close();
@@ -119,11 +109,20 @@ public class Controller {
         
     }
     
-    public String SendReceiveData(String data) throws IOException { 
+    public String SendReceiveData(String data) throws IOException, Exception {
+        Key key= AES.generateRandomKey();
+        String encryptedData= AES.encrypt(data, key);
+        String keyValue= AES.convertKeytoString(key);
+        data= keyValue+"///"+encryptedData;
         out.write(data);
         out.newLine();
         out.flush();
         String dataReceive = in.readLine();
+        if (dataReceive.contains("///")) {
+            String dataReceiveKey= dataReceive.split("///")[0];
+            String encryptedDataReceive = dataReceive.split("///")[1];
+            dataReceive=AES.decrypt(encryptedDataReceive, AES.generateKey(dataReceiveKey));
+        }
         return dataReceive;
     }
     

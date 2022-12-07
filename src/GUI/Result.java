@@ -52,7 +52,9 @@ public class Result extends javax.swing.JFrame {
             getContentPane().setVisible(false);
         } catch (IOException ex) {
             Logger.getLogger(Result.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }    catch (Exception ex) {
+                 Logger.getLogger(Result.class.getName()).log(Level.SEVERE, null, ex);
+             }
          }
       });
         
