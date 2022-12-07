@@ -61,8 +61,6 @@ public class Dashboard extends javax.swing.JFrame {
                 String dataReceive = controller.SendReceiveData(jsonSend.toString());
                 System.out.println(dataReceive);
                 JSONObject json = new JSONObject(dataReceive);
-               
-                
                 JPanel UserInformation = new UserInformation(json);
                 JPanel Exam_All = new Exam_All(jsonSend.getString("username"));
                 jTabbedPane1.addTab("User Information", UserInformation);
@@ -72,6 +70,17 @@ public class Dashboard extends javax.swing.JFrame {
             }    
     }
 
+    public Dashboard(JSONObject json) throws IOException {
+        initComponents();
+        this.setTitle("Quiz Exam");
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        Controller controller = new Controller();
+        JPanel UserInformation = new UserInformation(json);
+        JPanel Exam_All = new Exam_All();
+        jTabbedPane1.addTab("User Information", UserInformation);
+        jTabbedPane1.addTab("Exam", Exam_All);    
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -88,7 +97,6 @@ public class Dashboard extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(1000, 900));
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jTabbedPane1.setForeground(new java.awt.Color(0, 0, 0));
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTabbedPane1.setMaximumSize(new java.awt.Dimension(0, 0));
@@ -117,18 +125,18 @@ public class Dashboard extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        FlatLightLaf.setup();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new Dashboard().setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        FlatLightLaf.setup();
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                try {
+//                    new Dashboard().setVisible(true);
+//                } catch (IOException ex) {
+//                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane jTabbedPane1;

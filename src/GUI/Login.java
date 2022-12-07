@@ -253,11 +253,11 @@ public class Login extends javax.swing.JFrame {
                 JSONObject json = new JSONObject(dataReceive);
                 
                 if(json.getBoolean("status")){ //status = true -> login
-                    Dashboard dashboard = new Dashboard();
+                    Dashboard dashboard = new Dashboard(json);
                     this.dispose();
                     dashboard.setVisible(true);
                 }else{
-                     JOptionPane.showMessageDialog(this, "Can't login!");
+                    JOptionPane.showMessageDialog(this, "Username or password is incorrect!");
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);

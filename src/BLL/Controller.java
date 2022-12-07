@@ -19,6 +19,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -114,9 +115,7 @@ public class Controller {
         in.close();
         out.close();
         socket.close();
-        System.out.println("closeConnectToServer");
-
-        
+        System.out.println("closeConnectToServer");   
     }
     
     public String SendReceiveData(String data) throws IOException, Exception {
@@ -135,19 +134,30 @@ public class Controller {
         }
         return dataReceive;
     }
-    
-    
+
     public String convertToJSON(Map<String,String> data){
         Gson gson = new Gson();
         String json = gson.toJson(data);
         return json;
     }
+    
+    public String generateOTP() {
 
-    
- 
-    
-   
-    
+        // Using numeric values
+        String numbers = "0123456789";
+
+        // Using random method
+        Random rndm_method = new Random();
+
+        char[] otp = new char[6];
+
+        for (int i = 0; i < 6; i++) {
+            // Use of charAt() method : to get character value
+            // Use of nextInt() as it is scanning the value as int
+            otp[i] = numbers.charAt(rndm_method.nextInt(numbers.length()));
+        }
+        return String.valueOf(otp);
+    }
 }
 
 //class Send implements Runnable{
