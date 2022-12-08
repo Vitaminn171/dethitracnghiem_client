@@ -26,9 +26,11 @@ import java.sql.SQLException;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
@@ -44,24 +46,15 @@ public class Exam_All extends javax.swing.JPanel {
     /**
      * Creates new form Exam_All
      */
-    //get subject in database
-    String subject[] = {"All", "Physic", "Math", "Chemistry", "English"};
 
     public Exam_All(String username) throws IOException, Exception {
         initComponents();
-        //subject = { "Physic", "Math", "Chemistry", "English" };
+        setCenterTable();
+        
         Controller controller = new Controller();
-
-        Gson gson = new Gson();
-
-//        Map<String, String> inputMap = new HashMap<String, String>();
-//            inputMap.put("username", username);
-//            inputMap.put("func", "getSubject");//push function to inputMap      
-//            inputMap.put("status", "true");
-//            inputMap.put("data", array.toString().replace("\\", ""));
         JSONObject jsonExam = new JSONObject();
         jsonExam.put("username", username);
-        jsonExam.put("func", "getExam");
+        jsonExam.put("func", "getExamAll");
 
         //send data
         JSONObject jsonSend = new JSONObject();
@@ -85,20 +78,18 @@ public class Exam_All extends javax.swing.JPanel {
             listSubject.add(jOBJ.get("subjectname").toString());
         }
 
-        /* BufferedImage img = null;
-        File f = new File("C:\\Image\\search-icon-2.png");
-        try {
-            img = ImageIO.read(f);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Image dimg = img.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        ImageIcon imageIcon = new ImageIcon(dimg);
-        jButton_search.setIcon(imageIcon); */
+        
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-
+        jComboBox_subject.addItem("All");
+        jComboBox_subject.setSelectedItem("ALL");
         for (int i = 0; i < listSubject.size(); i++) {
             jComboBox_subject.addItem(listSubject.get(i).toString());
+        }
+        
+        
+        if(jComboBox_subject.getSelectedItem().equals("All")){
+            setDataToTable(arrayExam,model);
+            tableMouseClick(arrayExam, username);
         }
 
         //get subject when click in combo box 
@@ -114,64 +105,36 @@ public class Exam_All extends javax.swing.JPanel {
                 //clear data exam before select another subject 
 
                 //send data to get exam with subject or get ALL with subject selected "ALL"
-                String subjectSelected = jComboBox_subject.getSelectedItem().toString();
-                JSONObject jsonSend_1 = new JSONObject();
-                //send data
-                jsonSend_1.put("username", username);
-                jsonSend_1.put("func", "getExam");
-                jsonSend_1.put("subject", subjectSelected);
+                int subjectSelected = jComboBox_subject.getSelectedIndex();
+                if(subjectSelected == 0){
+                    setDataToTable(arrayExam,model);
+                    tableMouseClick(arrayExam, username);
+                }else{
+                    JSONObject jsonSend_1 = new JSONObject();
+                    //send data
+                    jsonSend_1.put("username", username);
+                    jsonSend_1.put("func", "getExam");
+                    jsonSend_1.put("subjectID", subjectSelected);
 
-                String dataReceive_1;
+                    String dataReceive_1;
 
-                try {
-                    //receive data and push it to table 
-                    dataReceive_1 = controller.SendReceiveData(jsonSend_1.toString());
-                    JSONObject jSONObject_1 = new JSONObject(dataReceive_1);
-                    System.out.println(dataReceive_1);
-                    JSONArray arrayReceive_1 = jSONObject_1.getJSONArray("data");
-                    // get json array inside json object
-                    for (int i = 0; i < arrayReceive_1.length(); i++) {
-                        JSONObject jOBJ = arrayReceive_1.getJSONObject(i);
-                        Object[] row = {jOBJ.get("examID").toString(),
-                            jOBJ.get("examTitle").toString(),
-                            jOBJ.get("numOfquiz").toString(),
-                            jOBJ.get("creator").toString(),
-                            jOBJ.get("highestScore").toString(),
-                            jOBJ.get("lowestScore").toString(),
-                            jOBJ.get("avgScore").toString()};
+                    try {
+                        //receive data and push it to table 
+                        dataReceive_1 = controller.SendReceiveData(jsonSend_1.toString());
+                        JSONObject jSONObject_1 = new JSONObject(dataReceive_1);
+                        System.out.println(dataReceive_1);
+                        JSONArray arrayReceive_1 = jSONObject_1.getJSONArray("examlist");
+                        // get json array inside json object
 
-                        //add exam to each row
-                        model.addRow(row);
+                        setDataToTable(arrayReceive_1, model);
+
+                        tableMouseClick(arrayReceive_1,username);
+
+                    } catch (Exception ex) {
+                        Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
-                    jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                            //int row = jTable1.rowAtPoint(evt.getPoint());
-                            //int col = jTable1.columnAtPoint(evt.getPoint());
-                            int row = jTable1.rowAtPoint(evt.getPoint());
-                            //int column = source.columnAtPoint( evt.getPoint() );
-                            String s = jTable1.getModel().getValueAt(row, 0) + "";
-                            String title = jTable1.getModel().getValueAt(row, 1) + "";
-
-                            int a = JOptionPane.showConfirmDialog(null, "Start the exam ID " + s + ", with title " + title + " ?");
-                            if (a == JOptionPane.YES_OPTION) {
-                                JSONObject jsonExam = arrayReceive_1.getJSONObject(Integer.parseInt(s));
-
-                                try {
-                                    new Exam(jsonExam, username).setVisible(true);
-
-                                } catch (IOException ex) {
-                                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (Exception ex) {
-                                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            }
-                        }
-                    });
-                } catch (Exception ex) {
-                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
 
             }
         });
@@ -203,11 +166,11 @@ public class Exam_All extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Title", "Creator", "Num of Quizz", "Highest Score", "Avg Score", "Lowest Score"
+                "ID", "Title", "Subject", "Creator", "Num of Quizz", "Highest Score", "Lowest Score", "Avg Score"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -280,39 +243,56 @@ public class Exam_All extends javax.swing.JPanel {
         ImageIcon imageIcon = new ImageIcon(dimg);
         return imageIcon;
     }
+    
+    private void setCenterTable(){
+        //center data in table
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        jTable1.setDefaultRenderer(String.class, centerRenderer);
+    }
+    
+    private void setDataToTable(JSONArray jSONArray, DefaultTableModel model){
+        for (int i = 0; i < jSONArray.length(); i++) {
+                        JSONObject jOBJ = jSONArray.getJSONObject(i);
+                        Object[] row = {jOBJ.get("examID").toString(),
+                            jOBJ.get("examTitle").toString(),
+                            jOBJ.get("subjectName").toString(),
+                            jOBJ.get("creator").toString(),
+                            jOBJ.get("numOfQuiz").toString(),
+                            jOBJ.get("highestScore").toString(),
+                            jOBJ.get("lowestScore").toString(),
+                            jOBJ.get("avgScore").toString()};
 
-//    void listExam() throws SQLException {
-//        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-//        List list = examBLL.LoadExam(1);
-//        Object[][] data = new Object[list.size()][9];
-//        for (int i = 0; i < list.size(); i++) {
-//            ExamDTO e = (ExamDTO) list.get(i);
-//            Object[] row = {
-//                e.getExamID(),
-//                e.getTitle(),
-//                e.getFullname(),
-//                e.getSubjectname(),
-//                e.getNumOfQuiz(),
-//                e.getTime(),
-//                e.getHighest(),
-//                e.getLowest(),
-//                e.getAvg()
-//            };
-//            model.addRow(row);
-//        }
-//        jTable1.setModel(model);
-//    }
-//    private DefaultTableModel convertExamList(List list) {
-//        String[] columnNames = {"TT", "CourseID", "PersonID"};
-//        Object[][] data = new Object[list.size()][3];
-//        for (int i = 0; i < list.size(); i++) {
-//            ExamDTO e = (ExamDTO) list.get(i);
-//            data[i][0] = e.getCourseId();
-//            data[i][1] = e.getPersonId();
-//        }
-//        DefaultTableModel model = new DefaultTableModel(data, columnNames);
-//        return model;
-//    }
+                        //add exam to each row
+                        model.addRow(row);
+                    }
+    }
+
+    private void tableMouseClick(JSONArray jSONArray, String username){
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            int row = jTable1.rowAtPoint(evt.getPoint());
+                            String s = jTable1.getModel().getValueAt(row, 0) + "";
+                            String title = jTable1.getModel().getValueAt(row, 1) + "";
+
+                            int a = JOptionPane.showConfirmDialog(null, "Start the exam ID " + s + ", with title " + title + " ?");
+                            if (a == JOptionPane.YES_OPTION) {
+                                JSONObject jsonExam = jSONArray.getJSONObject(Integer.parseInt(s));
+
+                                try {
+                                    new Exam(jsonExam, username).setVisible(true);
+
+                                } catch (IOException ex) {
+                                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (Exception ex) {
+                                    Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        }
+                    });
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jComboBox_subject;
     private javax.swing.JPanel jPanel1;
