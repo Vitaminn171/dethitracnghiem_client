@@ -34,6 +34,7 @@ public class Controller_Server {
 
     UserBLL uBLL = new UserBLL();
     SubjectBLL sBLL = new SubjectBLL();
+    ExamBLL eBLL = new ExamBLL();
 
     public JSONObject checkFunction(JSONObject json) throws IOException, SQLException {
 
@@ -108,14 +109,42 @@ public class Controller_Server {
                 break;
             }
 
-            case "getExam" -> {
-                List list = sBLL.readSubject();
-                JSONArray subjectlist = new JSONArray();
+            case "getExamAll" -> {
+                List list = eBLL.readExam();
+                JSONArray examlist = new JSONArray();
                 for (int i = 0; i < list.size(); i++) {
-                    SubjectDTO e = (SubjectDTO) list.get(i);
-                    subjectlist.put(new JSONObject().put("subjectid", e.getSubjectID()).put("subjectname", e.getSubjectname()));
+                    ExamDTO examDTO = (ExamDTO) list.get(i);
+                    examlist.put(new JSONObject().put("examID", examDTO.getExamID())
+                                                    .put("subjectName", examDTO.getSubjectname())
+                                                    .put("examTitle", examDTO.getTitle())
+                                                    .put("numOfQuiz", examDTO.getNumOfQuiz())
+                                                    .put("lowestScore", examDTO.getLowest())
+                                                    .put("highestScore", examDTO.getHighest())
+                                                    .put("avgScore", examDTO.getAvg())
+                                                    .put("limitTime", examDTO.getTime())
+                                                    .put("creator", examDTO.getFullname()));
                 }
-                json.put("subjectlist", subjectlist);
+                json.put("examlist", examlist);
+                System.out.println(json.toString());
+                break;
+            }
+            
+            case "getExam" -> {
+                List list = eBLL.getExamBySubject(json.getInt("subjectID"));
+                JSONArray examlist = new JSONArray();
+                for (int i = 0; i < list.size(); i++) {
+                    ExamDTO examDTO = (ExamDTO) list.get(i);
+                    examlist.put(new JSONObject().put("examID", examDTO.getExamID())
+                                                    .put("subjectName", examDTO.getSubjectname())
+                                                    .put("examTitle", examDTO.getTitle())
+                                                    .put("numOfQuiz", examDTO.getNumOfQuiz())
+                                                    .put("lowestScore", examDTO.getLowest())
+                                                    .put("highestScore", examDTO.getHighest())
+                                                    .put("avgScore", examDTO.getAvg())
+                                                    .put("limitTime", examDTO.getTime())
+                                                    .put("creator", examDTO.getFullname()));
+                }
+                json.put("examlist", examlist);
                 System.out.println(json.toString());
                 break;
             }
