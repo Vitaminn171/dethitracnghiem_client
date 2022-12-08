@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -298,27 +297,27 @@ public class Exam_All extends javax.swing.JPanel {
         return imageIcon;
     }
 
-    void listExam() throws SQLException {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        List list = examBLL.LoadExam(1);
-        Object[][] data = new Object[list.size()][9];
-        for (int i = 0; i < list.size(); i++) {
-            ExamDTO e = (ExamDTO) list.get(i);
-            Object[] row = {
-                e.getExamID(),
-                e.getTitle(),
-                e.getFullname(),
-                e.getSubjectname(),
-                e.getNumOfQuiz(),
-                e.getTime(),
-                e.getHighest(),
-                e.getLowest(),
-                e.getAvg()
-            };
-            model.addRow(row);
-        }
-        jTable1.setModel(model);
-    }
+//    void listExam() throws SQLException {
+//        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+//        List list = examBLL.LoadExam(1);
+//        Object[][] data = new Object[list.size()][9];
+//        for (int i = 0; i < list.size(); i++) {
+//            ExamDTO e = (ExamDTO) list.get(i);
+//            Object[] row = {
+//                e.getExamID(),
+//                e.getTitle(),
+//                e.getFullname(),
+//                e.getSubjectname(),
+//                e.getNumOfQuiz(),
+//                e.getTime(),
+//                e.getHighest(),
+//                e.getLowest(),
+//                e.getAvg()
+//            };
+//            model.addRow(row);
+//        }
+//        jTable1.setModel(model);
+//    }
 
 //    private DefaultTableModel convertExamList(List list) {
 //        String[] columnNames = {"TT", "CourseID", "PersonID"};

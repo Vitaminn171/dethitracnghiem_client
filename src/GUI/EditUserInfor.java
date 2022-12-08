@@ -80,7 +80,6 @@ public class EditUserInfor extends javax.swing.JFrame {
        jButton_submit.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
             String username = jFormattedTextField_username.getText();
-            String email = jFormattedTextField_email.getText();
             String fullname = jFormattedTextField_fullname.getText();
             Date birthDate = jXDatePicker1.getDate();//get birthday to check it must before today
             boolean gender = false;
@@ -89,7 +88,7 @@ public class EditUserInfor extends javax.swing.JFrame {
             }else if(jRadioButton_female.isSelected()){
                 gender = false; //female Selected
             }
-            checkValidate(username, email, fullname, birthDate, gender, json.getString("username"));
+            checkValidate(username, fullname, birthDate, gender);
         }
       });
 
@@ -273,11 +272,6 @@ public class EditUserInfor extends javax.swing.JFrame {
         jButton_submit.setText("Submit");
         jButton_submit.setBorderPainted(false);
         jButton_submit.setPreferredSize(new java.awt.Dimension(100, 40));
-        jButton_submit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_submitActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 11;
@@ -308,21 +302,6 @@ public class EditUserInfor extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton_maleActionPerformed
 
-    private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
-        // TODO add your handling code here:
-        String username = jFormattedTextField_username.getText();
-        String fullname = jFormattedTextField_fullname.getText();
-        Date birthDate = jXDatePicker1.getDate();//get birthday to check it must before today
-        boolean gender = false;
-        if (jRadioButton_male.isSelected()) {
-            gender = true; //male Selected
-        } else if (jRadioButton_female.isSelected()) {
-            gender = false; //female Selected
-        }
-        checkValidate(username, fullname, birthDate, gender);
-
-    }//GEN-LAST:event_jButton_submitActionPerformed
-
     private void jButton_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cancelActionPerformed
         // TODO add your handling code here:
         this.dispose();
@@ -342,7 +321,7 @@ public class EditUserInfor extends javax.swing.JFrame {
 
     }
 
-    private void checkValidate(String username, String fullname, Date birthDate, boolean gender, String oldUsername){
+    private void checkValidate(String username, String fullname, Date birthDate, boolean gender){
         try {
 
             SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
@@ -361,7 +340,7 @@ public class EditUserInfor extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
                 } else {
                     //JOptionPane.showMessageDialog(this, "Created account success!");
-                    Edit(username, fullname, dateString, gender, oldUsername);
+                    Edit(username, fullname, dateString, gender);
                 }
 
                 //TODO push data to outputstream to BLL.Controller
@@ -373,7 +352,7 @@ public class EditUserInfor extends javax.swing.JFrame {
         }
     }
 
-    private void Edit(String username, String fullname, String dateString, boolean gender, String oldUsername) throws Exception {
+    private void Edit(String username, String fullname, String dateString, boolean gender) throws Exception {
 //        Map<String, String> inputMap = new HashMap<String, String>();
 //        inputMap.put("username", username);//push username to inputMap
 //        inputMap.put("fullname", fullname);//push fullname to inputMap
@@ -384,9 +363,7 @@ public class EditUserInfor extends javax.swing.JFrame {
         
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("username", username);
-        jsonSend.put("oldUsername", oldUsername);
         jsonSend.put("fullname", fullname);
-        jsonSend.put("email", email);
         jsonSend.put("birth", dateString);
         jsonSend.put("gender", gender);
         jsonSend.put("func", "editUserInfor");

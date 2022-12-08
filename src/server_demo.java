@@ -1,3 +1,5 @@
+
+import BLL.AES;
 import BLL.Controller_Server;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,7 +26,7 @@ public class server_demo {
     private static BufferedReader in = null;
     private static BufferedWriter out = null;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         try {
             //server lấy local IP bằng cách tạo socket đến 1 website tạm
             Socket socket = new Socket("thongtindaotao.sgu.edu.vn", 80);
@@ -32,7 +34,7 @@ public class server_demo {
             // SV tự generate API tại https://retool.com/api-generator/
             String api = "https://retoolapi.dev/FFY4oG/data/1"; // Ghi vào dòng 1 trong DB
             String jsonData = "{\"ip\":\"" + localIP + "\"}";
-            
+
             //Đưa local ip lên trang tạm
             Jsoup.connect(api)
                     .ignoreContentType(true).ignoreHttpErrors(true)
@@ -40,12 +42,12 @@ public class server_demo {
                     .requestBody(jsonData)
                     .method(Connection.Method.PUT).execute();
             System.out.println("Server local ip: " + localIP);
-            
+
             server = new ServerSocket(6666);
             System.out.println("Server started...");
             socket1 = server.accept();
             System.out.println("Client " + socket1.getInetAddress() + " connected...");
-            
+
             in = new BufferedReader(new InputStreamReader(socket1.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(socket1.getOutputStream()));
 
@@ -55,11 +57,15 @@ public class server_demo {
                 if (line.equals("bye")) {
                     break;
                 }
-                
+                if (line.contains("///")) {
+                    String dataReceiveKey = line.split("///")[0];
+                    String encryptedDataReceive = line.split("///")[1];
+                    line = AES.decrypt(encryptedDataReceive, AES.generateKey(dataReceiveKey));
+                }
                 Controller_Server con_admin = new Controller_Server();
-                
+
                 JSONObject json = new JSONObject(line);
-                
+
                 try {
                     json = con_admin.checkFunction(json);
                 } catch (SQLException ex) {
@@ -88,4 +94,3 @@ public class server_demo {
     }
 
 }
-

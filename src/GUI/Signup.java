@@ -400,7 +400,6 @@ public class Signup extends javax.swing.JFrame {
                     jsonSend.put("username", username);
                     jsonSend.put("password", hashPass);
                     jsonSend.put("fullname", fullname);
-                    jsonSend.put("email", email);
                     jsonSend.put("birth", dateString);
                     jsonSend.put("gender", gender);
                     jsonSend.put("func", "signup");
