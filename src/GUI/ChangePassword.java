@@ -31,7 +31,7 @@ import org.json.JSONObject;
 public class ChangePassword extends javax.swing.JFrame {
 
     private boolean flag = false;
-
+    String Username;
     /**
      * Creates new form ChangePassword
      */
@@ -42,6 +42,8 @@ public class ChangePassword extends javax.swing.JFrame {
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         jButton_cancel.putClientProperty( "JButton.buttonType", "roundRect" );
         jButton_submit.putClientProperty( "JButton.buttonType", "roundRect" );
+        jPassword_Old.putClientProperty( "JComponent.roundRect", true );
+        jPassword_Old.putClientProperty( "JTextField.placeholderText","Old Password");
         jPasswordField1.putClientProperty( "JComponent.roundRect", true );
         jPasswordField1.putClientProperty( "JTextField.placeholderText","New Password");
         jPasswordField2.putClientProperty( "JComponent.roundRect", true );
@@ -53,9 +55,10 @@ public class ChangePassword extends javax.swing.JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Image dimg = img.getScaledInstance(25, 25,Image.SCALE_SMOOTH);
+        Image dimg = img.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         ImageIcon imageIcon = new ImageIcon(dimg);
         jButton_eye.setIcon(imageIcon);
+        this.Username = Username;
         
         jButton_submit.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
@@ -92,6 +95,7 @@ public class ChangePassword extends javax.swing.JFrame {
         }
          }
       });
+        
     }
 
     /**
@@ -102,7 +106,6 @@ public class ChangePassword extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -111,41 +114,25 @@ public class ChangePassword extends javax.swing.JFrame {
         jButton_cancel = new javax.swing.JButton();
         jButton_submit = new javax.swing.JButton();
         jButton_eye = new javax.swing.JButton();
+        jPassword_Old = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setRequestFocusEnabled(false);
         jPanel1.setVerifyInputWhenFocusTarget(false);
-        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("CHANGE PASSWORD");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.insets = new java.awt.Insets(30, 50, 0, 50);
-        jPanel1.add(jLabel1, gridBagConstraints);
 
         jPasswordField1.setPreferredSize(new java.awt.Dimension(250, 40));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(30, 65, 0, 5);
-        jPanel1.add(jPasswordField1, gridBagConstraints);
 
         jPasswordField2.setPreferredSize(new java.awt.Dimension(250, 40));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(15, 65, 0, 5);
-        jPanel1.add(jPasswordField2, gridBagConstraints);
+        jPasswordField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordField2ActionPerformed(evt);
+            }
+        });
 
         jButton_cancel.setBackground(new java.awt.Color(255, 102, 102));
         jButton_cancel.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -158,14 +145,6 @@ public class ChangePassword extends javax.swing.JFrame {
                 jButton_cancelActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 65, 30, 40);
-        jPanel1.add(jButton_cancel, gridBagConstraints);
 
         jButton_submit.setBackground(new java.awt.Color(34, 133, 225));
         jButton_submit.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -178,16 +157,7 @@ public class ChangePassword extends javax.swing.JFrame {
                 jButton_submitActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 40, 30, 5);
-        jPanel1.add(jButton_submit, gridBagConstraints);
 
-        jButton_eye.setBackground(new java.awt.Color(255, 255, 255));
         jButton_eye.setBorderPainted(false);
         jButton_eye.setMaximumSize(new java.awt.Dimension(40, 40));
         jButton_eye.setMinimumSize(new java.awt.Dimension(20, 20));
@@ -198,13 +168,53 @@ public class ChangePassword extends javax.swing.JFrame {
                 jButton_eyeActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(30, 0, 0, 40);
-        jPanel1.add(jButton_eye, gridBagConstraints);
+
+        jPassword_Old.setPreferredSize(new java.awt.Dimension(250, 40));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(87, 87, 87)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(jPassword_Old, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton_cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(80, 80, 80)
+                                .addComponent(jButton_submit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPasswordField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPasswordField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_eye, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addComponent(jLabel1)
+                .addGap(22, 22, 22)
+                .addComponent(jPassword_Old, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_eye, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton_submit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -222,7 +232,37 @@ public class ChangePassword extends javax.swing.JFrame {
 
     private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
         // TODO add your handling code here:
-        
+        if(jPassword_Old.getPassword().length != 0 && jPasswordField1.getPassword().length != 0 && jPasswordField2.getPassword().length != 0){
+            Controller controller = new Controller();
+            String oldpassword = String.valueOf(jPassword_Old.getPassword());
+            String newpassword = String.valueOf(jPasswordField1.getPassword());
+            String retypepassword = String.valueOf(jPasswordField2.getPassword());
+            if(!newpassword.equals(retypepassword)){
+                JOptionPane.showMessageDialog(this, "Password doesn't match! Please retype.");
+            if(!Controller.validatePassword(newpassword)){
+                JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
+            }
+            }else{
+                String hashOldPass = MD5.getMd5(oldpassword);
+                String hashNewPass = MD5.getMd5(newpassword);//hash md5 for password
+
+                Map<String, String> inputMap = new HashMap<String, String>();
+                inputMap.put("func", "changePass");//push username to inputMap
+                inputMap.put("username", Username);
+                inputMap.put("password_old", hashOldPass);//push password hashed to inputMap
+                inputMap.put("password_new", hashNewPass);
+                inputMap.put("status", "true");
+                String data = controller.convertToJSON(inputMap);
+                JSONObject json =  new JSONObject(data);
+                
+                OTP otp = new OTP(json);
+                otp.setVisible(true);
+                this.dispose();
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(this, "Do not leave the password field blank!");
+        }
         
     }//GEN-LAST:event_jButton_submitActionPerformed
 
@@ -242,6 +282,10 @@ public class ChangePassword extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton_cancelActionPerformed
 
+    private void jPasswordField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordField2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -255,9 +299,6 @@ public class ChangePassword extends javax.swing.JFrame {
     }
     
     public void changePass(String data, Controller controller) throws Exception{
-        String pass = String.valueOf(jPasswordField1.getPassword());
-        
-            
                 try {
                     String dataReceive = controller.SendReceiveData(data);
                     System.out.println(dataReceive);
@@ -281,5 +322,6 @@ public class ChangePassword extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JPasswordField jPasswordField2;
+    private javax.swing.JPasswordField jPassword_Old;
     // End of variables declaration//GEN-END:variables
 }

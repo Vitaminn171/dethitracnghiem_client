@@ -1,3 +1,4 @@
+import BLL.Controller_Server;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -6,6 +7,9 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.json.JSONObject;
@@ -51,7 +55,17 @@ public class server_demo {
                 if (line.equals("bye")) {
                     break;
                 }
-
+                
+                Controller_Server con_admin = new Controller_Server();
+                
+                JSONObject json = new JSONObject(line);
+                
+                try {
+                    json = con_admin.checkFunction(json);
+                } catch (SQLException ex) {
+                    Logger.getLogger(server_demo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                line = json.toString();
                 StringBuilder newline = new StringBuilder();
                 newline.append(line);
                 line = newline.toString();

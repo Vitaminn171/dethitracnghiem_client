@@ -28,7 +28,8 @@ import javax.swing.JOptionPane;
  */
 public class Main {
     public static void main(String[] args) throws IOException {
-        FlatLightLaf.setup();
+        FlatLightLaf.setup();   
+        new Login().setVisible(true);
         startConnectToServer();
         
     }
