@@ -57,26 +57,27 @@ public class server_demo {
                 if (line.equals("bye")) {
                     break;
                 }
-                if (line.contains("///")) {
-                    String dataReceiveKey = line.split("///")[0];
-                    String encryptedDataReceive = line.split("///")[1];
-                    line = AES.decrypt(encryptedDataReceive, AES.generateKey(dataReceiveKey));
-                }
+                System.out.println(line);
+//                if (line.contains("///")) {
+//                    String dataReceiveKey = line.split("///")[0];
+//                    String encryptedDataReceive = line.split("///")[1];
+//                    line = AES.decrypt(encryptedDataReceive, AES.generateKey(dataReceiveKey));
+//                }
                 Controller_Server con_admin = new Controller_Server();
 
                 JSONObject json = new JSONObject(line);
-
-                try {
-                    json = con_admin.checkFunction(json);
-                } catch (SQLException ex) {
-                    Logger.getLogger(server_demo.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
+                json = con_admin.checkFunction(json);
+                System.out.println("json data: " + json.toString());
+//                    line = con_admin.EncryptServerData(json.toString());
                 line = json.toString();
                 StringBuilder newline = new StringBuilder();
                 newline.append(line);
                 line = newline.toString();
                 System.out.println(line);
 
+                if(json.getString("func").equals("signup"))
+                    System.out.println("Check lỗi");
                 out.write(line);
                 out.newLine();
                 out.flush();

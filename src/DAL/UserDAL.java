@@ -35,10 +35,10 @@ public class UserDAL extends MyDatabaseManager {
         return list;
     }
 
-    public UserDTO getUserByID(int UserID) throws SQLException {
-        String query = "SELECT * FROM user WHERE UserID = ?";
+    public UserDTO getUserByUsername(String Username) throws SQLException {
+        String query = "SELECT * FROM user WHERE Username = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
-        p.setInt(1, UserID);
+        p.setString(1, Username);
         ResultSet rs = p.executeQuery();
         UserDTO u = new UserDTO();
         if (rs != null) {
@@ -48,7 +48,6 @@ public class UserDAL extends MyDatabaseManager {
                 u.setFullname(rs.getString("Fullname"));
                 u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
                 u.setGender(rs.getBoolean("Gender"));
-                u.setLogStatus(rs.getBoolean("LogStatus"));
                 u.setBlocked(rs.getBoolean("BlockStatus"));
             }
         }

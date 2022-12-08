@@ -31,7 +31,7 @@ import org.json.JSONObject;
 public class ChangePassword extends javax.swing.JFrame {
 
     private boolean flag = false;
-    String Username;
+
     /**
      * Creates new form ChangePassword
      */
@@ -39,16 +39,16 @@ public class ChangePassword extends javax.swing.JFrame {
         initComponents();
         this.setTitle("Quiz Exam Change Password");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        jButton_cancel.putClientProperty( "JButton.buttonType", "roundRect" );
-        jButton_submit.putClientProperty( "JButton.buttonType", "roundRect" );
-        jPassword_Old.putClientProperty( "JComponent.roundRect", true );
-        jPassword_Old.putClientProperty( "JTextField.placeholderText","Old Password");
-        jPasswordField1.putClientProperty( "JComponent.roundRect", true );
-        jPasswordField1.putClientProperty( "JTextField.placeholderText","New Password");
-        jPasswordField2.putClientProperty( "JComponent.roundRect", true );
-        jPasswordField2.putClientProperty( "JTextField.placeholderText","Confirm New Password");
-        
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        jButton_cancel.putClientProperty("JButton.buttonType", "roundRect");
+        jButton_submit.putClientProperty("JButton.buttonType", "roundRect");
+        jPassword_Old.putClientProperty("JComponent.roundRect", true);
+        jPassword_Old.putClientProperty("JTextField.placeholderText", "Old Password");
+        jPasswordField1.putClientProperty("JComponent.roundRect", true);
+        jPasswordField1.putClientProperty("JTextField.placeholderText", "New Password");
+        jPasswordField2.putClientProperty("JComponent.roundRect", true);
+        jPasswordField2.putClientProperty("JTextField.placeholderText", "Confirm New Password");
+
         BufferedImage img = null;
         try {
             img = ImageIO.read(getClass().getResource("/GUI/Image/eye.png"));
@@ -58,50 +58,47 @@ public class ChangePassword extends javax.swing.JFrame {
         Image dimg = img.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         ImageIcon imageIcon = new ImageIcon(dimg);
         jButton_eye.setIcon(imageIcon);
-        this.Username = Username;
-        
+
         jButton_submit.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {
-             if(jPasswordField1.getPassword().length != 0 && jPasswordField2.getPassword().length != 0){
-            Controller controller = new Controller();
-            String password = String.valueOf(jPasswordField1.getPassword());
-            String password1 = String.valueOf(jPasswordField1.getPassword());
-            if(!password.equals(password1)){
-                JOptionPane.showMessageDialog(null, "Password doesn't match! Please retype.");
-            if(!Controller.validatePassword(password)){
-                JOptionPane.showMessageDialog(null, "Password too weak or invalid!");
-            }
-            }else{
-                String hashPass = MD5.getMd5(password);//hash md5 for password
+            public void actionPerformed(ActionEvent e) {
+                if (jPassword_Old.getPassword().length != 0 && jPasswordField1.getPassword().length != 0 && jPasswordField2.getPassword().length != 0) {
+                    Controller controller = new Controller();
+                    String oldpassword = String.valueOf(jPassword_Old.getPassword());
+                    String newpassword = String.valueOf(jPasswordField1.getPassword());
+                    String retypepassword = String.valueOf(jPasswordField2.getPassword());
+                    if (!newpassword.equals(retypepassword)) {
+                        JOptionPane.showMessageDialog(null, "Password doesn't match! Please retype.");
+                        if (!Controller.validatePassword(newpassword)) {
+                            JOptionPane.showMessageDialog(null, "Password too weak or invalid!");
+                        }
+                    } else {
+                        String hashOldPass = MD5.getMd5(oldpassword);
+                        String hashNewPass = MD5.getMd5(newpassword);//hash md5 for password
 
 //                Map<String, String> inputMap = new HashMap<String, String>();
 //                inputMap.put("func", "changePass");//push username to inputMap
 //                inputMap.put("password", hashPass);//push password hashed to inputMap
-                
-                JSONObject jsonSend = new JSONObject();
-                jsonSend.put("func", "changePass");
-                jsonSend.put("password", hashPass);
-                jsonSend.put("username", username);
-                
-                
-                OTP otp = new OTP(jsonSend);
-                otp.setVisible(true);
-                getContentPane().setVisible(false);
-                
+                        JSONObject jsonSend = new JSONObject();
+                        jsonSend.put("func", "changePass");
+                        jsonSend.put("password_old", hashOldPass);
+                        jsonSend.put("password_new", hashNewPass);
+                        jsonSend.put("username", username);
+
+                        OTP otp = new OTP(jsonSend);
+                        otp.setVisible(true);
+                        getContentPane().setVisible(false);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Do not leave the password field blank!");
+                }
             }
-            
-        }else{
-            JOptionPane.showMessageDialog(null, "Do not leave the password field blank!");
-        }
-         }
-      });
-        
+        });
+
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -152,11 +149,6 @@ public class ChangePassword extends javax.swing.JFrame {
         jButton_submit.setText("Submit");
         jButton_submit.setBorderPainted(false);
         jButton_submit.setPreferredSize(new java.awt.Dimension(100, 40));
-        jButton_submit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_submitActionPerformed(evt);
-            }
-        });
 
         jButton_eye.setBorderPainted(false);
         jButton_eye.setMaximumSize(new java.awt.Dimension(40, 40));
@@ -230,48 +222,12 @@ public class ChangePassword extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
-        // TODO add your handling code here:
-        if(jPassword_Old.getPassword().length != 0 && jPasswordField1.getPassword().length != 0 && jPasswordField2.getPassword().length != 0){
-            Controller controller = new Controller();
-            String oldpassword = String.valueOf(jPassword_Old.getPassword());
-            String newpassword = String.valueOf(jPasswordField1.getPassword());
-            String retypepassword = String.valueOf(jPasswordField2.getPassword());
-            if(!newpassword.equals(retypepassword)){
-                JOptionPane.showMessageDialog(this, "Password doesn't match! Please retype.");
-            if(!Controller.validatePassword(newpassword)){
-                JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
-            }
-            }else{
-                String hashOldPass = MD5.getMd5(oldpassword);
-                String hashNewPass = MD5.getMd5(newpassword);//hash md5 for password
-
-                Map<String, String> inputMap = new HashMap<String, String>();
-                inputMap.put("func", "changePass");//push username to inputMap
-                inputMap.put("username", Username);
-                inputMap.put("password_old", hashOldPass);//push password hashed to inputMap
-                inputMap.put("password_new", hashNewPass);
-                inputMap.put("status", "true");
-                String data = controller.convertToJSON(inputMap);
-                JSONObject json =  new JSONObject(data);
-                
-                OTP otp = new OTP(json);
-                otp.setVisible(true);
-                this.dispose();
-            }
-            
-        }else{
-            JOptionPane.showMessageDialog(this, "Do not leave the password field blank!");
-        }
-        
-    }//GEN-LAST:event_jButton_submitActionPerformed
-
     private void jButton_eyeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_eyeActionPerformed
         // TODO add your handling code here:
-        if(!flag){
-            jPasswordField1.setEchoChar((char)0);
+        if (!flag) {
+            jPasswordField1.setEchoChar((char) 0);
             flag = true;
-        }else{
+        } else {
             jPasswordField1.setEchoChar('•');
             flag = false;
         }
@@ -297,21 +253,23 @@ public class ChangePassword extends javax.swing.JFrame {
 //            }
 //        });
     }
-    
-    public void changePass(String data, Controller controller) throws Exception{
-                try {
-                    String dataReceive = controller.SendReceiveData(data);
-                    System.out.println(dataReceive);
-                    JSONObject jsonReceive = new JSONObject(dataReceive);
-                    if(jsonReceive.getBoolean("status")){
-                        JOptionPane.showMessageDialog(this, "Change password success!");
-                    }else{
-                        JOptionPane.showMessageDialog(this, "Change password fail!");
-                    }
-                } catch (IOException ex) {
-                    Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            
+
+    public void changePass(String data, Controller controller) throws Exception {
+        try {
+            String dataReceive = controller.SendReceiveData(data);
+            System.out.println(dataReceive);
+            JSONObject jsonReceive = new JSONObject(dataReceive);
+            if (jsonReceive.getBoolean("status")) {
+                JOptionPane.showMessageDialog(this, "Change password success!");
+                Dashboard dashboard = new Dashboard(jsonReceive.getString("username"));
+                dashboard.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Change password fail!");
+
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -66,18 +66,17 @@ public class OTP extends javax.swing.JFrame {
 //            }
 //        };
 //        timer=new Timer(100, countDown);
-        
         Controller controller = new Controller();
         String otp = controller.generateOTP();
-        SendMail.SendOTP(otp);
-        
+        SendMail.SendOTP(json.getString("username"), otp);
+
         jButton_submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-             try {
-                     checkOtpValid(jFormattedTextField1.getText(), json, otp);
-             } catch (Exception ex) {
-                 Logger.getLogger(OTP.class.getName()).log(Level.SEVERE, null, ex);
-             }
+                try {
+                    checkOtpValid(jFormattedTextField1.getText(), json, otp);
+                } catch (Exception ex) {
+                    Logger.getLogger(OTP.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -175,26 +174,25 @@ public class OTP extends javax.swing.JFrame {
 //        inputMap.put("correctOtp", correctOtp);
 //        inputMap.put("otpData", otpData);
 //        inputMap.put("status", "true");
-        
+
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("func", "otp");
-        jsonSend.put("func_1", json.getString("func"));
         jsonSend.put("otpData", otpData);
-        jsonSend.put("status", true);
-        jsonSend.put("username", json.getString("username"));
-    
+        jsonSend.put("correctOtp", correctOtp);
+//        jsonSend.put("username", json.getString("username"));
+
 //        JSONObject json = new JSONObject(data);
         String receiveData = controller.SendReceiveData(jsonSend.toString());
         JSONObject jsonDataOtpReceive = new JSONObject(receiveData);//string convert into json object
         String receive;
-        if(jsonDataOtpReceive.getBoolean("status")){
+        if (jsonDataOtpReceive.getBoolean("status")) {
             switch (json.getString("func")) {
                 case "signup": {
                     Signup signup = new Signup();
                     signup.Signup(json.toString(), controller);
                     break;
                 }
-                case "changePass":{
+                case "changePass": {
                     ChangePassword changePass = new ChangePassword(json.getString("username"));
                     changePass.changePass(String.valueOf(json), controller);
                     break;
@@ -204,18 +202,18 @@ public class OTP extends javax.swing.JFrame {
         } else {
 
             JOptionPane.showMessageDialog(this, "Wrong OTP!");
-            switch (json.getString("func")) {
-                case "signup":
-                    Login login = new Login();
-                    login.setVisible(true);
-                    break;
-                case "changePass":
-                    Dashboard dashboard = new Dashboard(json.getString("username"));
-                    dashboard.setVisible(true);
-                    break;
-            }
-        }  
-  
+//            switch (json.getString("func")) {
+//                case "signup":
+//                    Login login = new Login();
+//                    login.setVisible(true);
+//                    break;
+//                case "changePass":
+//                    Dashboard dashboard = new Dashboard(json.getString("username"));
+//                    dashboard.setVisible(true);
+//                    break;
+//            }
+        }
+
     }
 
     public boolean check() {

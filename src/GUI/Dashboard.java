@@ -45,7 +45,7 @@ public class Dashboard extends javax.swing.JFrame {
 //            inputMap.put("gender", "true");
 //            inputMap.put("blockStatus", "none");
         JSONObject jsonSend = new JSONObject();
-        jsonSend.put("action", "get_user_information");
+//        jsonSend.put("action", "get_user_information");
         jsonSend.put("func", "user");//push function to inputMap   
         jsonSend.put("username", username);
 

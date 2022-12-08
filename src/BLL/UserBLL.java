@@ -41,8 +41,8 @@ public class UserBLL {
         return result;
     }
     
-    public UserDTO getUserByID(int UserID) throws SQLException {
-        UserDTO u = uDAL.getUserByID(UserID);
+    public UserDTO getUserByUsername(String Username) throws SQLException {
+        UserDTO u = uDAL.getUserByUsername(Username);
         return u;
     }
 

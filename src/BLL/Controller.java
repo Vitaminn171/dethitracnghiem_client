@@ -35,15 +35,16 @@ import org.jsoup.nodes.Document;
  * @author Quoc An
  */
 public class Controller {
-    public static Socket socket =null;
+
+    public static Socket socket = null;
     public static Gson gson = new Gson();
     public static Thread t;
     static BufferedWriter out;
     static BufferedReader in;
     static ExecutorService excutor;
-    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
-    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-    
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX
+            = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
     public static final Pattern VALID_PASSWORD_REGEX = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$");
     //^                                   # start of line
     //  (?=.*[0-9])                       # positive lookahead, digit [0-9]
@@ -55,25 +56,23 @@ public class Controller {
     //$                                   # end of line
 
     public static final Pattern VALID_OTP_REGEX = Pattern.compile("^[0-9]{1,6}$");
-    
+
     public static boolean validateEmail(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.find();
     }
-    
+
     public static boolean validateOTP(String OTPStr) {
         Matcher matcher = VALID_OTP_REGEX.matcher(OTPStr);
         return matcher.find();
     }
-    
+
     public static boolean validatePassword(String password) {
         Matcher matcher = VALID_PASSWORD_REGEX.matcher(password);
         return matcher.find();
     }
-    
-   
-    
-    public static void startConnectToServer(){
+
+    public static void startConnectToServer() {
         try {
             //TODO: use api to auto get ip from server
             // Lên trang mà server để local ip để lấy về
@@ -97,41 +96,43 @@ public class Controller {
 
         }
 
-        
     }
-    
-    public static void closeConnectToServer() throws IOException{
+
+    public static void closeConnectToServer() throws IOException {
         //close
-        
+
         in.close();
         out.close();
         socket.close();
-        System.out.println("closeConnectToServer");   
+        System.out.println("closeConnectToServer");
     }
-    
+
     public String SendReceiveData(String data) throws IOException, Exception {
-        Key key= AES.generateRandomKey();
-        String encryptedData= AES.encrypt(data, key);
-        String keyValue= AES.convertKeytoString(key);
-        data= keyValue+"///"+encryptedData;
+//        Key key = AES.generateRandomKey();
+//        String encryptedData = AES.encrypt(data, key);
+//        String keyValue = AES.convertKeytoString(key);
+//        System.out.println(" key: " + keyValue);
+//        data = keyValue + "///" + encryptedData;
+//        System.out.println("Encrypted Value with key: " + data);
         out.write(data);
         out.newLine();
         out.flush();
         String dataReceive = in.readLine();
-        if (dataReceive.contains("///")) {
-            String dataReceiveKey= dataReceive.split("///")[0];
-            String encryptedDataReceive = dataReceive.split("///")[1];
-            dataReceive=AES.decrypt(encryptedDataReceive, AES.generateKey(dataReceiveKey));
-        }
+//        if (dataReceive.contains("///")) {
+//            String dataReceiveKey = dataReceive.split("///")[0];
+//            String encryptedDataReceive = dataReceive.split("///")[1];
+//            dataReceive = AES.decrypt(encryptedDataReceive, AES.generateKey(dataReceiveKey));
+//        }
         return dataReceive;
+
     }
 
-    public String convertToJSON(Map<String,String> data){
+    public String convertToJSON(Map<String, String> data) {
         Gson gson = new Gson();
         String json = gson.toJson(data);
         return json;
     }
-    
+
     public String generateOTP() {
 
         // Using numeric values

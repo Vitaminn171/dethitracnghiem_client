@@ -40,34 +40,32 @@ public class Exam extends javax.swing.JFrame {
     static Timer timer;
     int i = 0;
     public ButtonGroup G;
+
     public Exam(JSONObject jsonExam, String username) throws IOException, Exception {
         initComponents();
         this.setTitle("Quiz Exam");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+
         // set the time with "limit time" and countdown
-        
-        jButton_next.putClientProperty( "JButton.buttonType", "roundRect" );
-        jButton_next.putClientProperty( "JButton.focusWidth", 1 );
-        jButton_prev.putClientProperty( "JButton.buttonType", "roundRect" );
-        jButton_prev.putClientProperty( "JButton.focusWidth", 1 );
-        jButton_finish.putClientProperty( "JButton.buttonType", "roundRect" );
-        jButton_finish.putClientProperty( "JButton.focusWidth", 1 );
-        
+        jButton_next.putClientProperty("JButton.buttonType", "roundRect");
+        jButton_next.putClientProperty("JButton.focusWidth", 1);
+        jButton_prev.putClientProperty("JButton.buttonType", "roundRect");
+        jButton_prev.putClientProperty("JButton.focusWidth", 1);
+        jButton_finish.putClientProperty("JButton.buttonType", "roundRect");
+        jButton_finish.putClientProperty("JButton.focusWidth", 1);
+
         jRadioButton_answer_1.setActionCommand("A");
         jRadioButton_answer_2.setActionCommand("B");
         jRadioButton_answer_3.setActionCommand("C");
         jRadioButton_answer_4.setActionCommand("D");
-        
-        
-        
+
         G = new ButtonGroup();
         G.add(jRadioButton_answer_1);
         G.add(jRadioButton_answer_2);
         G.add(jRadioButton_answer_3);
         G.add(jRadioButton_answer_4);
-        
+
         Controller controller = new Controller();
         JSONObject json = getExamQuest(controller, username, jsonExam.getInt("examID"));
         JSONArray examQuestion = json.getJSONArray("data");
@@ -75,17 +73,17 @@ public class Exam extends javax.swing.JFrame {
         int num = data.getInt("number") + 1;
         jLabel_questNum.setText("Question " + num + ":");
         jLabel_questTitle.setText(data.getString("question"));
-            jRadioButton_answer_1.setText(data.getString("choice1"));
-            jRadioButton_answer_2.setText(data.getString("choice2"));
-            jRadioButton_answer_3.setText(data.getString("choice3"));
-            jRadioButton_answer_4.setText(data.getString("choice4"));
-        
+        jRadioButton_answer_1.setText(data.getString("choice1"));
+        jRadioButton_answer_2.setText(data.getString("choice2"));
+        jRadioButton_answer_3.setText(data.getString("choice3"));
+        jRadioButton_answer_4.setText(data.getString("choice4"));
+
         jButton_next.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int j = i + 1;
-                if(j < jsonExam.getInt("numOfquiz")){
+                if (j < jsonExam.getInt("numOfquiz")) {
                     //JSONObject answer = examQuestion.getJSONObject(i);
-                    if(G.getSelection() != null){
+                    if (G.getSelection() != null) {
                         JSONObject answer = examQuestion.getJSONObject(i);
                         answer.put("answer", G.getSelection().getActionCommand());
                         examQuestion.put(i, answer);
@@ -94,7 +92,7 @@ public class Exam extends javax.swing.JFrame {
 //                    examQuestion.put(answer);
                     i++;
                     JSONObject answer_next = examQuestion.getJSONObject(i);
-                    try{
+                    try {
                         switch (answer_next.getString("answer")) {
                             case "A":
                                 jRadioButton_answer_1.setSelected(true);
@@ -104,41 +102,41 @@ public class Exam extends javax.swing.JFrame {
                                 break;
                             case "C":
                                 jRadioButton_answer_3.setSelected(true);
-                                break;    
+                                break;
                             case "D":
                                 jRadioButton_answer_4.setSelected(true);
                                 break;
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         G.clearSelection();
                     }
                     //G.clearSelection();
                     int num = answer_next.getInt("number") + 1;
-                        jLabel_questNum.setText("Question " + num + ":");
-                        jLabel_questTitle.setText(answer_next.getString("question"));
-                        jRadioButton_answer_1.setText(answer_next.getString("choice1"));
-                        jRadioButton_answer_2.setText(answer_next.getString("choice2"));
-                        jRadioButton_answer_3.setText(answer_next.getString("choice3"));
-                        jRadioButton_answer_4.setText(answer_next.getString("choice4"));
-                    
-                }else{
-                    
+                    jLabel_questNum.setText("Question " + num + ":");
+                    jLabel_questTitle.setText(answer_next.getString("question"));
+                    jRadioButton_answer_1.setText(answer_next.getString("choice1"));
+                    jRadioButton_answer_2.setText(answer_next.getString("choice2"));
+                    jRadioButton_answer_3.setText(answer_next.getString("choice3"));
+                    jRadioButton_answer_4.setText(answer_next.getString("choice4"));
+
+                } else {
+
                 }
             }
-         });
+        });
         jButton_prev.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
-                if(i > 0){
+
+                if (i > 0) {
                     JSONObject answer = examQuestion.getJSONObject(i);
-                    if(G.getSelection() != null){
+                    if (G.getSelection() != null) {
                         answer.put("answer", G.getSelection().getActionCommand());
                         examQuestion.put(i, answer);
                     }
                     i--;
                     JSONObject answer_prev = examQuestion.getJSONObject(i);
                     //answer_prev.put("answer", G.getSelection().getActionCommand());
-                    try{
+                    try {
                         switch (answer_prev.getString("answer")) {
                             case "A":
                                 jRadioButton_answer_1.setSelected(true);
@@ -148,50 +146,57 @@ public class Exam extends javax.swing.JFrame {
                                 break;
                             case "C":
                                 jRadioButton_answer_3.setSelected(true);
-                                break;    
+                                break;
                             case "D":
                                 jRadioButton_answer_4.setSelected(true);
                                 break;
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         G.clearSelection();
                     }
-                    
-                    
-                
+
                     int num = answer_prev.getInt("number") + 1;
-                        jLabel_questNum.setText("Question " + num + ":");
-                        jLabel_questTitle.setText(answer_prev.getString("question"));
-                        jRadioButton_answer_1.setText(answer_prev.getString("choice1"));
-                        jRadioButton_answer_2.setText(answer_prev.getString("choice2"));
-                        jRadioButton_answer_3.setText(answer_prev.getString("choice3"));
-                        jRadioButton_answer_4.setText(answer_prev.getString("choice4"));
-                    
+                    jLabel_questNum.setText("Question " + num + ":");
+                    jLabel_questTitle.setText(answer_prev.getString("question"));
+                    jRadioButton_answer_1.setText(answer_prev.getString("choice1"));
+                    jRadioButton_answer_2.setText(answer_prev.getString("choice2"));
+                    jRadioButton_answer_3.setText(answer_prev.getString("choice3"));
+                    jRadioButton_answer_4.setText(answer_prev.getString("choice4"));
+
                 }
-                
+
             }
-         });
-        
-        
+        });
+
         jButton_finish.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
-                   JSONObject answer = examQuestion.getJSONObject(i);
-                    if(G.getSelection() != null){
-                        //JSONObject answer = examQuestion.getJSONObject(i);
-                        answer.remove("answer");
-                        answer.put("answer", G.getSelection().getActionCommand());
-                        examQuestion.put(i, answer);
-                    }else{
-                        answer.put("answer", "none");
-                        examQuestion.put(i, answer);
+
+                JSONObject answer = examQuestion.getJSONObject(i);
+                if (G.getSelection() != null) {
+                    //JSONObject answer = examQuestion.getJSONObject(i);
+                    answer.remove("answer");
+                    answer.put("answer", G.getSelection().getActionCommand());
+                    examQuestion.put(i, answer);
+                } else {
+                    answer.put("answer", "none");
+                    examQuestion.put(i, answer);
+                }
+                for (int i = 0; i < examQuestion.length(); i++) {
+                    JSONObject data = examQuestion.getJSONObject(i);
+                    try {
+                        data.getString("answer");
+                    } catch (Exception ex) {
+                        data.put("answer", "none");
+                        examQuestion.put(i, data);
                     }
-//              
+
+                }
+
                 JSONObject jsonSend = new JSONObject();
                 jsonSend.put("username", username);
                 jsonSend.put("examID", jsonExam.getInt("examID"));
                 jsonSend.put("data", examQuestion);
-                
+
                 Controller controller = new Controller();
                 String data;
                 try {
@@ -204,12 +209,11 @@ public class Exam extends javax.swing.JFrame {
                 } catch (Exception ex) {
                     Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             }
-                    
-            
-         });
-        
+
+        });
+
         final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         final Runnable runnable = new Runnable() {
@@ -217,8 +221,6 @@ public class Exam extends javax.swing.JFrame {
 
             public void run() {
 
-                
- 
                 // formula for conversion for
                 // milliseconds to minutes.
                 long minutes = (countdownStarter / 1000) / 60;
@@ -237,22 +239,22 @@ public class Exam extends javax.swing.JFrame {
                 if (countdownStarter == 0) {
                     scheduler.shutdown();
                     JOptionPane.showMessageDialog(null, "Out of time!");
-                    for(int i = 0; i < examQuestion.length(); i++){
+                    for (int i = 0; i < examQuestion.length(); i++) {
                         JSONObject data = examQuestion.getJSONObject(i);
-                        try{
+                        try {
                             data.getString("answer");
-                        }catch(Exception ex){
+                        } catch (Exception ex) {
                             data.put("answer", "none");
-                            examQuestion.put(i,data);
+                            examQuestion.put(i, data);
                         }
-                        
+
                     }
                     Controller controller = new Controller();
                     JSONObject jsonSend = new JSONObject();
                     jsonSend.put("username", username);
                     jsonSend.put("examID", jsonExam.getInt("examID"));
                     jsonSend.put("data", examQuestion);
-                    
+
                     String data;
                     try {
                         data = controller.SendReceiveData(jsonSend.toString());
@@ -268,16 +270,13 @@ public class Exam extends javax.swing.JFrame {
             }
         };
         scheduler.scheduleAtFixedRate(runnable, 0, 1, TimeUnit.MILLISECONDS);
-        
+
         // if (time == 0)
         //      then finish quiz and save all the answer
-        
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -474,9 +473,8 @@ public class Exam extends javax.swing.JFrame {
 
     private void jButton_nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_nextActionPerformed
         // TODO add your handling code here:
-        
-        
-        
+
+
     }//GEN-LAST:event_jButton_nextActionPerformed
 
     private void jRadioButton_answer_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_answer_1ActionPerformed
@@ -499,22 +497,20 @@ public class Exam extends javax.swing.JFrame {
 //                
 //            }
 //        });
-        
+
     }
-    
- 
-    
-    private JSONObject getExamQuest(Controller controller, String username, int id) throws IOException, Exception{
+
+    private JSONObject getExamQuest(Controller controller, String username, int id) throws IOException, Exception {
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("username", username);
         jsonSend.put("func", "getExam");
         jsonSend.put("ID", id);
-        
+
         String dataReceive = controller.SendReceiveData(jsonSend.toString());
         JSONObject jsonReceive = new JSONObject(dataReceive);
         return jsonReceive;
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_finish;

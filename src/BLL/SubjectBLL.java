@@ -21,4 +21,9 @@ public class SubjectBLL {
         to = page * numofrecords;
         return list.subList(from, Math.min(to, size));
     }
+    
+    public List readSubject() throws SQLException {
+        List list = sDAL.readSubject();
+        return list;
+    }
 }
