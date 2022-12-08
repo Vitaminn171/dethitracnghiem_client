@@ -22,6 +22,16 @@ public class ExamBLL {
         to = page * numofrecords;
         return list.subList(from, Math.min(to, size));
     }
+    
+    public List getExamBySubject(int SubjectID) throws SQLException{
+        List list = eDAL.getExamBySubject(SubjectID);
+        return list;
+    }
+    
+    public List readExam() throws SQLException {
+        List list = eDAL.readExam();
+        return list;
+    }
 
     public List findExam(String str) throws SQLException {
         List list = new ArrayList();
