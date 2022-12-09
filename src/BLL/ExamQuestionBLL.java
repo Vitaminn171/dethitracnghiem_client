@@ -13,14 +13,19 @@ public class ExamQuestionBLL {
         eqDAL = new ExamQuestionDAL();
     }
 
-    public List LoadExamQuestion(int page) throws SQLException {
-        int numofrecords = 30;
-        ArrayList list = eqDAL.readExamQ();
-        int size = list.size();
-        int from, to;
-        from = (page - 1) * numofrecords;
-        to = page * numofrecords;
-        return list.subList(from, Math.min(to, size));
+//    public List LoadExamQuestion(int page) throws SQLException {
+//        int numofrecords = 30;
+//        ArrayList list = eqDAL.readExamQ();
+//        int size = list.size();
+//        int from, to;
+//        from = (page - 1) * numofrecords;
+//        to = page * numofrecords;
+//        return list.subList(from, Math.min(to, size));
+//    }
+    
+    public List getExamQuestion(int examID) throws SQLException{
+        List list = eqDAL.readExamQ(examID);
+        return list;
     }
 
     public int insertExamQuestion(ExamQuestionDTO eq) throws SQLException {

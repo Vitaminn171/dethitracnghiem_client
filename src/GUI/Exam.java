@@ -36,8 +36,6 @@ public class Exam extends javax.swing.JFrame {
     /**
      * Creates new form Exam
      */
-    static int interval;
-    static Timer timer;
     int i = 0;
     public ButtonGroup G;
 
@@ -70,7 +68,7 @@ public class Exam extends javax.swing.JFrame {
         JSONObject json = getExamQuest(controller, username, jsonExam.getInt("examID"));
         JSONArray examQuestion = json.getJSONArray("data");
         JSONObject data = examQuestion.getJSONObject(i);
-        int num = data.getInt("number") + 1;
+        int num = data.getInt("number");
         jLabel_questNum.setText("Question " + num + ":");
         jLabel_questTitle.setText(data.getString("question"));
         jRadioButton_answer_1.setText(data.getString("choice1"));
@@ -81,7 +79,7 @@ public class Exam extends javax.swing.JFrame {
         jButton_next.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int j = i + 1;
-                if (j < jsonExam.getInt("numOfquiz")) {
+                if (j < jsonExam.getInt("numOfQuiz")) {
                     //JSONObject answer = examQuestion.getJSONObject(i);
                     if (G.getSelection() != null) {
                         JSONObject answer = examQuestion.getJSONObject(i);
@@ -111,7 +109,7 @@ public class Exam extends javax.swing.JFrame {
                         G.clearSelection();
                     }
                     //G.clearSelection();
-                    int num = answer_next.getInt("number") + 1;
+                    int num = answer_next.getInt("number");
                     jLabel_questNum.setText("Question " + num + ":");
                     jLabel_questTitle.setText(answer_next.getString("question"));
                     jRadioButton_answer_1.setText(answer_next.getString("choice1"));
@@ -155,7 +153,7 @@ public class Exam extends javax.swing.JFrame {
                         G.clearSelection();
                     }
 
-                    int num = answer_prev.getInt("number") + 1;
+                    int num = answer_prev.getInt("number");
                     jLabel_questNum.setText("Question " + num + ":");
                     jLabel_questTitle.setText(answer_prev.getString("question"));
                     jRadioButton_answer_1.setText(answer_prev.getString("choice1"));
@@ -194,6 +192,7 @@ public class Exam extends javax.swing.JFrame {
 
                 JSONObject jsonSend = new JSONObject();
                 jsonSend.put("username", username);
+                jsonSend.put("func", "receiveAnswer");
                 jsonSend.put("examID", jsonExam.getInt("examID"));
                 jsonSend.put("data", examQuestion);
 
@@ -252,6 +251,7 @@ public class Exam extends javax.swing.JFrame {
                     Controller controller = new Controller();
                     JSONObject jsonSend = new JSONObject();
                     jsonSend.put("username", username);
+                    jsonSend.put("func", "receiveAnswer");
                     jsonSend.put("examID", jsonExam.getInt("examID"));
                     jsonSend.put("data", examQuestion);
 
@@ -296,6 +296,9 @@ public class Exam extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(1000, 600));
+        setSize(new java.awt.Dimension(1000, 600));
+        setType(java.awt.Window.Type.UTILITY);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel_questNum.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -304,20 +307,22 @@ public class Exam extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(27, 42, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.insets = new java.awt.Insets(50, 42, 0, 0);
         getContentPane().add(jLabel_questNum, gridBagConstraints);
 
         jLabel_questTitle.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel_questTitle.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel_questTitle.setText("Question ......................");
         jLabel_questTitle.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel_questTitle.setMaximumSize(new java.awt.Dimension(133, 60));
+        jLabel_questTitle.setMinimumSize(new java.awt.Dimension(133, 60));
+        jLabel_questTitle.setPreferredSize(new java.awt.Dimension(133, 60));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.ipadx = 706;
-        gridBagConstraints.ipady = 123;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 42, 0, 42);
         getContentPane().add(jLabel_questTitle, gridBagConstraints);
@@ -334,8 +339,11 @@ public class Exam extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 42);
         getContentPane().add(jRadioButton_answer_1, gridBagConstraints);
 
@@ -351,8 +359,11 @@ public class Exam extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 42);
         getContentPane().add(jRadioButton_answer_2, gridBagConstraints);
 
@@ -368,8 +379,11 @@ public class Exam extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 42);
         getContentPane().add(jRadioButton_answer_3, gridBagConstraints);
 
@@ -385,8 +399,11 @@ public class Exam extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 42);
         getContentPane().add(jRadioButton_answer_4, gridBagConstraints);
 
@@ -402,8 +419,8 @@ public class Exam extends javax.swing.JFrame {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.ipadx = 13;
         gridBagConstraints.ipady = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 42, 31, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 42, 50, 0);
         getContentPane().add(jButton_prev, gridBagConstraints);
 
         jButton_next.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
@@ -418,8 +435,8 @@ public class Exam extends javax.swing.JFrame {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.ipadx = 38;
         gridBagConstraints.ipady = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 18, 31, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 18, 50, 0);
         getContentPane().add(jButton_next, gridBagConstraints);
 
         jLabel_time.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -427,8 +444,8 @@ public class Exam extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(27, 481, 0, 42);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(50, 481, 0, 42);
         getContentPane().add(jLabel_time, gridBagConstraints);
 
         jButton_finish.setBackground(new java.awt.Color(255, 255, 102));
@@ -444,10 +461,11 @@ public class Exam extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 34;
         gridBagConstraints.ipady = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 491, 31, 42);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 491, 50, 42);
         getContentPane().add(jButton_finish, gridBagConstraints);
 
         pack();
@@ -503,8 +521,8 @@ public class Exam extends javax.swing.JFrame {
     private JSONObject getExamQuest(Controller controller, String username, int id) throws IOException, Exception {
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("username", username);
-        jsonSend.put("func", "getExam");
-        jsonSend.put("ID", id);
+        jsonSend.put("func", "getExamQuest");
+        jsonSend.put("examID", id);
 
         String dataReceive = controller.SendReceiveData(jsonSend.toString());
         JSONObject jsonReceive = new JSONObject(dataReceive);

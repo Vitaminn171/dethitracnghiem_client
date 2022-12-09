@@ -12,9 +12,12 @@ public class ExamQuestionDAL extends MyDatabaseManager {
         ExamQuestionDAL.connectDB();
     }
 
-    public ArrayList readExamQ() throws SQLException {
-        String query = "SELECT * FROM examquestion";
-        ResultSet rs = ExamQuestionDAL.doReadQuery(query);
+    public ArrayList readExamQ(int ExamID) throws SQLException {
+        String query = "SELECT * FROM examquestion WHERE ExamID = " + ExamID;
+        PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
+//        p.setInt(1, ExamID);
+        ResultSet rs = p.executeQuery();
+        //ResultSet rs = ExamQuestionDAL.doReadQuery(query);
         ArrayList list = new ArrayList();
 
         if (rs != null) {

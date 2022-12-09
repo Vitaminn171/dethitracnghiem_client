@@ -34,9 +34,7 @@ public class OTP extends javax.swing.JFrame {
     /**
      * Creates new form OTP
      */
-    double timeLeft = 5000; //5 seconds
-    int timeLeft2 = 5;
-    Timer timer;
+    
     boolean flag;
 
     public OTP(JSONObject json) {
@@ -50,22 +48,6 @@ public class OTP extends javax.swing.JFrame {
         jFormattedTextField1.putClientProperty("JTextField.placeholderText", "OTP");
         jButton_submit.putClientProperty("JButton.buttonType", "roundRect");
 
-        //double timeLeft = 5000; //5 seconds
-//
-//        ActionListener countDown=new ActionListener()
-//        {
-//            public void actionPerformed(ActionEvent e)
-//            {
-//                timeLeft -= 100;
-//                SimpleDateFormat df=new SimpleDateFormat("mm:ss:S");
-//                jLabel1.setText(df.format(timeLeft));
-//                if(timeLeft<=0)
-//                {
-//                    timer.stop();
-//                }
-//            }
-//        };
-//        timer=new Timer(100, countDown);
         Controller controller = new Controller();
         String otp = controller.generateOTP();
         SendMail.SendOTP(json.getString("username"), otp);
@@ -202,16 +184,11 @@ public class OTP extends javax.swing.JFrame {
         } else {
 
             JOptionPane.showMessageDialog(this, "Wrong OTP!");
-//            switch (json.getString("func")) {
-//                case "signup":
-//                    Login login = new Login();
-//                    login.setVisible(true);
-//                    break;
-//                case "changePass":
-//                    Dashboard dashboard = new Dashboard(json.getString("username"));
-//                    dashboard.setVisible(true);
-//                    break;
-//            }
+            switch (json.getString("func")) {
+                case "signup":
+                    new Signup().setVisible(true);
+                    break;
+            }
         }
 
     }

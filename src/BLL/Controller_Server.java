@@ -1,6 +1,7 @@
 package BLL;
 
 import DTO.ExamDTO;
+import DTO.ExamQuestionDTO;
 import DTO.SubjectDTO;
 import DTO.UserDTO;
 import GUI.Login;
@@ -35,7 +36,7 @@ public class Controller_Server {
     UserBLL uBLL = new UserBLL();
     SubjectBLL sBLL = new SubjectBLL();
     ExamBLL eBLL = new ExamBLL();
-
+    ExamQuestionBLL examQuestionBLL = new ExamQuestionBLL();
     public JSONObject checkFunction(JSONObject json) throws IOException, SQLException {
 
         switch (json.getString("func")) {
@@ -146,6 +147,39 @@ public class Controller_Server {
                 }
                 json.put("examlist", examlist);
                 System.out.println(json.toString());
+                break;
+            }
+            
+            case "getExamQuest" -> {
+                List list = examQuestionBLL.getExamQuestion(json.getInt("examID"));
+                JSONArray data = new JSONArray();
+                for (int i = 0; i < list.size(); i++) {
+                    ExamQuestionDTO examQuest = (ExamQuestionDTO) list.get(i);
+                    data.put(new JSONObject().put("examID", examQuest.getExamID())
+                                                    .put("question", examQuest.getQuestion())
+                                                    .put("choice1", examQuest.getChoice1())
+                                                    .put("choice2", examQuest.getChoice2())
+                                                    .put("choice3", examQuest.getChoice3())
+                                                    .put("choice4", examQuest.getChoice4())
+                                                    .put("number", examQuest.getNumber())
+                                                    );
+                }
+                json.put("data", data);
+                System.out.println(json.toString());
+                break;
+            }
+            
+            case "receiveAnswer" -> {
+                
+                //JSONObject jSONObject = new JSONObject();
+                //TODO: check the answer from client then send back result 
+                //"examinee"
+        //        "score"
+        //        "correct"
+        //        "wrong"
+                
+                System.out.println(json.toString());
+                json.put("status", "ok");
                 break;
             }
             
