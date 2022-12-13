@@ -38,9 +38,9 @@ public class Result extends javax.swing.JFrame {
         jButton1.putClientProperty( "JButton.focusWidth", 1 );
         
         jLabel_examinee_data.setText(jsonResult.getString("examinee"));
-        jLabel_score_data.setText(jsonResult.getString("score"));
-        jLabel_correct_data.setText(jsonResult.getString("correct"));
-        jLabel_wrong_data.setText(jsonResult.getString("wrong"));
+        jLabel_score_data.setText(String.valueOf(jsonResult.getDouble("score")));
+        jLabel_correct_data.setText(String.valueOf(jsonResult.getInt("correct")));
+        jLabel_wrong_data.setText(String.valueOf(jsonResult.getInt("wrong")));
         
         jButton1.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
@@ -82,6 +82,7 @@ public class Result extends javax.swing.JFrame {
         jLabel_wrong_data = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(400, 300));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -99,7 +100,7 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
         getContentPane().add(jLabel_examinee, gridBagConstraints);
@@ -109,7 +110,7 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
         getContentPane().add(jLabel_score, gridBagConstraints);
@@ -119,7 +120,7 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
         getContentPane().add(jLabel_correct, gridBagConstraints);
@@ -129,7 +130,7 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
         getContentPane().add(jLabel_wrong, gridBagConstraints);
@@ -152,12 +153,13 @@ public class Result extends javax.swing.JFrame {
 
         jLabel_examinee_data.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_examinee_data.setText("Examinee");
-        jLabel_examinee_data.setMaximumSize(new java.awt.Dimension(0, 0));
-        jLabel_examinee_data.setMinimumSize(new java.awt.Dimension(0, 0));
+        jLabel_examinee_data.setMaximumSize(null);
+        jLabel_examinee_data.setMinimumSize(null);
+        jLabel_examinee_data.setPreferredSize(null);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 18, 0, 42);
         getContentPane().add(jLabel_examinee_data, gridBagConstraints);
@@ -170,7 +172,7 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 18, 0, 42);
         getContentPane().add(jLabel_score_data, gridBagConstraints);
@@ -183,7 +185,7 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 18, 0, 42);
         getContentPane().add(jLabel_correct_data, gridBagConstraints);
@@ -196,7 +198,7 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(18, 16, 0, 42);
         getContentPane().add(jLabel_wrong_data, gridBagConstraints);

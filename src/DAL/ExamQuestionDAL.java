@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import DTO.ExamQuestionDTO;
+import DTO.UserDTO;
+import java.sql.Date;
 
 public class ExamQuestionDAL extends MyDatabaseManager {
 
@@ -12,10 +14,9 @@ public class ExamQuestionDAL extends MyDatabaseManager {
         ExamQuestionDAL.connectDB();
     }
 
-    public ArrayList readExamQ(int ExamID) throws SQLException {
-        String query = "SELECT * FROM examquestion WHERE ExamID = " + ExamID;
+    public ArrayList readExamQ(int ExamID, int num) throws SQLException {
+        String query = "SELECT * FROM examquestion WHERE ExamID = " + ExamID + " AND Number = " + num;
         PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
-//        p.setInt(1, ExamID);
         ResultSet rs = p.executeQuery();
         //ResultSet rs = ExamQuestionDAL.doReadQuery(query);
         ArrayList list = new ArrayList();
@@ -36,6 +37,45 @@ public class ExamQuestionDAL extends MyDatabaseManager {
         }
         return list;
     }
+    
+    public ExamQuestionDTO readExam(int ExamID, int num) throws SQLException {
+        String query = "SELECT * FROM examquestion WHERE ExamID = ? AND Number = ?" ;
+        
+        PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
+        p.setInt(2, num);
+        ResultSet rs = p.executeQuery();
+        //ResultSet rs = ExamQuestionDAL.doReadQuery(query);
+        ExamQuestionDTO eq = new ExamQuestionDTO();
+        if(rs.next()){
+                eq.setExamID(rs.getInt("ExamID"));
+                eq.setNumber(rs.getInt("Number"));
+                eq.setQuestion(rs.getString("Question"));
+                eq.setChoice1(rs.getString("Choice1"));
+                eq.setChoice2(rs.getString("Choice2"));
+                eq.setChoice3(rs.getString("Choice3"));
+                eq.setChoice4(rs.getString("Choice4"));
+                return eq;
+        }
+        
+        return null;
+
+    }
+    public ExamQuestionDTO readAnswer(int ExamID, int num) throws SQLException {
+        String query = "SELECT * FROM examquestion WHERE ExamID = " + ExamID + " AND Number = " + num;
+        PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
+        ResultSet rs = p.executeQuery();
+        //ResultSet rs = ExamQuestionDAL.doReadQuery(query);
+        ExamQuestionDTO eq = new ExamQuestionDTO();
+        if(rs.next()){
+                eq.setExamID(rs.getInt("ExamID"));
+                eq.setNumber(rs.getInt("Number"));
+                eq.setAnswer(rs.getString("Answer"));
+                return eq;
+        }
+        return null;
+    }
+
 
     /*
      * public ExamChoiceDTO getUser(int UserID) throws SQLException {

@@ -151,35 +151,29 @@ public class Controller_Server {
             }
             
             case "getExamQuest" -> {
-                List list = examQuestionBLL.getExamQuestion(json.getInt("examID"));
-                JSONArray data = new JSONArray();
-                for (int i = 0; i < list.size(); i++) {
-                    ExamQuestionDTO examQuest = (ExamQuestionDTO) list.get(i);
-                    data.put(new JSONObject().put("examID", examQuest.getExamID())
-                                                    .put("question", examQuest.getQuestion())
-                                                    .put("choice1", examQuest.getChoice1())
-                                                    .put("choice2", examQuest.getChoice2())
-                                                    .put("choice3", examQuest.getChoice3())
-                                                    .put("choice4", examQuest.getChoice4())
-                                                    .put("number", examQuest.getNumber())
-                                                    );
-                }
-                json.put("data", data);
+                
+                ExamQuestionDTO examQuest = examQuestionBLL.getExamQuestion(json.getInt("examID"),json.getInt("number"));
+                
+                json.put("question", examQuest.getQuestion());
+                json.put("choice1", examQuest.getChoice1());
+                json.put("choice2", examQuest.getChoice2());
+                json.put("choice3", examQuest.getChoice3());
+                json.put("choice4", examQuest.getChoice4());
+  
                 System.out.println(json.toString());
                 break;
             }
             
             case "receiveAnswer" -> {
                 
-                //JSONObject jSONObject = new JSONObject();
-                //TODO: check the answer from client then send back result 
-                //"examinee"
-        //        "score"
-        //        "correct"
-        //        "wrong"
+                ExamQuestionDTO eq = examQuestionBLL.getExamAnswer(json.getInt("examID"),json.getInt("number"));
+                 
+                int correct = checkAnswer(eq.getAnswer(),json.getString("answer"),json.getInt("correct"));
+                //int score = correct * (10 / (jsonSend.getInt("numOfQuiz")));
+                json.put("correct", correct);
+                //json.put("score", score);
                 
                 System.out.println(json.toString());
-                json.put("status", "ok");
                 break;
             }
             
@@ -218,5 +212,12 @@ public class Controller_Server {
         data = keyValue + "///" + encryptedData;
         System.out.println("Encrypted Value with key: " + data);
         return data;
+    }
+    
+    public int checkAnswer(String answer, String receive, int correct){
+        if(answer.equals(receive)){
+            correct++;
+        } 
+        return correct;
     }
 }

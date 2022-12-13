@@ -26,6 +26,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -47,6 +48,7 @@ public class Exam_All extends javax.swing.JPanel {
      * Creates new form Exam_All
      */
 
+    
     public Exam_All(String username) throws IOException, Exception {
         initComponents();
         setCenterTable();
@@ -221,15 +223,7 @@ public class Exam_All extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        // TODO add your handling code here:
-        //get id while clicked row data
-        /* JTable source = (JTable) evt.getSource();
-        int row = source.rowAtPoint(evt.getPoint());
-        //int column = source.columnAtPoint( evt.getPoint() );
-        String s = source.getModel().getValueAt(row, 0) + "";
-
-        JOptionPane.showMessageDialog(null, s); */
-
+        
     }//GEN-LAST:event_jTable1MouseClicked
 
     private ImageIcon setImageIcon(String path, int x, int y) {
@@ -275,11 +269,22 @@ public class Exam_All extends javax.swing.JPanel {
                             int row = jTable1.rowAtPoint(evt.getPoint());
                             String s = jTable1.getModel().getValueAt(row, 0) + "";
                             String title = jTable1.getModel().getValueAt(row, 1) + "";
-
+                            
                             int a = JOptionPane.showConfirmDialog(null, "Start the exam ID " + s + ", with title " + title + " ?");
                             if (a == JOptionPane.YES_OPTION) {
-                                JSONObject jsonExam = jSONArray.getJSONObject(Integer.parseInt(s));
-
+                                
+                                int id = Integer.parseInt(s);
+                                JSONObject jsonExam = new JSONObject();
+                                for(int i = 0; i< jSONArray.length(); i++){
+                                    JSONObject jsonTemp = jSONArray.getJSONObject(i);
+                                    if(jsonTemp.getInt("examID") == id){
+                                        jsonExam = jsonTemp;
+                                    }
+                                }
+                                
+                                
+                                //JSONObject jsonExam = jSONArray.getJSONObject(id);
+                               
                                 try {
                                     new Exam(jsonExam, username).setVisible(true);
 
