@@ -103,6 +103,7 @@ public class Exam extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(null, "Finish!");
                             JSONObject jsonResult = new JSONObject();
                             jsonResult.put("examinee", username);
+                            jsonResult.put("examID", jsonExam.getInt("examID"));
                             jsonResult.put("correct", correct);
                             jsonResult.put("score", score);
                             jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
@@ -314,6 +315,7 @@ public class Exam extends javax.swing.JFrame {
                             
                             
                             JSONObject jsonResult = new JSONObject();
+                            jsonResult.put("examID", jsonExam.getInt("examID"));
                             jsonResult.put("examinee", username);
                             jsonResult.put("correct", correct);
                             jsonResult.put("score", score);
@@ -324,6 +326,7 @@ public class Exam extends javax.swing.JFrame {
                         }
                     }else{
                         JSONObject jsonResult = new JSONObject();
+                        jsonResult.put("examID", jsonExam.getInt("examID"));
                         jsonResult.put("examinee", username);
                         jsonResult.put("correct", correct);
                         jsonResult.put("score", score);

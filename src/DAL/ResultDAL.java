@@ -37,9 +37,17 @@ public class ResultDAL extends MyDatabaseManager {
     
     // DEFAULT: Examinee là user đang login, ExamID là đề
     // Score là điểm thi, CorrectQuiz là số câu đúng, WrongWiz là số câu sai (WIP)
-    public int insertResult(ResultDTO r) throws SQLException {
-        String query = "INSERT INTO result () VALUES ()";
+    public int insertResult(int ExamID, String Examinee, int Score, int Correct, int Wrong, String Date) throws SQLException {
+        
+        String query = "INSERT INTO result (ExamID, Examinee, CorrectQuiz, WrongQuiz, Date, NumOfTime, Score) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement p = ResultDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
+        p.setString(2, Examinee);
+        p.setInt(3, Correct);
+        p.setInt(4, Wrong);
+        p.setString(5, Date);
+        p.setInt(6, 1);
+        p.setInt(7, Score);
         int result = p.executeUpdate();
         return result;
     }

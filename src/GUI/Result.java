@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import BLL.Controller;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -12,9 +13,14 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONObject;
+import java.time.LocalDateTime;  
+import java.time.format.DateTimeFormatter;  
+import java.util.Date;
 
 /**
  *
@@ -25,7 +31,7 @@ public class Result extends javax.swing.JFrame {
     /**
      * Creates new form Result
      */
-    public Result(JSONObject jsonResult) {
+    public Result(JSONObject jsonResult) throws Exception {
         initComponents();
         this.setTitle("Quiz Exam Result");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -42,6 +48,14 @@ public class Result extends javax.swing.JFrame {
         jLabel_correct_data.setText(String.valueOf(jsonResult.getInt("correct")));
         jLabel_wrong_data.setText(String.valueOf(jsonResult.getInt("wrong")));
         
+        
+       
+        LocalDate date = java.time.LocalDate.now();
+        jsonResult.put("date", date.toString());
+        jsonResult.put("func", "result");
+        Controller controller = new Controller();
+        String dataReceive = controller.SendReceiveData(jsonResult.toString());
+        System.out.println(dataReceive);
         jButton1.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
             try {

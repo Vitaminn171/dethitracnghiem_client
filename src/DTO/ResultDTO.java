@@ -3,15 +3,15 @@ package DTO;
 import java.util.Date;
 
 public class ResultDTO {
-    int ResultID, UserID, CorrectQuiz, WrongQuiz;
+    int ResultID, UserID, CorrectQuiz, WrongQuiz, ExamID;
     float Score;
-    String ExamID, Title, Fullname;
+    String Title, Fullname;
     Date date;
 
     public ResultDTO() {
     }
 
-    public ResultDTO(int ResultID, int UserID, int CorrectQuiz, int WrongQuiz, float Score, String ExamID, String Title, String Fullname, Date date) {
+    public ResultDTO(int ResultID, int UserID, int CorrectQuiz, int WrongQuiz, float Score, int ExamID, String Title, String Fullname, Date date) {
         this.ResultID = ResultID;
         this.UserID = UserID;
         this.CorrectQuiz = CorrectQuiz;
@@ -63,11 +63,11 @@ public class ResultDTO {
         this.Score = Score;
     }
 
-    public String getExamID() {
+    public int getExamID() {
         return ExamID;
     }
 
-    public void setExamID(String ExamID) {
+    public void setExamID(int ExamID) {
         this.ExamID = ExamID;
     }
 
