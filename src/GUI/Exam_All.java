@@ -29,6 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -47,8 +48,11 @@ public class Exam_All extends javax.swing.JPanel {
     /**
      * Creates new form Exam_All
      */
+        
 
-    
+    public JPanel getjPanel1() {
+        return jPanel1;
+    }
     public Exam_All(String username) throws IOException, Exception {
         initComponents();
         setCenterTable();
@@ -93,6 +97,8 @@ public class Exam_All extends javax.swing.JPanel {
             setDataToTable(arrayExam,model);
             tableMouseClick(arrayExam, username);
         }
+        
+        
 
         //get subject when click in combo box 
         jComboBox_subject.addActionListener(new ActionListener() {
@@ -223,7 +229,7 @@ public class Exam_All extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        
+
     }//GEN-LAST:event_jTable1MouseClicked
 
     private ImageIcon setImageIcon(String path, int x, int y) {
@@ -273,6 +279,9 @@ public class Exam_All extends javax.swing.JPanel {
                             int a = JOptionPane.showConfirmDialog(null, "Start the exam ID " + s + ", with title " + title + " ?");
                             if (a == JOptionPane.YES_OPTION) {
                                 
+                                
+                                
+                                
                                 int id = Integer.parseInt(s);
                                 JSONObject jsonExam = new JSONObject();
                                 for(int i = 0; i< jSONArray.length(); i++){
@@ -281,7 +290,9 @@ public class Exam_All extends javax.swing.JPanel {
                                         jsonExam = jsonTemp;
                                     }
                                 }
-                                
+                                Window window = SwingUtilities.getWindowAncestor(getjPanel1());
+                                window.dispose();
+                                getjPanel1().setVisible(false);
                                 
                                 //JSONObject jsonExam = jSONArray.getJSONObject(id);
                                
