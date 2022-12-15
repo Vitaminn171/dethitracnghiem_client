@@ -45,6 +45,7 @@ import org.json.JSONObject;
 public class Exam_All extends javax.swing.JPanel {
 
     ExamBLL examBLL = new ExamBLL();
+    JSONObject jSONtemp;
 
     /**
      * Creates new form Exam_All
@@ -58,7 +59,13 @@ public class Exam_All extends javax.swing.JPanel {
         setCenterTable();
 
         Controller controller = new Controller();
-
+        JSONObject jsonBlock = new JSONObject();
+        jsonBlock.put("username", username);
+        jsonBlock.put("func", "getBlockStatus");
+        String blockStatus = controller.SendReceiveData(jsonBlock.toString());
+        jSONtemp = new JSONObject(blockStatus);
+        System.out.println(jSONtemp.toString());
+        
         JSONObject jsonExam = new JSONObject();
         jsonExam.put("username", username);
         jsonExam.put("func", "getExamAll");
@@ -155,6 +162,16 @@ public class Exam_All extends javax.swing.JPanel {
             }
         });
 
+        jButton_AddExam.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (jSONtemp.getBoolean("blockAddExam")) {
+                    JOptionPane.showMessageDialog(null, "Tài khoản đang bị khóa thêm đề thi, vui lòng liên hệ quản trị viên!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Tài khoản không bị khóa thêm đề thi");
+                }
+            }
+        });
+
     }
 
     /**
@@ -168,7 +185,7 @@ public class Exam_All extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jComboBox_subject = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        jButton_AddExam = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -203,11 +220,11 @@ public class Exam_All extends javax.swing.JPanel {
         jComboBox_subject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jComboBox_subject.setModel(new javax.swing.DefaultComboBoxModel<>());
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setText("THÊM ĐỀ THI");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_AddExam.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton_AddExam.setText("THÊM ĐỀ THI");
+        jButton_AddExam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_AddExamActionPerformed(evt);
             }
         });
 
@@ -221,7 +238,7 @@ public class Exam_All extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jComboBox_subject, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(457, 457, 457)
-                        .addComponent(jButton1))
+                        .addComponent(jButton_AddExam))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1491, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
@@ -231,7 +248,7 @@ public class Exam_All extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox_subject, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton_AddExam, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1003, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(15, Short.MAX_VALUE))
@@ -257,9 +274,9 @@ public class Exam_All extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton_AddExamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddExamActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton_AddExamActionPerformed
 
     private ImageIcon setImageIcon(String path, int x, int y) {
         BufferedImage img = null;
@@ -351,8 +368,9 @@ public class Exam_All extends javax.swing.JPanel {
 
                         }
                     }
+                } else if (jSONtemp.getBoolean("blockTakeExam")) {
+                    JOptionPane.showMessageDialog(null, "Tài khoản đang bị khóa thi, vui lòng liên hệ quản trị viên!");
                 } else {
-
                     String title = jTable1.getModel().getValueAt(row, 1) + "";
 
                     int a = JOptionPane.showConfirmDialog(null, "Start the exam ID " + s + ", with title " + title + " ?");
@@ -380,12 +398,13 @@ public class Exam_All extends javax.swing.JPanel {
                         }
                     }
                 }
+
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton_AddExam;
     private javax.swing.JComboBox<String> jComboBox_subject;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

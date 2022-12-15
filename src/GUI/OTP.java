@@ -47,7 +47,7 @@ public class OTP extends javax.swing.JFrame {
         jButton_submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (!check()) {
-                    JOptionPane.showMessageDialog(null, "OTP đã hết hiệu lực! Vui lòng đăng ký lại");
+                    JOptionPane.showMessageDialog(null, "OTP đã hết hiệu lực! Vui lòng đăng ký lại!");
                 } else {
                     try {
                         checkOtpValid(jFormattedTextField1.getText(), json, otp);
@@ -61,7 +61,7 @@ public class OTP extends javax.swing.JFrame {
         final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         final Runnable runnable = new Runnable() {
-            long countdownStarter = 600000; //convert minute to milisecond
+            long countdownStarter = (long) (0.5 * 60000); //convert minute to milisecond
 
             public void run() {
 

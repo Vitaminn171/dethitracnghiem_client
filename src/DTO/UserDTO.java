@@ -6,20 +6,22 @@ public class UserDTO {
     int UserID, OTP;
     String Username, Password, Fullname;
     Date DateofBirth;
-    boolean Gender, Logstatus, Blocked;
+    boolean Gender, Logstatus, BlockLogin, BlockAddExam, BlockTakeExam;
 
     public UserDTO() {
     }
 
-    public UserDTO(int OTP, String Username, String Password, String Fullname, Date DateofBirth, boolean Gender, boolean LogStatus, boolean Blocked) {
-        this.OTP = OTP;
+    public UserDTO(String Username, String Password, String Fullname, Date DateofBirth, boolean Gender,
+            boolean LogStatus, boolean BlockLogin, boolean BlockAddExam, boolean BlockTakeExam) {
         this.Username = Username;
         this.Password = Password;
         this.Fullname = Fullname;
         this.DateofBirth = DateofBirth;
         this.Gender = Gender;
         this.Logstatus = LogStatus;
-        this.Blocked = Blocked;
+        this.BlockLogin = BlockLogin;
+        this.BlockAddExam = BlockAddExam;
+        this.BlockTakeExam = BlockTakeExam;
     }
 
     public int getUserID() {
@@ -54,10 +56,6 @@ public class UserDTO {
         return Logstatus;
     }
 
-    public boolean isBlocked() {
-        return Blocked;
-    }
-
     public void setUserID(int UserID) {
         this.UserID = UserID;
     }
@@ -90,7 +88,27 @@ public class UserDTO {
         this.Logstatus = Logstatus;
     }
 
-    public void setBlocked(boolean Blocked) {
-        this.Blocked = Blocked;
+    public boolean isBlockLogin() {
+        return BlockLogin;
+    }
+
+    public void setBlockLogin(boolean Blocked) {
+        this.BlockLogin = Blocked;
+    }
+
+    public boolean isBlockAddExam() {
+        return BlockAddExam;
+    }
+
+    public void setBlockAddExam(boolean Blocked) {
+        this.BlockAddExam = Blocked;
+    }
+
+    public boolean isBlockTakeExam() {
+        return BlockTakeExam;
+    }
+
+    public void setBlockTakeExam(boolean Blocked) {
+        this.BlockTakeExam = Blocked;
     }
 }

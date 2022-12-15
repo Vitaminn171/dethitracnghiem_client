@@ -267,7 +267,7 @@ public class Login extends javax.swing.JFrame {
                     this.dispose();
                     dashboard.setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Username or password is incorrect!");
+                    JOptionPane.showMessageDialog(this, json.getString("message"));
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);

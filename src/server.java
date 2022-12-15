@@ -166,7 +166,7 @@ class server_command implements Runnable {
             } else {
                 arr[i][j++] = String.valueOf("Offline");
             }
-            if (u.isBlocked() == true) {
+            if (u.isBlockLogin() == true) {
                 arr[i][j++] = String.valueOf("Blocked");
             } else {
                 arr[i][j++] = String.valueOf("Good");
@@ -213,7 +213,7 @@ class server_command implements Runnable {
             } else {
                 arr[i][j++] = String.valueOf("Offline");
             }
-            if (u.isBlocked() == true) {
+            if (u.isBlockLogin()== true) {
                 arr[i][j++] = String.valueOf("Blocked");
             } else {
                 arr[i][j++] = String.valueOf("Good");

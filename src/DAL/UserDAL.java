@@ -25,11 +25,12 @@ public class UserDAL extends MyDatabaseManager {
                 u.setUserID(rs.getInt("UserID"));
                 u.setUsername(rs.getString("Username"));
                 u.setFullname(rs.getString("Fullname"));
-                //u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
                 u.setDateofBirth(rs.getDate("Birth"));
                 u.setGender(rs.getBoolean("Gender"));
                 u.setLogStatus(rs.getBoolean("LogStatus"));
-                u.setBlocked(rs.getBoolean("BlockLogin"));
+                u.setBlockLogin(rs.getBoolean("BlockLogin"));
+                u.setBlockAddExam(rs.getBoolean("BlockAddExam"));
+                u.setBlockTakeExam(rs.getBoolean("BlockTakeExam"));
                 list.add(u);
             }
         }
@@ -37,7 +38,7 @@ public class UserDAL extends MyDatabaseManager {
     }
 
     public ArrayList readOnlineUser() throws SQLException {
-        String query = "SELECT * FROM user WHERE LogStatus=1";
+        String query = "SELECT * FROM user WHERE LogStatus = 1";
         ResultSet rs = UserDAL.doReadQuery(query);
         ArrayList list = new ArrayList();
 
@@ -47,11 +48,12 @@ public class UserDAL extends MyDatabaseManager {
                 u.setUserID(rs.getInt("UserID"));
                 u.setUsername(rs.getString("Username"));
                 u.setFullname(rs.getString("Fullname"));
-                //u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
                 u.setDateofBirth(rs.getDate("Birth"));
                 u.setGender(rs.getBoolean("Gender"));
                 u.setLogStatus(rs.getBoolean("LogStatus"));
-                u.setBlocked(rs.getBoolean("BlockLogin"));
+                u.setBlockLogin(rs.getBoolean("BlockLogin"));
+                u.setBlockAddExam(rs.getBoolean("BlockAddExam"));
+                u.setBlockTakeExam(rs.getBoolean("BlockTakeExam"));
                 list.add(u);
             }
         }
@@ -72,7 +74,9 @@ public class UserDAL extends MyDatabaseManager {
                 u.setFullname(rs.getString("Fullname"));
                 u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
                 u.setGender(rs.getBoolean("Gender"));
-                u.setBlocked(rs.getBoolean("BlockLogin"));
+                u.setBlockLogin(rs.getBoolean("BlockLogin"));
+                u.setBlockAddExam(rs.getBoolean("BlockAddExam"));
+                u.setBlockTakeExam(rs.getBoolean("BlockTakeExam"));
             }
         }
         return u;
@@ -91,7 +95,6 @@ public class UserDAL extends MyDatabaseManager {
                 u.setFullname(rs.getString("Fullname"));
                 u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
                 u.setGender(rs.getBoolean("Gender"));
-                u.setBlocked(rs.getBoolean("BlockLogin"));
             }
         }
         return u;
@@ -111,13 +114,13 @@ public class UserDAL extends MyDatabaseManager {
             u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
             u.setGender(rs.getBoolean("Gender"));
             u.setPassword(rs.getString("Password"));
-            u.setBlocked(rs.getBoolean("BlockLogin"));
             return u;
         }
         return null;
     }
 
-    public int insertUser(String Username, String Password, String Fullname, boolean Gender, String Birth) throws SQLException {
+    public int insertUser(String Username, String Password, String Fullname, boolean Gender, String Birth)
+            throws SQLException {
         String query = "INSERT INTO user (Username, Password, Fullname, Gender, Birth) VALUES (?, ?, ?, ? ,?)";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setString(1, Username);
@@ -140,8 +143,40 @@ public class UserDAL extends MyDatabaseManager {
         return result;
     }
 
+    public UserDTO getBlockStatus(String Username) throws SQLException {
+        String query = "SELECT BlockAddExam, BlockTakeExam FROM user WHERE Username = ?";
+        PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
+        p.setString(1, Username);
+        ResultSet rs = p.executeQuery();
+        UserDTO u = new UserDTO();
+        if (rs.next()) {
+            u.setBlockAddExam(rs.getBoolean("BlockAddExam"));
+            u.setBlockTakeExam(rs.getBoolean("BlockTakeExam"));
+            return u;
+        }
+        return null;
+    }
+
     public int blockLogin(int UserID, boolean block) throws SQLException {
         String query = "UPDATE user SET BlockLogin = ? WHERE UserID = ?";
+        PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
+        p.setBoolean(1, block);
+        p.setInt(2, UserID);
+        int result = p.executeUpdate();
+        return result;
+    }
+
+    public int blockAddExam(int UserID, boolean block) throws SQLException {
+        String query = "UPDATE user SET BlockAddExam = ? WHERE UserID = ?";
+        PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
+        p.setBoolean(1, block);
+        p.setInt(2, UserID);
+        int result = p.executeUpdate();
+        return result;
+    }
+
+    public int blockTakeExam(int UserID, boolean block) throws SQLException {
+        String query = "UPDATE user SET BlockTakeExam = ? WHERE UserID = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setBoolean(1, block);
         p.setInt(2, UserID);
