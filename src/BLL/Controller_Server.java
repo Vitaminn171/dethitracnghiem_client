@@ -236,7 +236,7 @@ public class Controller_Server {
             }
 
             case "addResult" -> {
-                if (rBLL.insertResult(json.getInt("examID"), json.getInt("userID"), json.getFloat("score"),
+                if (rBLL.insertResult(json.getInt("examID"), json.getString("examinee"), json.getFloat("score"),
                         json.getString("date"), json.getInt("correct"), json.getInt("wrong")) == 0) {
                     json.put("status", false);
                     json.put("message", "Thêm kết quả thi thất bại!");

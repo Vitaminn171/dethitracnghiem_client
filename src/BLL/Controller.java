@@ -118,7 +118,6 @@ public class Controller {
         out.newLine();
         out.flush();
         String dataReceive = in.readLine();
-        System.out.println("Client nhan: " + dataReceive);
         if (dataReceive.contains("///")) {
             String dataReceiveKey = dataReceive.split("///")[0];
             String dataReceiveIV = dataReceive.split("///")[1];
@@ -154,58 +153,4 @@ public class Controller {
         return String.valueOf(otp);
     }
 }
-
-//class Send implements Runnable{
-//    private Socket socket;
-//    private BufferedWriter out;
-//    private String jsonString;
-//    public Send(Socket s, BufferedWriter o, String jsonString){
-//        this.socket = s;
-//        this.out = o;
-//        this.jsonString = jsonString;
-//    }
-//    public void run (){
-//        
-//        try{
-//            while(true){
-//                try{
-//                    
-//                    if(jsonString.equals("bye"))
-//                    break;
-//                }catch(Exception e){
-//                    
-//                }
-//                
-//            }
-//            this.socket.close();
-//        }catch(IOException e){
-//            System.out.println(e.getMessage());
-//        }
-//    }
-//    
-//}
-//
-//class Receive implements Runnable{
-//    private Socket socket;
-//    private BufferedReader in;
-//    public DTO.UserDTO user;
-//    public Receive(Socket s, BufferedReader r){
-//        this.socket = s;
-//        this.in = r;
-//    }
-//    
-//    public void run(){
-//        try {
-//            while(true){
-//                String data = in.readLine();
-//                
-//                
-//                user.setUsername(data);
-//                System.out.println("Received: " + data);
-//            }
-//        }catch(IOException e){
-//            System.out.println(e.getMessage());
-//        }
-//    }
-//}
 

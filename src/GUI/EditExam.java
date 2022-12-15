@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -29,24 +31,41 @@ import org.json.JSONObject;
 public class EditExam extends javax.swing.JFrame {
 
     public EditExam(JSONObject json) {
+
         initComponents();
         this.setTitle("Quiz Exam");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 
         jFormattedTextField_examTitle.putClientProperty("JComponent.roundRect", true);
-        jFormattedTextField_examTitle.putClientProperty("JTextField.placeholderText", "Tên đề");
+        jFormattedTextField_examTitle.setText(json.getString("examTitle"));
 
         jFormattedTextField_numOfQuiz.putClientProperty("JComponent.roundRect", true);
-        jFormattedTextField_numOfQuiz.putClientProperty("JTextField.placeholderText", "Số câu");
+        jFormattedTextField_numOfQuiz.setText(json.getString("numOfQuiz"));
 
         jFormattedTextField_limitTime.putClientProperty("JComponent.roundRect", true);
-        jFormattedTextField_limitTime.putClientProperty("JTextField.placeholderText", "Thời gian làm bài");
+        jFormattedTextField_limitTime.setText(json.getString("limitTime"));
 
+        Controller controller = new Controller();
+        JSONObject jsonSend = new JSONObject();
+        jsonSend.put("func", "getSubject");
+        try {
+            String dataReceive = controller.SendReceiveData(jsonSend.toString());
+            JSONObject jSONObject = new JSONObject(dataReceive);
+            JSONArray arrayReceive = jSONObject.getJSONArray("subjectlist");
+            ArrayList listSubject = new ArrayList();
+            for (int i = 0; i < arrayReceive.length(); i++) {
+                JSONObject jSubjectList = arrayReceive.getJSONObject(i);
+                listSubject.add(jSubjectList.get("subjectName").toString());
+                jComboBox_subject.addItem(listSubject.get(i).toString());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(EditExam.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jComboBox_subject.setSelectedItem(json.getString("subjectName"));
         jButton_cancel.putClientProperty("JButton.buttonType", "roundRect");
 
         jButton_submit.putClientProperty("JButton.buttonType", "roundRect");
-        Controller controller = new Controller();
         jButton_submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String examTitle = jFormattedTextField_examTitle.getText();
@@ -69,11 +88,13 @@ public class EditExam extends javax.swing.JFrame {
                     try {
                         String response = controller.SendReceiveData(jsonSend.toString());
                         JSONObject jResponse = new JSONObject(response);
-                        if (jResponse.getBoolean("status")){
+                        if (jResponse.getBoolean("status")) {
                             JOptionPane.showMessageDialog(null, jResponse.getString("message"));
                             //this.dispose();
-                            
-                        } else JOptionPane.showMessageDialog(null, jResponse.getString("message"));
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, jResponse.getString("message"));
+                        }
                     } catch (Exception ex) {
                         Logger.getLogger(EditExam.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -81,6 +102,7 @@ public class EditExam extends javax.swing.JFrame {
                 }
             }
         });
+
     }
 
     /**
@@ -310,71 +332,6 @@ public class EditExam extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void checkValidate(String username, String password, String fullname, Date birthDate, boolean gender) {
-        try {
-
-            if (fullname.length() != 0
-                    || username.length() != 0
-                    || password.length() != 0) {
-                String hashPass = MD5.getMd5(password);//hash md5 for password
-
-//                    Map<String, String> inputMap = new HashMap<String, String>();
-//                    inputMap.put("username", username);//push username to inputMap
-//                    inputMap.put("password", hashPass);//push password hashed to inputMap
-//                    inputMap.put("fullname", fullname);//push fullname to inputMap
-////                    inputMap.put("birth", dateString);//push birthday to inputMap
-//                    inputMap.put("gender", String.valueOf(gender));//push gender to inputMap
-//                    inputMap.put("func", "signup");//push function to inputMap
-//                    inputMap.put("status", "true");
-                JSONObject jsonSend = new JSONObject();
-                jsonSend.put("username", username);
-                jsonSend.put("password", hashPass);
-                jsonSend.put("fullname", fullname);
-                jsonSend.put("gender", gender);
-                jsonSend.put("func", "signup");
-                jsonSend.put("status", true);
-
-                Controller controller = new Controller();
-
-                //Signup(username, password, email, fullname, dateString, gender);
-                OTP otp = new OTP(jsonSend);
-                otp.setVisible(true);
-                //Signup(data, controller);
-//                    Login login = new Login();
-                //Signup(username, password, email, fullname, dateString, gender);
-                this.dispose();
-//                    login.setVisible(true);
-            } //TODO push data to outputstream to BLL.Controller
-            else {
-                JOptionPane.showMessageDialog(this, "Do not leave fields blank!");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Do not input invalid data!");
-        }
-    }
-
-    public void Signup(String data, Controller controller) throws Exception {
-        //Controller controller = new Controller();
-        try {
-            String dataReceive = controller.SendReceiveData(data);
-            System.out.println(dataReceive);
-            JSONObject jsonReceive = new JSONObject(dataReceive);
-            if (jsonReceive.getBoolean("status")) {
-                JOptionPane.showMessageDialog(this, "Created account success!");
-                //new Login().setVisible(true);
-
-                this.dispose();
-                Login login = new Login();
-                login.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Created account fail!" + jsonReceive.getString("message"));
-                //new EditExam().setVisible(true);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(EditExam.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;

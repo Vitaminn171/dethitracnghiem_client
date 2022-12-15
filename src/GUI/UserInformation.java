@@ -45,7 +45,7 @@ public class UserInformation extends javax.swing.JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Image dimg = img.getScaledInstance(160, 160,Image.SCALE_SMOOTH);
+        Image dimg = img.getScaledInstance(160, 160, Image.SCALE_SMOOTH);
         ImageIcon imageIcon = new ImageIcon(dimg);
         jLabel1.setIcon(imageIcon);
 
@@ -74,22 +74,22 @@ public class UserInformation extends javax.swing.JPanel {
 
         this.json = json;
         jButton_edit.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {
-             try {
-                 EditUserInfor edit = new EditUserInfor(json);
-                 edit.setVisible(true);
-                 
-             } catch (ParseException ex) {
-                 Logger.getLogger(UserInformation.class.getName()).log(Level.SEVERE, null, ex);
-             }
-         }
-      });
-         jButton_changePass.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {
-             ChangePassword changePwd = new ChangePassword(json.getString("username"));
-             changePwd.setVisible(true);
-         }
-      });
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    EditUserInfor edit = new EditUserInfor(json);
+                    edit.setVisible(true);
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(UserInformation.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        jButton_changePass.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ChangePassword changePwd = new ChangePassword(json.getString("username"));
+                changePwd.setVisible(true);
+            }
+        });
     }
 
     /**
@@ -354,13 +354,14 @@ public class UserInformation extends javax.swing.JPanel {
             inputMap.put("status", "true");
             String dataReceive = controller.SendReceiveData(controller.convertToJSON(inputMap));
             JSONObject jsonReceive = new JSONObject(dataReceive);
-            if (jsonReceive.getString("status").equals("true")) {
+            if (jsonReceive.getBoolean("status")) {
                 JFrame parent = (JFrame) this.getTopLevelAncestor();
                 parent.dispose();
                 Login login = new Login();
                 login.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Logout fail!");
             }
-            else JOptionPane.showMessageDialog(this, "Logout fail!");
         } catch (IOException ex) {
             Logger.getLogger(UserInformation.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

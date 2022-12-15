@@ -52,7 +52,7 @@ public class Result extends javax.swing.JFrame {
        
         LocalDate date = java.time.LocalDate.now();
         jsonResult.put("date", date.toString());
-        jsonResult.put("func", "result");
+        jsonResult.put("func", "addResult");
         Controller controller = new Controller();
         String dataReceive = controller.SendReceiveData(jsonResult.toString());
         System.out.println(dataReceive);

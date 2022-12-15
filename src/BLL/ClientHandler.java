@@ -41,7 +41,6 @@ public class ClientHandler implements Runnable{
             while (true) {                
                 // Server nhận dữ liệu từ client qua stream
                 String line = in.readLine();
-                System.out.println("Server nhan:" + line);
                 AES aes= new AES();
                 if (line.equals("bye")) {
                     break;
@@ -51,7 +50,6 @@ public class ClientHandler implements Runnable{
                     line = aes.decrypt(line.split("///")[2]);
 //                    System.out.println("BLL.ClientHandler.run()");
                 }
-                System.out.println(line);
                 Controller_Server con_admin = new Controller_Server();
                 JSONObject json = new JSONObject(line);
                 json = con_admin.checkFunction(json);
@@ -64,9 +62,8 @@ public class ClientHandler implements Runnable{
                 aes_server.init();
                 String encryptedData = aes_server.encryptOld(line);
                 String keyValue= aes_server.getSecretKey();
-                String IV=aes.getIV();
+                String IV=aes_server.getIV();
                 String data= keyValue+"///"+IV+"///"+encryptedData;
-                System.out.println("Server gui:" + data);
                 out.write(data);
                 out.newLine();
                 out.flush();

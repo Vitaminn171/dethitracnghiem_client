@@ -31,154 +31,152 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import com.bethecoder.ascii_table.ASCIITable;
 
-
-
 public class server {
+
     private static ServerSocket server = null;
     private static String localIP;
-    private static Thread t1=null;
-    private static Thread t2=null;
-    public static String localIP(){
+    private static Thread t1 = null;
+    private static Thread t2 = null;
+
+    public static String localIP() {
         return localIP;
     }
-    
-    
 
     public static void stopThread() throws IOException {
         t2.stop();
         t1.stop();
         server.close();
     }
-    
-    
-    
+
     public static void main(String[] args) throws IOException {
         //server lấy local IP bằng cách tạo socket đến 1 website tạm
-            Socket socket = new Socket("thongtindaotao.sgu.edu.vn", 80);
-            localIP = socket.getLocalAddress().toString().substring(1);
-            // SV tự generate API tại https://retool.com/api-generator/
-            String api = "https://retoolapi.dev/FFY4oG/data/1"; // Ghi vào dòng 1 trong DB
-            String jsonData = "{\"ip\":\"" + localIP + "\"}";
+        Socket socket = new Socket("thongtindaotao.sgu.edu.vn", 80);
+        localIP = socket.getLocalAddress().toString().substring(1);
+        // SV tự generate API tại https://retool.com/api-generator/
+        String api = "https://retoolapi.dev/FFY4oG/data/1"; // Ghi vào dòng 1 trong DB
+        String jsonData = "{\"ip\":\"" + localIP + "\"}";
 
-            //Đưa local ip lên trang tạm
-            Jsoup.connect(api)
-                    .ignoreContentType(true).ignoreHttpErrors(true)
-                    .header("Content-Type", "application/json")
-                    .requestBody(jsonData)
-                    .method(Connection.Method.PUT).execute();
-            
-            System.out.println("====================================================");
-            System.out.println("Server local ip: " + localIP);
-            System.out.println("Server started...");
-            System.out.println("Type 'help' for the command list.");
-            System.out.println("====================================================");
-            server = new ServerSocket(6666);
-            
-            
-            //Chạy thread
-            t1= new Thread(new serverToClient(server));
-            t2= new Thread(new server_command(server,t1));
-            t1.start();
-            t2.start();
+        //Đưa local ip lên trang tạm
+        Jsoup.connect(api)
+                .ignoreContentType(true).ignoreHttpErrors(true)
+                .header("Content-Type", "application/json")
+                .requestBody(jsonData)
+                .method(Connection.Method.PUT).execute();
+
+        System.out.println("====================================================");
+        System.out.println("Server local ip: " + localIP);
+        System.out.println("Server started...");
+        System.out.println("Type 'help' for the command list.");
+        System.out.println("====================================================");
+        server = new ServerSocket(6666);
+
+        //Chạy thread
+        t1 = new Thread(new serverToClient(server));
+        t2 = new Thread(new server_command(server, t1));
+        t1.start();
+        t2.start();
 //            stopThread();
-        
+
     }
 }
 
-class serverToClient implements Runnable{
-    
-    private static final int NUMBER_OF_USER= 20;
+class serverToClient implements Runnable {
+
+    private static final int NUMBER_OF_USER = 20;
     private static ArrayList<ClientHandler> clients = new ArrayList<>();
     private static ExecutorService pool = Executors.newFixedThreadPool(NUMBER_OF_USER);
-    private ServerSocket server ;
+    private ServerSocket server;
 
     public serverToClient(ServerSocket server) {
         this.server = server;
     }
-    
+
     @Override
     public void run() {
-        try {
-            Socket client = server.accept();
-            ClientHandler clientHandler= new ClientHandler(client);
-            clients.add(clientHandler);
-            pool.execute(clientHandler);
-            server.close();
-        } catch (IOException e) {
-            System.err.println(e);
+        while (true) {
+            try {
+                Socket client = server.accept();
+                ClientHandler clientHandler = new ClientHandler(client);
+                clients.add(clientHandler);
+                pool.execute(clientHandler);
+//                server.close();
+            } catch (IOException e) {
+                System.err.println(e);
+            }
         }
     }
 
 }
 
 class server_command implements Runnable {
+
     private Thread thread;
-    private static ServerSocket s ;
-    public server_command(ServerSocket server,Thread t) {
+    private static ServerSocket s;
+
+    public server_command(ServerSocket server, Thread t) {
         this.s = server;
-        this.thread= t;
+        this.thread = t;
     }
-    
+
     public static void show(String... args) {
         System.out.println("====================================================");
-        for (String arg: args) {
+        for (String arg : args) {
             System.out.println(arg);
         }
         System.out.println("====================================================");
     }
-    
-    public static void showServerstats() throws SQLException{
-        show("Server local ip: " + new server().localIP(),"Number of online user: "+ new UserBLL().getNumberOfUser("online"),"Number of user: "+ new UserBLL().getNumberOfUser(""));
+
+    public static void showServerstats() throws SQLException {
+        show("Server local ip: " + new server().localIP(), "Number of online user: " + new UserBLL().getNumberOfUser("online"), "Number of user: " + new UserBLL().getNumberOfUser(""));
     }
-    
-    public static void showHelp() throws SQLException{
+
+    public static void showHelp() throws SQLException {
         show("1.server show : Display server infomation.",
-             "2.user [all] : Show all user.",
-             "3.block/unblock {UserID} : Block/Unblock user with ID.",
-             "4.exam [all/id] : show all exam/exam information.",
-             "5.server [close]: Close server."
+                "2.user [all] : Show all user.",
+                "3.block/unblock {UserID} : Block/Unblock user with ID.",
+                "4.exam [all/id] : show all exam/exam information.",
+                "5.server [close]: Close server."
         );
     }
-    
-    public static void showUsers() throws SQLException{
-        List<UserDTO> users= new UserBLL().LoadAllUser();
-        
+
+    public static void showUsers() throws SQLException {
+        List<UserDTO> users = new UserBLL().LoadAllUser();
+
         //Xuất số lượng người dùng
-        show("Number of User: "+users.size());
-        
+        show("Number of User: " + users.size());
+
         /*
             Xuất danh sách người dùng 
         
-        */
-        
-        String[][] arr= new String[users.size()][7];
-        int i=0;
-        for(UserDTO u : users) {
-            int j=0;
-            arr[i][j++]=String.valueOf(u.getUserID());
-            arr[i][j++]=String.valueOf(u.getFullname());
-            arr[i][j++]=String.valueOf(u.getUsername());
-            arr[i][j++]=String.valueOf(u.getDateofBirth());
-            if (u.isGender()==true) {
-                arr[i][j++]=String.valueOf("Male");
+         */
+        String[][] arr = new String[users.size()][7];
+        int i = 0;
+        for (UserDTO u : users) {
+            int j = 0;
+            arr[i][j++] = String.valueOf(u.getUserID());
+            arr[i][j++] = String.valueOf(u.getFullname());
+            arr[i][j++] = String.valueOf(u.getUsername());
+            arr[i][j++] = String.valueOf(u.getDateofBirth());
+            if (u.isGender() == true) {
+                arr[i][j++] = String.valueOf("Male");
             } else {
-                arr[i][j++]=String.valueOf("Female");
+                arr[i][j++] = String.valueOf("Female");
             }
-            if (u.isLogStatus()==true) {
-                arr[i][j++]=String.valueOf("Online");
+            if (u.isLogStatus() == true) {
+                arr[i][j++] = String.valueOf("Online");
             } else {
-                arr[i][j++]=String.valueOf("Offline");
+                arr[i][j++] = String.valueOf("Offline");
             }
-            if (u.isBlocked()==true) {
-                arr[i][j++]=String.valueOf("Blocked");
+            if (u.isBlocked() == true) {
+                arr[i][j++] = String.valueOf("Blocked");
             } else {
-                arr[i][j++]=String.valueOf("Good");
+                arr[i][j++] = String.valueOf("Good");
             }
             i++;
         }
-        
-        String [] tableHeaders = { "ID", "Fullname", "Email","Date of Birth","Gender", "Log Status","Account Status"};
-        
+
+        String[] tableHeaders = {"ID", "Fullname", "Email", "Date of Birth", "Gender", "Log Status", "Account Status"};
+
 //        for(int k=0;k<i;k++){
 //            for(int j = 0;j<6;j++){
 //                System.out.print(arr[k][j]+"   ");
@@ -187,47 +185,45 @@ class server_command implements Runnable {
 //        }
         ASCIITable.getInstance().printTable(tableHeaders, arr);
     }
-    
-    
-    public static void showOnlineUsers() throws SQLException{
-        List<UserDTO> users= new UserBLL().LoadOnlineUser();
-        
+
+    public static void showOnlineUsers() throws SQLException {
+        List<UserDTO> users = new UserBLL().LoadOnlineUser();
+
         //Xuất số lượng người dùng
-        show("Number of User: "+users.size());
-        
+        show("Number of User: " + users.size());
+
         /*
             Xuất danh sách người dùng 
         
-        */
-        
-        String[][] arr= new String[users.size()][7];
-        int i=0;
-        for(UserDTO u : users) {
-            int j=0;
-            arr[i][j++]=String.valueOf(u.getUserID());
-            arr[i][j++]=String.valueOf(u.getFullname());
-            arr[i][j++]=String.valueOf(u.getUsername());
-            arr[i][j++]=String.valueOf(u.getDateofBirth());
-            if (u.isGender()==true) {
-                arr[i][j++]=String.valueOf("Male");
+         */
+        String[][] arr = new String[users.size()][7];
+        int i = 0;
+        for (UserDTO u : users) {
+            int j = 0;
+            arr[i][j++] = String.valueOf(u.getUserID());
+            arr[i][j++] = String.valueOf(u.getFullname());
+            arr[i][j++] = String.valueOf(u.getUsername());
+            arr[i][j++] = String.valueOf(u.getDateofBirth());
+            if (u.isGender() == true) {
+                arr[i][j++] = String.valueOf("Male");
             } else {
-                arr[i][j++]=String.valueOf("Female");
+                arr[i][j++] = String.valueOf("Female");
             }
-            if (u.isLogStatus()==true) {
-                arr[i][j++]=String.valueOf("Online");
+            if (u.isLogStatus() == true) {
+                arr[i][j++] = String.valueOf("Online");
             } else {
-                arr[i][j++]=String.valueOf("Offline");
+                arr[i][j++] = String.valueOf("Offline");
             }
-            if (u.isBlocked()==true) {
-                arr[i][j++]=String.valueOf("Blocked");
+            if (u.isBlocked() == true) {
+                arr[i][j++] = String.valueOf("Blocked");
             } else {
-                arr[i][j++]=String.valueOf("Good");
+                arr[i][j++] = String.valueOf("Good");
             }
             i++;
         }
-        
-        String [] tableHeaders = { "ID", "Fullname", "Email","Date of Birth","Gender", "Log Status","Account Status"};
-        
+
+        String[] tableHeaders = {"ID", "Fullname", "Email", "Date of Birth", "Gender", "Log Status", "Account Status"};
+
 //        for(int k=0;k<i;k++){
 //            for(int j = 0;j<6;j++){
 //                System.out.print(arr[k][j]+"   ");
@@ -236,34 +232,32 @@ class server_command implements Runnable {
 //        }
         ASCIITable.getInstance().printTable(tableHeaders, arr);
     }
-    
-    
-    public static void showExams() throws SQLException{
-        List<ExamDTO> exams= new ExamBLL().readExam();
-        
+
+    public static void showExams() throws SQLException {
+        List<ExamDTO> exams = new ExamBLL().readExam();
+
         //Xuất số lượng đề thi
-        show("Number of Exam: "+exams.size());
-        
+        show("Number of Exam: " + exams.size());
+
         /*
             Xuất danh sách đề thi (ExamID,ExamTitle,Creator,SubjectID,NumofQuiz,LimitTime)
         
-        */
-        
-        String[][] arr= new String[exams.size()][6];
-        int i=0;
-        for(ExamDTO o : exams) {
-            int j=0;
-            arr[i][j++]=String.valueOf(o.getExamID());
-            arr[i][j++]=String.valueOf(o.getTitle());
-            arr[i][j++]=o.getFullname();
-            arr[i][j++]=o.getSubjectname();
-            arr[i][j++]=String.valueOf(o.getNumOfQuiz());
-            arr[i][j++]=String.valueOf(o.getTime());
+         */
+        String[][] arr = new String[exams.size()][6];
+        int i = 0;
+        for (ExamDTO o : exams) {
+            int j = 0;
+            arr[i][j++] = String.valueOf(o.getExamID());
+            arr[i][j++] = String.valueOf(o.getTitle());
+            arr[i][j++] = o.getFullname();
+            arr[i][j++] = o.getSubjectname();
+            arr[i][j++] = String.valueOf(o.getNumOfQuiz());
+            arr[i][j++] = String.valueOf(o.getTime());
             i++;
         }
-        
-        String [] tableHeaders = { "ID", "Title", "Creator","Subject","Number of Quiz", "Limit time"};
-        
+
+        String[] tableHeaders = {"ID", "Title", "Creator", "Subject", "Number of Quiz", "Limit time"};
+
 //        for(int k=0;k<i;k++){
 //            for(int j = 0;j<6;j++){
 //                System.out.print(arr[k][j]+"   ");
@@ -272,35 +266,34 @@ class server_command implements Runnable {
 //        }
         ASCIITable.getInstance().printTable(tableHeaders, arr);
     }
-    
-    
+
     @Override
     public void run() {
-        Scanner sc= new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         UserBLL uBLL = new UserBLL();
-        ExamBLL eBLL= new ExamBLL();
-        while (true) {            
+        ExamBLL eBLL = new ExamBLL();
+        while (true) {
             System.out.print(">> ");
-            String temp= sc.nextLine();
-            String[] cmd=temp.split(" ");
-            switch(cmd[0]) {
+            String temp = sc.nextLine();
+            String[] cmd = temp.split(" ");
+            switch (cmd[0]) {
                 case "block": {
                     if (cmd.length > 2) {
                         System.out.println("Wrong command! Try 'block {UserID}'.");
                     } else {
                         try {
                             int id = Integer.parseInt(cmd[1]);
-                            if(uBLL.getUserByID(id)!= null) {
+                            if (uBLL.getUserByID(id) != null) {
                                 if (uBLL.blockLogin(id, true) == 1) {
-                                    System.out.println("Blocked ID="+id+" successfully!");
+                                    System.out.println("Blocked ID=" + id + " successfully!");
                                 }
                             } else {
                                 System.out.println("UserID is not exist!");
-                            }      
+                            }
                         } catch (Exception e) {
                             System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                         }
-                          
+
                     }
                     break;
                 }
@@ -310,17 +303,17 @@ class server_command implements Runnable {
                     } else {
                         try {
                             int id = Integer.parseInt(cmd[1]);
-                            if(uBLL.getUserByID(id)!= null) {
-                                if (uBLL.blockLogin(id, false)==1) {
-                                    System.out.println("Unblocked ID="+id+" successfully!");
+                            if (uBLL.getUserByID(id) != null) {
+                                if (uBLL.blockLogin(id, false) == 1) {
+                                    System.out.println("Unblocked ID=" + id + " successfully!");
                                 }
                             } else {
                                 System.out.println("UserID is not exist!");
-                            }      
+                            }
                         } catch (Exception e) {
                             System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                         }
-                          
+
                     }
                     break;
                 }
@@ -328,8 +321,8 @@ class server_command implements Runnable {
                     if (cmd.length > 2) {
                         System.out.println("Wrong command! Try 'server [close/show]'.");
                     } else {
-                        switch(cmd[1]) {
-                            case "show":{
+                        switch (cmd[1]) {
+                            case "show": {
                                 try {
                                     showServerstats();
                                 } catch (SQLException ex) {
@@ -337,27 +330,27 @@ class server_command implements Runnable {
                                 }
                                 break;
                             }
-                            case "close":{
+                            case "close": {
                                 System.out.println("Server is closing...");
-                            try {
-                                server.stopThread();
-                            } catch (IOException ex) {
-                                Logger.getLogger(server_command.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                                try {
+                                    server.stopThread();
+                                } catch (IOException ex) {
+                                    Logger.getLogger(server_command.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                                 break;
                             }
-                            default:{
+                            default: {
                                 System.out.println("Wrong command! Try 'server [close/show]'.");
                             }
                         }
                     }
                     break;
                 }
-                case "exam":{
+                case "exam": {
                     if (cmd.length > 2) {
                         System.out.println("Wrong command! Try 'exam [all/{id}]'.");
                     } else {
-                        if(cmd[1].equals("all")) {
+                        if (cmd[1].equals("all")) {
                             try {
                                 showExams();
                             } catch (SQLException ex) {
@@ -367,19 +360,19 @@ class server_command implements Runnable {
                         }
                         try {
                             int eid = Integer.parseInt(cmd[1]);
-                            if(eBLL.getExamByID(eid)!= null) {
-                                ExamDTO e=eBLL.getExamByID(eid);
+                            if (eBLL.getExamByID(eid) != null) {
+                                ExamDTO e = eBLL.getExamByID(eid);
                                 show(
-                                        "Title: "+e.getTitle(),
-                                        "Creator: "+e.getFullname(),
-                                        "Subject: "+e.getSubjectname(),
-                                        "Highest Score: "+e.getHighest(),
-                                        "Lowest Score: "+e.getLowest(),
-                                        "Average Score: "+e.getAvg()
+                                        "Title: " + e.getTitle(),
+                                        "Creator: " + e.getFullname(),
+                                        "Subject: " + e.getSubjectname(),
+                                        "Highest Score: " + e.getHighest(),
+                                        "Lowest Score: " + e.getLowest(),
+                                        "Average Score: " + e.getAvg()
                                 );
                             } else {
                                 System.out.println("ExamID is not exist!");
-                            }      
+                            }
                         } catch (Exception e) {
                             System.out.println("Wrong type of ExamID! ID's type should be: Integer.");
                         }
@@ -390,8 +383,8 @@ class server_command implements Runnable {
                     if (cmd.length > 2) {
                         System.out.println("Wrong command! Try 'user [all/online]'.");
                     } else {
-                        switch(cmd[1]){
-                            case "all":{
+                        switch (cmd[1]) {
+                            case "all": {
                                 try {
                                     showUsers();
                                 } catch (SQLException ex) {
@@ -399,7 +392,7 @@ class server_command implements Runnable {
                                 }
                                 break;
                             }
-                            case "online":{
+                            case "online": {
                                 try {
                                     showOnlineUsers();
                                 } catch (SQLException ex) {
@@ -407,7 +400,7 @@ class server_command implements Runnable {
                                 }
                                 break;
                             }
-                            default:{
+                            default: {
                                 System.out.println("Wrong command! Try 'user [all/online]'.");
                             }
                         }
@@ -446,5 +439,5 @@ class server_command implements Runnable {
             }
         }
     }
-    
+
 }

@@ -3,10 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/GUI/Exam.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/DTO/ExamDTO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/BLL/ResultBLL.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/GUI/Exam_All.java</file>
             <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/server.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/BLL/ExamQuestionBLL.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/Main.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/BLL/Controller.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/DAL/ResultDAL.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/GUI/EditExam.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/GUI/Result.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/DAL/ExamDAL.java</file>
             <file>file:/C:/Users/Admin/Desktop/Project/dethitracnghiem_client/src/BLL/Controller_Server.java</file>
         </group>
     </open-files>

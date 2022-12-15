@@ -81,13 +81,13 @@ public class AES {
     public static void main(String[] args) {
         try {
             AES aes = new AES();
-            aes.init();
+            aes.initFromStrings("YhvAfObsOauy88Vba8ZJjw==", "jPk33qX+nkgnBbxG");
             
             
-            String encryptedMessage = aes.encryptOld("Huỳnh Hoàng Huy");
-            String decryptedMessage = aes.decrypt(encryptedMessage);
-            aes.exportKeys();
-            System.out.println("Encrypted Message : " + encryptedMessage);
+//            String encryptedMessage = aes.encryptOld("Huỳnh Hoàng Huy");
+            String decryptedMessage = aes.decrypt("qF819w5shmC0pibBOhdGPWJ0OUBOkpV/G0evDR+beyU6ggCFC3t07hQ2bdZrR0Mn2EzGnGKtaXUYuMJL9IgYWQ75rh1JckFB36Kv2DPSr7dRYiVPTVvS1s4pFCti1u8=");
+//            aes.exportKeys();
+//            System.out.println("Encrypted Message : " + encryptedMessage);
             System.out.println("Decrypted Message : " + decryptedMessage);
             
         } catch (Exception ignored) {
