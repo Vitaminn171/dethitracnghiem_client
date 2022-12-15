@@ -29,8 +29,8 @@ public class ResultBLL {
         return list;
     }
 
-    public int insertResult(ResultDTO r) throws SQLException {
-        int result = rDAL.insertResult(r);
+    public int insertResult(int ExamID, int Examinee, float Score, String Date, int Correct, int Wrong) throws SQLException {
+        int result = rDAL.insertResult(ExamID, Examinee, Score, Date, Correct, Wrong);
         return result;
     }
 }

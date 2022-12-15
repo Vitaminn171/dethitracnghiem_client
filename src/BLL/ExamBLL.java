@@ -13,21 +13,16 @@ public class ExamBLL {
         eDAL = new ExamDAL();
     }
 
-    public List LoadExam(int page) throws SQLException {
-        int numofrecords = 30;
-        ArrayList list = eDAL.readExam();
-        int size = list.size();
-        int from, to;
-        from = (page - 1) * numofrecords;
-        to = page * numofrecords;
-        return list.subList(from, Math.min(to, size));
+    public List getExamByUser(String Username) throws SQLException {
+        List list = eDAL.getExamByUser(Username);
+        return list;
     }
-    
-    public List getExamBySubject(int SubjectID) throws SQLException{
+
+    public List getExamBySubject(int SubjectID) throws SQLException {
         List list = eDAL.getExamBySubject(SubjectID);
         return list;
     }
-    
+
     public List readExam() throws SQLException {
         List list = eDAL.readExam();
         return list;
@@ -44,22 +39,25 @@ public class ExamBLL {
         return result;
     }
 
-    public int updateExam(ExamDTO e) throws SQLException {
-        int result = eDAL.updateExam(e);
+    public int updateExam(int ExamID, String ExamTitle, int SubjectID, int NumOfQuiz, int LimitTime)
+            throws SQLException {
+        int result = eDAL.updateExam(ExamID, ExamTitle, SubjectID, NumOfQuiz, LimitTime);
         return result;
     }
-    
-    /* public ExamDTO getExam(int ExamID) throws SQLException {
-        ExamDTO e = eDAL.getExam(ExamID);
-        return e;
-    } */
+
+    /*
+     * public ExamDTO getExam(int ExamID) throws SQLException {
+     * ExamDTO e = eDAL.getExam(ExamID);
+     * return e;
+     * }
+     */
 
     public int deleteExam(int ExamID) throws SQLException {
         int result = eDAL.deleteExam(ExamID);
         return result;
     }
 
-    public int getNumberOfExam() throws SQLException{
+    public int getNumberOfExam() throws SQLException {
         return eDAL.getNumberOfExam();
     }
 }

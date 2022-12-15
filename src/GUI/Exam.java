@@ -325,13 +325,17 @@ public class Exam extends javax.swing.JFrame {
                             Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }else{
-                        JSONObject jsonResult = new JSONObject();
-                        jsonResult.put("examID", jsonExam.getInt("examID"));
-                        jsonResult.put("examinee", username);
-                        jsonResult.put("correct", correct);
-                        jsonResult.put("score", score);
-                        jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
-                        new Result(jsonResult).setVisible(true);
+                        try {
+                            JSONObject jsonResult = new JSONObject();
+                            jsonResult.put("examID", jsonExam.getInt("examID"));
+                            jsonResult.put("examinee", username);
+                            jsonResult.put("correct", correct);
+                            jsonResult.put("score", score);
+                            jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
+                            new Result(jsonResult).setVisible(true);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     
                     

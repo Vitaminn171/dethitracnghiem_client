@@ -68,7 +68,6 @@ public class server_demo {
                 JSONObject json = new JSONObject(line);
                 
                 json = con_admin.checkFunction(json);
-                System.out.println("json data: " + json.toString());
 //                    line = con_admin.EncryptServerData(json.toString());
                 line = json.toString();
                 StringBuilder newline = new StringBuilder();
@@ -76,8 +75,6 @@ public class server_demo {
                 line = newline.toString();
                 System.out.println(line);
 
-                if(json.getString("func").equals("signup"))
-                    System.out.println("Check lỗi");
                 out.write(line);
                 out.newLine();
                 out.flush();

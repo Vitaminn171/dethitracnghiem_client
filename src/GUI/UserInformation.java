@@ -66,12 +66,12 @@ public class UserInformation extends javax.swing.JPanel {
             jLabel_gender.setText("Nữ");
         }
         //jLabel_gender.setText(String.valueOf(json.getBoolean("gender")));
-        if (json.getBoolean("blockStatus")) {
+        if (json.getBoolean("blockLogin")) {
             jLabel_blockStatus.setText("Đang bị block");
         } else {
             jLabel_blockStatus.setText("Không bị block");
         }
-        //jLabel_blockStatus.setText(String.valueOf(json.getBoolean("blockStatus")));
+
         this.json = json;
         jButton_edit.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
@@ -350,7 +350,7 @@ public class UserInformation extends javax.swing.JPanel {
             Controller controller = new Controller();
             Map<String, String> inputMap = new HashMap<String, String>();
             inputMap.put("func", "logout");//push username to inputMap
-            inputMap.put("userid", String.valueOf(json.getInt("userid")));
+            inputMap.put("userID", String.valueOf(json.getInt("userID")));
             inputMap.put("status", "true");
             String dataReceive = controller.SendReceiveData(controller.convertToJSON(inputMap));
             JSONObject jsonReceive = new JSONObject(dataReceive);
@@ -359,7 +359,6 @@ public class UserInformation extends javax.swing.JPanel {
                 parent.dispose();
                 Login login = new Login();
                 login.setVisible(true);
-                /* System.exit(0); */
             }
             else JOptionPane.showMessageDialog(this, "Logout fail!");
         } catch (IOException ex) {

@@ -61,8 +61,8 @@ public class UserBLL {
         return result;
     }
 
-    public int blockUser(int UserID, boolean block) throws SQLException {
-        int result = uDAL.blockUser(UserID, block);
+    public int blockLogin(int UserID, boolean block) throws SQLException {
+        int result = uDAL.blockLogin(UserID, block);
         return result;
     }
 
