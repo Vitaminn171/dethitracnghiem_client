@@ -108,23 +108,26 @@ public class Controller {
     }
 
     public String SendReceiveData(String data) throws IOException, Exception {
-//        Key key = AES.generateRandomKey();
-//        String encryptedData = AES.encrypt(data, key);
-//        String keyValue = AES.convertKeytoString(key);
-//        System.out.println(" key: " + keyValue);
-//        data = keyValue + "///" + encryptedData;
-//        System.out.println("Encrypted Value with key: " + data);
+        AES aes = new AES();
+        aes.init();
+        String encryptedData = aes.encryptOld(data);
+        String keyValue = aes.getSecretKey();
+        String IV = aes.getIV();
+        data = keyValue + "///" + IV + "///" + encryptedData;
         out.write(data);
         out.newLine();
         out.flush();
         String dataReceive = in.readLine();
-//        if (dataReceive.contains("///")) {
-//            String dataReceiveKey = dataReceive.split("///")[0];
-//            String encryptedDataReceive = dataReceive.split("///")[1];
-//            dataReceive = AES.decrypt(encryptedDataReceive, AES.generateKey(dataReceiveKey));
-//        }
+        System.out.println("Client nhan: " + dataReceive);
+        if (dataReceive.contains("///")) {
+            String dataReceiveKey = dataReceive.split("///")[0];
+            String dataReceiveIV = dataReceive.split("///")[1];
+            String encryptedDataReceive = dataReceive.split("///")[2];
+            AES aes_client = new AES();
+            aes_client.initFromStrings(dataReceiveKey, dataReceiveIV);
+            dataReceive = aes_client.decrypt(encryptedDataReceive);
+        }
         return dataReceive;
-
     }
 
     public String convertToJSON(Map<String, String> data) {

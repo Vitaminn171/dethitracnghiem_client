@@ -96,14 +96,9 @@ class serverToClient implements Runnable{
         this.server = server;
     }
     
-    
-    
-    
-    
     @Override
     public void run() {
         try {
-            
             Socket client = server.accept();
             ClientHandler clientHandler= new ClientHandler(client);
             clients.add(clientHandler);
@@ -244,7 +239,7 @@ class server_command implements Runnable {
     
     
     public static void showExams() throws SQLException{
-        List<ExamDTO> exams= new ExamBLL().LoadAllExam();
+        List<ExamDTO> exams= new ExamBLL().readExam();
         
         //Xuất số lượng đề thi
         show("Number of Exam: "+exams.size());
@@ -296,7 +291,7 @@ class server_command implements Runnable {
                         try {
                             int id = Integer.parseInt(cmd[1]);
                             if(uBLL.getUserByID(id)!= null) {
-                                if (uBLL.blockUser(id, true)==1) {
+                                if (uBLL.blockLogin(id, true) == 1) {
                                     System.out.println("Blocked ID="+id+" successfully!");
                                 }
                             } else {
@@ -316,7 +311,7 @@ class server_command implements Runnable {
                         try {
                             int id = Integer.parseInt(cmd[1]);
                             if(uBLL.getUserByID(id)!= null) {
-                                if (uBLL.blockUser(id, false)==1) {
+                                if (uBLL.blockLogin(id, false)==1) {
                                     System.out.println("Unblocked ID="+id+" successfully!");
                                 }
                             } else {

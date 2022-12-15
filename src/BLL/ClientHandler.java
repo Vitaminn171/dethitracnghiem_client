@@ -41,14 +41,17 @@ public class ClientHandler implements Runnable{
             while (true) {                
                 // Server nhận dữ liệu từ client qua stream
                 String line = in.readLine();
+                System.out.println("Server nhan:" + line);
+                AES aes= new AES();
                 if (line.equals("bye")) {
                     break;
                 }
                 if (line.contains("///")) {
-                    String dataReceiveKey = line.split("///")[0];
-                    String encryptedDataReceive = line.split("///")[1];
-//                    line = AES.decrypt(encryptedDataReceive, AES.generateKey(dataReceiveKey));
+                    aes.initFromStrings(line.split("///")[0], line.split("///")[1]);
+                    line = aes.decrypt(line.split("///")[2]);
+//                    System.out.println("BLL.ClientHandler.run()");
                 }
+                System.out.println(line);
                 Controller_Server con_admin = new Controller_Server();
                 JSONObject json = new JSONObject(line);
                 json = con_admin.checkFunction(json);
@@ -56,12 +59,15 @@ public class ClientHandler implements Runnable{
                 StringBuilder newline = new StringBuilder();
                 newline.append(line);
                 line = newline.toString();
-                System.out.println(line);
-//                Key key= AES.generateRandomKey();
-//                String encryptedData= AES.encrypt(line, key);
-//                String keyValue= AES.convertKeytoString(key);
-//                String data= keyValue+"///"+encryptedData;
-//                out.write(data);
+                
+                AES aes_server = new AES();
+                aes_server.init();
+                String encryptedData = aes_server.encryptOld(line);
+                String keyValue= aes_server.getSecretKey();
+                String IV=aes.getIV();
+                String data= keyValue+"///"+IV+"///"+encryptedData;
+                System.out.println("Server gui:" + data);
+                out.write(data);
                 out.newLine();
                 out.flush();
             }

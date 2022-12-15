@@ -42,7 +42,7 @@ public class Controller_Server {
     public JSONObject checkFunction(JSONObject json) throws IOException, SQLException {
 
         switch (json.getString("func")) {
-            case "login" : {
+            case "login" -> {
                 UserDTO user = uBLL.getUser(json.getString("username"), json.getString("password"));
                 if (user == null) {
                     json.put("status", false);
@@ -59,7 +59,6 @@ public class Controller_Server {
                     json.put("status", true);
                     uBLL.Logon(user.getUserID());
                 }
-                break;
             }
             case "signup" -> {
                 if (uBLL.insertUser(json.getString("username"), json.getString("password"), json.getString("fullname"),
@@ -68,9 +67,8 @@ public class Controller_Server {
                 } else {
                     json.put("status", true);
                 }
-                break;
             }
-            case "user" -> {
+            case "user" ->  {
                 UserDTO user = uBLL.getUserByUsername(json.getString("username"));
                 if (user == null) {
                     json.put("status", false);
@@ -82,18 +80,16 @@ public class Controller_Server {
                     json.put("gender", user.isGender());
                     json.put("status", true);
                 }
-                break;
             }
-            case "otp" : {
+            case "otp" -> {
                 if (!json.getString("otpData").equals(json.getString("correctOtp"))) {
                     json.put("status", false);
                 } else {
                     json.put("status", true);
                 }
-                break;
             }
 
-            case "changePass" : {
+            case "changePass" -> {
                 UserDTO user = uBLL.getUser(json.getString("username"), json.getString("password_old"));
                 if (user == null) {
                     json.put("status", false);
@@ -105,7 +101,6 @@ public class Controller_Server {
                     uBLL.changePassword(json.getString("username"), json.getString("password_new"));
                     json.put("status", true);
                 }
-                break;
             }
 
             case "editUserInfor" -> {
@@ -116,7 +111,6 @@ public class Controller_Server {
                     json.put("blockLogin", false);
                     json.put("status", true);
                 }
-                break;
             }
 
             case "getExamAll" -> {
@@ -137,7 +131,6 @@ public class Controller_Server {
                 }
                 json.put("examlist", examlist);
                 System.out.println(json.toString());
-                break;
             }
 
             case "getExamByUser" -> {
@@ -158,7 +151,6 @@ public class Controller_Server {
                 }
                 json.put("examlist", examlist);
                 System.out.println(json.toString());
-                break;
             }
 
             case "getExam" -> {
@@ -179,12 +171,9 @@ public class Controller_Server {
                 }
                 json.put("examlist", examlist);
                 System.out.println(json.toString());
-                break;
             }
 
             case "addExam" -> {
-
-                break;
             }
 
             case "editExam" -> {
@@ -196,7 +185,6 @@ public class Controller_Server {
                     json.put("status", true);
                     json.put("message", "Cập nhật đề thi thành công!");
                 }
-                break;
             }
 
             case "deleteExam" -> {
@@ -207,7 +195,6 @@ public class Controller_Server {
                     json.put("status", true);
                     json.put("message", "Xóa đề thi thành công");
                 }
-                break;
             }
 
             case "getExamQuest" -> {
@@ -222,7 +209,6 @@ public class Controller_Server {
                 json.put("choice4", examQuest.getChoice4());
 
                 System.out.println(json.toString());
-                break;
             }
 
             case "receiveAnswer" -> {
@@ -235,7 +221,6 @@ public class Controller_Server {
                 // json.put("score", score);
 
                 System.out.println(json.toString());
-                break;
             }
 
             case "getSubject" -> {
@@ -248,7 +233,6 @@ public class Controller_Server {
                 }
                 json.put("subjectlist", subjectlist);
                 System.out.println(json.toString());
-                break;
             }
 
             case "addResult" -> {
@@ -261,7 +245,6 @@ public class Controller_Server {
                     json.put("message", "Thêm kết quả thi thành công!");
                 }
 
-                break;
             }
 
             case "logout" -> {
@@ -270,23 +253,13 @@ public class Controller_Server {
                 } else {
                     json.put("status", true);
                 }
-                break;
             }
 
-            default : {
+            default -> {
 
             }
         }
         return json;
-    }
-
-    public String EncryptServerData(String data) throws IOException, Exception {
-        Key key = AES.generateRandomKey();
-        String encryptedData = AES.encrypt(data, key);
-        String keyValue = AES.convertKeytoString(key);
-        data = keyValue + "///" + encryptedData;
-        System.out.println("Encrypted Value with key: " + data);
-        return data;
     }
 
     public int checkAnswer(String answer, String receive, int correct) {

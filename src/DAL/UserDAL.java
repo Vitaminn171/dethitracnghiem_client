@@ -29,13 +29,13 @@ public class UserDAL extends MyDatabaseManager {
                 u.setDateofBirth(rs.getDate("Birth"));
                 u.setGender(rs.getBoolean("Gender"));
                 u.setLogStatus(rs.getBoolean("LogStatus"));
-                u.setBlocked(rs.getBoolean("BlockStatus"));
+                u.setBlocked(rs.getBoolean("BlockLogin"));
                 list.add(u);
             }
         }
         return list;
     }
-    
+
     public ArrayList readOnlineUser() throws SQLException {
         String query = "SELECT * FROM user WHERE LogStatus=1";
         ResultSet rs = UserDAL.doReadQuery(query);
@@ -56,6 +56,26 @@ public class UserDAL extends MyDatabaseManager {
             }
         }
         return list;
+    }
+
+    public UserDTO getUserByID(int UserID) throws SQLException {
+        String query = "SELECT * FROM user WHERE UserID = ?";
+        PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
+        p.setInt(1, UserID);
+        ResultSet rs = p.executeQuery();
+        UserDTO u = null;
+        if (rs != null) {
+            u = new UserDTO();
+            while (rs.next()) {
+                u.setUserID(rs.getInt("UserID"));
+                u.setUsername(rs.getString("Username"));
+                u.setFullname(rs.getString("Fullname"));
+                u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
+                u.setGender(rs.getBoolean("Gender"));
+                u.setBlocked(rs.getBoolean("BlockLogin"));
+            }
+        }
+        return u;
     }
 
     public UserDTO getUserByUsername(String Username) throws SQLException {
@@ -142,13 +162,13 @@ public class UserDAL extends MyDatabaseManager {
         int count = rs.getInt("usercount");
         return count;
     }
-    
+
     public int changePassword(String Username, String Password) throws SQLException {
         String query = "UPDATE user SET Password = ? WHERE Username = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setString(1, Password);
         p.setString(2, Username);
-        int result  = p.executeUpdate();
+        int result = p.executeUpdate();
         return result;
     }
 

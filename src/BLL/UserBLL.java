@@ -7,13 +7,14 @@ import DTO.UserDTO;
 import DAL.UserDAL;
 
 public class UserBLL {
+
     UserDAL uDAL;
 
     public UserBLL() {
         uDAL = new UserDAL();
     }
 
-    public  List LoadUser(int page) throws SQLException {
+    public List LoadUser(int page) throws SQLException {
         int numofrecords = 30;
         ArrayList list = uDAL.readUser();
         int size = list.size();
@@ -22,13 +23,13 @@ public class UserBLL {
         to = page * numofrecords;
         return list.subList(from, Math.min(to, size));
     }
-    
-    public  List LoadAllUser() throws SQLException {
+
+    public List LoadAllUser() throws SQLException {
         ArrayList list = uDAL.readUser();
         return list;
     }
-    
-    public  List LoadOnlineUser() throws SQLException {
+
+    public List LoadOnlineUser() throws SQLException {
         ArrayList list = uDAL.readOnlineUser();
         return list;
     }
@@ -40,7 +41,6 @@ public class UserBLL {
      * return list;
      * }
      */
-
     public int insertUser(String Username, String Password, String Fullname, boolean Gender, String Birth) throws SQLException {
         int result = uDAL.insertUser(Username, Password, Fullname, Gender, Birth);
         return result;
@@ -50,7 +50,12 @@ public class UserBLL {
         int result = uDAL.updateUser(Username, Fullname, Gender, Birth);
         return result;
     }
-    
+
+    public UserDTO getUserByID(int UserID) throws SQLException {
+        UserDTO u = uDAL.getUserByID(UserID);
+        return u;
+    }
+
     public UserDTO getUserByUsername(String Username) throws SQLException {
         UserDTO u = uDAL.getUserByUsername(Username);
         return u;
@@ -78,10 +83,10 @@ public class UserBLL {
 
     //WIP
     public int getNumberOfUser(String str) throws SQLException {
-        return uDAL.getNumberOfUser(str); 
+        return uDAL.getNumberOfUser(str);
     }
-    
-    public int changePassword(String Username, String Password) throws SQLException{
+
+    public int changePassword(String Username, String Password) throws SQLException {
         return uDAL.changePassword(Username, Password);
     }
 }

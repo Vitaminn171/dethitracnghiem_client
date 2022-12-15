@@ -64,6 +64,14 @@ public class AES {
     private byte[] decode(String data) {
         return Base64.getDecoder().decode(data);
     }
+    
+    public String getSecretKey(){
+        return encode(key.getEncoded());
+    }
+    
+    public String getIV(){
+        return encode(IV);
+    }
 
     private void exportKeys(){
         System.err.println("SecretKey : "+encode(key.getEncoded()));
