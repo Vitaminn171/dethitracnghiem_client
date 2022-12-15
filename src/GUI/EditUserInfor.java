@@ -92,6 +92,17 @@ public class EditUserInfor extends javax.swing.JFrame {
         }
       });
 
+       //update 16/12 by Quoc An
+       jButton_cancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    new Dashboard(json.getString("username")).setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(ExamDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+       //update 16/12 by Quoc An
     }
 
     /**
@@ -304,9 +315,9 @@ public class EditUserInfor extends javax.swing.JFrame {
 
     private void jButton_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cancelActionPerformed
         // TODO add your handling code here:
+        
+        //update 16/12 by Quoc An
         this.dispose();
-        Login login = new Login();
-        login.setVisible(true);
     }//GEN-LAST:event_jButton_cancelActionPerformed
 
     private void jFormattedTextField_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField_usernameActionPerformed

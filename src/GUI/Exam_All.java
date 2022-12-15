@@ -360,13 +360,31 @@ public class Exam_All extends javax.swing.JPanel {
                     Controller controller = new Controller();
                     JSONObject jsonExam = new JSONObject();
                     jsonExam.put("examID", id);
-                    String[] options = {"Xem", "Sửa", "Xóa"};
-                    int option = JOptionPane.showOptionDialog(null, null, null,
+                    String[] options = {"Detail", "Edit", "Delete"};
+                    //update 16/12 by Quoc An
+                    int option = JOptionPane.showOptionDialog(null, "Choese option below.", "Option",
                             JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
                             null, options, null);
+                    
                     if (option == 0) {
-                        JOptionPane.showMessageDialog(null, "Xem chi tiết");
+                        try {
+                            //JOptionPane.showMessageDialog(null, "Xem chi tiết");
+                            //todo
+                            new ExamDetail(id,username).setVisible(true);
+                            Window window = SwingUtilities.getWindowAncestor(getjPanel1());
+                            window.dispose();
+                            getjPanel1().setVisible(false);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                        
+                        
+                        
                     }
+                    //update 16/12 by Quoc An
+                    
+                    
                     int NumOfDo = Integer.parseInt(jTable1.getModel().getValueAt(row, 6).toString());
                     if ((option == 1 || option == 2) && NumOfDo > 0) {
                         JOptionPane.showMessageDialog(null, "Không thể sửa hoặc xóa khi đã được thi qua!");

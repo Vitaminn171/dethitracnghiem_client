@@ -160,6 +160,23 @@ public class Controller_Server {
                 json.put("examlist", examlist);
                 System.out.println(json.toString());
             }
+            
+            //update 16/12 by Quoc An
+            case "getExamByID" -> {
+                ExamDTO examDTO = eBLL.getExamByID(json.getInt("examID"));
+                
+                json.put("subject", examDTO.getSubjectname());
+                json.put("title", examDTO.getTitle());
+                json.put("numOfQuiz", examDTO.getNumOfQuiz());
+                json.put("lowest", examDTO.getLowest());
+                json.put("highest", examDTO.getHighest());
+                json.put("avg", examDTO.getAvg());
+                json.put("time", examDTO.getTime());
+                json.put("creator", examDTO.getFullname());
+                
+                System.out.println(json.toString());
+            }
+            //update 16/12 by Quoc An
 
             case "getExam" -> {
                 List list = eBLL.getExamBySubject(json.getInt("subjectID"));
@@ -218,6 +235,25 @@ public class Controller_Server {
 
                 System.out.println(json.toString());
             }
+            
+            //update 16/12 by Quoc An
+            case "getExamDetailByID" -> {
+                List list = examQuestionBLL.getExamQuestion(json.getInt("examID"));
+                JSONArray examlist = new JSONArray();
+                for (int i = 0; i < list.size(); i++) {
+                    ExamQuestionDTO examQuestionDTO = (ExamQuestionDTO) list.get(i);
+                    examlist.put(new JSONObject()
+                            .put("question", examQuestionDTO.getQuestion())
+                            .put("choice1", examQuestionDTO.getChoice1())
+                            .put("choice2", examQuestionDTO.getChoice2())
+                            .put("choice3", examQuestionDTO.getChoice3())
+                            .put("choice4", examQuestionDTO.getChoice4())
+                            .put("answer", examQuestionDTO.getAnswer()));
+                }
+                json.put("data", examlist);
+                System.out.println(json.toString());
+            }
+            //update 16/12 by Quoc An
 
             case "receiveAnswer" -> {
 

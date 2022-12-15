@@ -18,6 +18,7 @@ public class ExamBLL {
         List list = eDAL.getExamByUser(Username);
         return list;
     }
+    
 
     public List getExamBySubject(int SubjectID) throws SQLException {
         List list = eDAL.getExamBySubject(SubjectID);

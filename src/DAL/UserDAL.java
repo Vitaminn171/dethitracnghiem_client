@@ -81,23 +81,26 @@ public class UserDAL extends MyDatabaseManager {
         return null;
     }
 
+    
+    //update 16/12 by Quoc An
     public UserDTO getUserByUsername(String Username) throws SQLException {
         String query = "SELECT * FROM user WHERE Username = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setString(1, Username);
         ResultSet rs = p.executeQuery();
-        UserDTO u = null;
-        if (rs != null) {
-            while (rs.next()) {
+        UserDTO u = new UserDTO();
+        if (rs.next()) {
+            
                 u.setUserID(rs.getInt("UserID"));
                 u.setUsername(rs.getString("Username"));
                 u.setFullname(rs.getString("Fullname"));
                 u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
                 u.setGender(rs.getBoolean("Gender"));
-            }
+            return u;
         }
-        return u;
+        return null;
     }
+    //update 16/12 by Quoc An
 
     public UserDTO getUser(String Username, String Password) throws SQLException {
         String query = "SELECT * FROM user WHERE Username = ? AND Password = ?";

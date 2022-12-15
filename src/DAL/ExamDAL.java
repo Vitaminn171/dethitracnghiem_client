@@ -170,8 +170,6 @@ public class ExamDAL extends MyDatabaseManager {
                 e.setFullname(rs.getString("FullName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
-                e.setStatus(rs.getBoolean("ExamStatus"));
-                e.setNumOfDo(rs.getInt("NumOfDo"));
                 e.setHighest(rs.getFloat("HighestScore"));
                 e.setLowest(rs.getFloat("LowestScore"));
                 e.setAvg(rs.getFloat("AvgScore"));
