@@ -250,8 +250,11 @@ public class Controller_Server {
                 } else {
                     json.put("status", true);
                     json.put("message", "Thêm kết quả thi thành công!");
-                }
 
+                    eBLL.calAvg(json.getInt("examID"));
+                    eBLL.calHighest(json.getInt("examID"), json.getFloat("score"));
+                    eBLL.calLowest(json.getInt("examID"), json.getFloat("score"));
+                }
             }
 
             case "logout" -> {

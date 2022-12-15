@@ -5,10 +5,6 @@
 package GUI;
 
 import BLL.Controller;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import BLL.ExamBLL;
-import DTO.ExamDTO;
 import java.awt.Image;
 import java.awt.List;
 import java.awt.Window;
@@ -16,14 +12,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.SQLException;
-import java.util.Vector;
+import java.util.Iterator;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -33,10 +28,13 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
-
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -44,7 +42,6 @@ import org.json.JSONObject;
  */
 public class Exam_All extends javax.swing.JPanel {
 
-    ExamBLL examBLL = new ExamBLL();
     JSONObject jSONtemp;
 
     /**
@@ -64,8 +61,7 @@ public class Exam_All extends javax.swing.JPanel {
         jsonBlock.put("func", "getBlockStatus");
         String blockStatus = controller.SendReceiveData(jsonBlock.toString());
         jSONtemp = new JSONObject(blockStatus);
-        System.out.println(jSONtemp.toString());
-        
+
         JSONObject jsonExam = new JSONObject();
         jsonExam.put("username", username);
         jsonExam.put("func", "getExamAll");
@@ -168,6 +164,35 @@ public class Exam_All extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null, "Tài khoản đang bị khóa thêm đề thi, vui lòng liên hệ quản trị viên!");
                 } else {
                     JOptionPane.showMessageDialog(null, "Tài khoản không bị khóa thêm đề thi");
+                    
+                    JSONArray arrQuestion = new JSONArray();
+                    try {
+                        File file = new File("C:\\demo\\examquestion.xlsx");   //creating a new file instance  
+                        FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
+                        //creating Workbook instance that refers to .xlsx file  
+                        XSSFWorkbook wb = new XSSFWorkbook(fis);
+                        XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object  
+                        Iterator<Row> itr = sheet.iterator();    //iterating over excel file  
+                        while (itr.hasNext()) {
+                            Row row = itr.next();
+                            Iterator<Cell> cellIterator = row.cellIterator();   //iterating over each column  
+                            while (cellIterator.hasNext()) {
+                                Cell cell = cellIterator.next();
+                                switch (cell.getCellType()) {
+                                    case Cell.CELL_TYPE_STRING:    //field that represents string cell type  
+                                        System.out.print(cell.getStringCellValue() + "\t\t\t");
+                                        break;
+                                    case Cell.CELL_TYPE_NUMERIC:    //field that represents number cell type  
+                                        System.out.print(cell.getNumericCellValue() + "\t\t\t");
+                                        break;
+                                    default:
+                                }
+                            }
+                            System.out.println("");
+                        }
+                    } catch (IOException x) {
+                        x.printStackTrace();
+                    }
                 }
             }
         });

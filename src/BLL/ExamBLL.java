@@ -7,6 +7,7 @@ import DTO.ExamDTO;
 import DAL.ExamDAL;
 
 public class ExamBLL {
+
     ExamDAL eDAL;
 
     public ExamBLL() {
@@ -27,7 +28,7 @@ public class ExamBLL {
         List list = eDAL.readExam();
         return list;
     }
-    
+
     public List LoadAllExam() throws SQLException {
         ArrayList list = eDAL.readExam();
         return list;
@@ -49,8 +50,8 @@ public class ExamBLL {
         int result = eDAL.updateExam(ExamID, ExamTitle, SubjectID, NumOfQuiz, LimitTime);
         return result;
     }
-    
-     public ExamDTO getExamByID(int ExamID) throws SQLException {
+
+    public ExamDTO getExamByID(int ExamID) throws SQLException {
         ExamDTO e = eDAL.getExamByID(ExamID);
         return e;
     }
@@ -63,7 +64,17 @@ public class ExamBLL {
     public int getNumberOfExam() throws SQLException {
         return eDAL.getNumberOfExam();
     }
-    
-    
-    
+
+    public void calAvg(int ExamID) throws SQLException {
+        eDAL.CalAvg(ExamID);
+    }
+
+    public void calHighest(int ExamID, float score) throws SQLException {
+        eDAL.Highest(ExamID, score);
+    }
+
+    public void calLowest(int ExamID, float score) throws SQLException {
+        eDAL.Lowest(ExamID, score);
+    }
+
 }

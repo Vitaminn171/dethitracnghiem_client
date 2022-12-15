@@ -73,7 +73,10 @@ public class UserBLL {
     }
 
     public int blockLogin(int UserID, boolean block) throws SQLException {
-        int result = uDAL.blockLogin(UserID, block);
+        int blockLoginResult = uDAL.blockLogin(UserID, block);
+        int blockAddExamResult = uDAL.blockAddExam(UserID, block);
+        int blockTakeExamResult = uDAL.blockTakeExam(UserID, block);
+        int result = (blockLoginResult==1 && blockAddExamResult==1 && blockTakeExamResult==1) ? 1 : 0;
         return result;
     }
 

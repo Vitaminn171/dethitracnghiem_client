@@ -65,9 +65,8 @@ public class UserDAL extends MyDatabaseManager {
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setInt(1, UserID);
         ResultSet rs = p.executeQuery();
-        UserDTO u = null;
         if (rs != null) {
-            u = new UserDTO();
+            UserDTO u = new UserDTO();
             while (rs.next()) {
                 u.setUserID(rs.getInt("UserID"));
                 u.setUsername(rs.getString("Username"));
@@ -79,7 +78,7 @@ public class UserDAL extends MyDatabaseManager {
                 u.setBlockTakeExam(rs.getBoolean("BlockTakeExam"));
             }
         }
-        return u;
+        return null;
     }
 
     public UserDTO getUserByUsername(String Username) throws SQLException {
