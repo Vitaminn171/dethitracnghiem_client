@@ -158,7 +158,7 @@ public class Exam_All extends javax.swing.JPanel {
             }
         });
 
-        jButton_AddExam.addActionListener(new ActionListener() {
+        jButton1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (jSONtemp.getBoolean("blockAddExam")) {
                     JOptionPane.showMessageDialog(null, "Tài khoản đang bị khóa thêm đề thi, vui lòng liên hệ quản trị viên!");
@@ -211,7 +211,7 @@ public class Exam_All extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jComboBox_subject = new javax.swing.JComboBox<>();
-        jButton_AddExam = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -278,7 +278,7 @@ public class Exam_All extends javax.swing.JPanel {
         jButton1.setBorderPainted(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_AddExamActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -307,9 +307,9 @@ public class Exam_All extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void jButton_AddExamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddExamActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_AddExamActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private ImageIcon setImageIcon(String path, int x, int y) {
         BufferedImage img = null;
@@ -455,7 +455,7 @@ public class Exam_All extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_AddExam;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox_subject;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
