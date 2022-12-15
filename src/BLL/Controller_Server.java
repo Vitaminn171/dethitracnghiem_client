@@ -48,19 +48,19 @@ public class Controller_Server {
                 if (user == null) {
                     json.put("status", false);
                     json.put("message", "Sai tên tài khoản hoặc mật khẩu!");
-                } else if (user.isBlocked()) {
+                } else if (user.isBlockLogin()) {
                     json.put("status", false);
                     json.put("message", "Tài khoản đang bị khóa, vui lòng liên hệ quản trị viên!");
                 } else {
                     json.put("userID", user.getUserID());
                     json.put("fullname", user.getFullname());
                     json.put("birth", user.getDateofBirth());
-                    json.put("blockLogin", user.isBlocked());
                     json.put("gender", user.isGender());
                     json.put("status", true);
                     uBLL.Logon(user.getUserID());
                 }
             }
+
             case "signup" -> {
                 if (uBLL.insertUser(json.getString("username"), json.getString("password"), json.getString("fullname"),
                         json.getBoolean("gender"), json.getString("birth")) == 0) {
@@ -69,7 +69,7 @@ public class Controller_Server {
                     json.put("status", true);
                 }
             }
-            case "user" ->  {
+            case "user" -> {
                 UserDTO user = uBLL.getUserByUsername(json.getString("username"));
                 if (user == null) {
                     json.put("status", false);
@@ -77,7 +77,8 @@ public class Controller_Server {
                     json.put("userID", user.getUserID());
                     json.put("fullname", user.getFullname());
                     json.put("birth", user.getDateofBirth());
-                    json.put("blockLogin", user.isBlocked());
+                    json.put("blockTakeExam", user.isBlockTakeExam());
+                    json.put("blockAddExam", user.isBlockAddExam());
                     json.put("gender", user.isGender());
                     json.put("status", true);
                 }
@@ -112,6 +113,12 @@ public class Controller_Server {
                     json.put("blockLogin", false);
                     json.put("status", true);
                 }
+            }
+
+            case "getBlockStatus" -> {
+                UserDTO user = uBLL.getBlockStatus(json.getString("username"));
+                json.put("blockTakeExam", user.isBlockTakeExam());
+                json.put("blockAddExam", user.isBlockAddExam());
             }
 
             case "getExamAll" -> {
@@ -244,8 +251,11 @@ public class Controller_Server {
                 } else {
                     json.put("status", true);
                     json.put("message", "Thêm kết quả thi thành công!");
-                }
 
+                    eBLL.calAvg(json.getInt("examID"));
+                    eBLL.calHighest(json.getInt("examID"), json.getFloat("score"));
+                    eBLL.calLowest(json.getInt("examID"), json.getFloat("score"));
+                }
             }
             
             case "getResultAll" -> {

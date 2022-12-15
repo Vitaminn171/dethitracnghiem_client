@@ -14,22 +14,12 @@ public class UserBLL {
         uDAL = new UserDAL();
     }
 
-    public  List LoadUser(int page) throws SQLException {
-        int numofrecords = 30;
-        ArrayList list = uDAL.readUser();
-        int size = list.size();
-        int from, to;
-        from = (page - 1) * numofrecords;
-        to = page * numofrecords;
-        return list.subList(from, Math.min(to, size));
-    }
-    
-    public  List LoadAllUser() throws SQLException {
+    public List LoadAllUser() throws SQLException {
         ArrayList list = uDAL.readUser();
         return list;
     }
-    
-    public  List LoadOnlineUser() throws SQLException {
+
+    public List LoadOnlineUser() throws SQLException {
         ArrayList list = uDAL.readOnlineUser();
         return list;
     }
@@ -41,7 +31,8 @@ public class UserBLL {
      * return list;
      * }
      */
-    public int insertUser(String Username, String Password, String Fullname, boolean Gender, String Birth) throws SQLException {
+    public int insertUser(String Username, String Password, String Fullname, boolean Gender, String Birth)
+            throws SQLException {
         int result = uDAL.insertUser(Username, Password, Fullname, Gender, Birth);
         return result;
     }
@@ -76,12 +67,29 @@ public class UserBLL {
         return result;
     }
 
+    public UserDTO getBlockStatus(String Username) throws SQLException {
+        UserDTO u = uDAL.getBlockStatus(Username);
+        return u;
+    }
+
     public int blockLogin(int UserID, boolean block) throws SQLException {
-        int result = uDAL.blockLogin(UserID, block);
+        int blockLoginResult = uDAL.blockLogin(UserID, block);
+        int blockAddExamResult = uDAL.blockAddExam(UserID, block);
+        int blockTakeExamResult = uDAL.blockTakeExam(UserID, block);
+        int result = (blockLoginResult==1 && blockAddExamResult==1 && blockTakeExamResult==1) ? 1 : 0;
         return result;
     }
 
-    //WIP
+    public int blockAddExam(int UserID, boolean block) throws SQLException {
+        int result = uDAL.blockAddExam(UserID, block);
+        return result;
+    }
+
+    public int blockTakeExam(int UserID, boolean block) throws SQLException {
+        int result = uDAL.blockTakeExam(UserID, block);
+        return result;
+    }
+    
     public int getNumberOfUser(String str) throws SQLException {
         return uDAL.getNumberOfUser(str);
     }

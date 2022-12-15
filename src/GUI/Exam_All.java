@@ -5,10 +5,6 @@
 package GUI;
 
 import BLL.Controller;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import BLL.ExamBLL;
-import DTO.ExamDTO;
 import java.awt.Image;
 import java.awt.List;
 import java.awt.Window;
@@ -16,14 +12,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.SQLException;
-import java.util.Vector;
+import java.util.Iterator;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -33,10 +28,13 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
-
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -44,7 +42,7 @@ import org.json.JSONObject;
  */
 public class Exam_All extends javax.swing.JPanel {
 
-    ExamBLL examBLL = new ExamBLL();
+    JSONObject jSONtemp;
 
     /**
      * Creates new form Exam_All
@@ -58,6 +56,11 @@ public class Exam_All extends javax.swing.JPanel {
         setCenterTable();
 
         Controller controller = new Controller();
+        JSONObject jsonBlock = new JSONObject();
+        jsonBlock.put("username", username);
+        jsonBlock.put("func", "getBlockStatus");
+        String blockStatus = controller.SendReceiveData(jsonBlock.toString());
+        jSONtemp = new JSONObject(blockStatus);
 
         JSONObject jsonExam = new JSONObject();
         jsonExam.put("username", username);
@@ -155,6 +158,45 @@ public class Exam_All extends javax.swing.JPanel {
             }
         });
 
+        jButton_AddExam.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (jSONtemp.getBoolean("blockAddExam")) {
+                    JOptionPane.showMessageDialog(null, "Tài khoản đang bị khóa thêm đề thi, vui lòng liên hệ quản trị viên!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Tài khoản không bị khóa thêm đề thi");
+                    
+                    JSONArray arrQuestion = new JSONArray();
+                    try {
+                        File file = new File("C:\\demo\\examquestion.xlsx");   //creating a new file instance  
+                        FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
+                        //creating Workbook instance that refers to .xlsx file  
+                        XSSFWorkbook wb = new XSSFWorkbook(fis);
+                        XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object  
+                        Iterator<Row> itr = sheet.iterator();    //iterating over excel file  
+                        while (itr.hasNext()) {
+                            Row row = itr.next();
+                            Iterator<Cell> cellIterator = row.cellIterator();   //iterating over each column  
+                            while (cellIterator.hasNext()) {
+                                Cell cell = cellIterator.next();
+                                switch (cell.getCellType()) {
+                                    case Cell.CELL_TYPE_STRING:    //field that represents string cell type  
+                                        System.out.print(cell.getStringCellValue() + "\t\t\t");
+                                        break;
+                                    case Cell.CELL_TYPE_NUMERIC:    //field that represents number cell type  
+                                        System.out.print(cell.getNumericCellValue() + "\t\t\t");
+                                        break;
+                                    default:
+                                }
+                            }
+                            System.out.println("");
+                        }
+                    } catch (IOException x) {
+                        x.printStackTrace();
+                    }
+                }
+            }
+        });
+
     }
 
     /**
@@ -169,7 +211,7 @@ public class Exam_All extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jComboBox_subject = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        jButton_AddExam = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -236,7 +278,7 @@ public class Exam_All extends javax.swing.JPanel {
         jButton1.setBorderPainted(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_AddExamActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -265,9 +307,9 @@ public class Exam_All extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton_AddExamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddExamActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton_AddExamActionPerformed
 
     private ImageIcon setImageIcon(String path, int x, int y) {
         BufferedImage img = null;
@@ -359,8 +401,9 @@ public class Exam_All extends javax.swing.JPanel {
 
                         }
                     }
+                } else if (jSONtemp.getBoolean("blockTakeExam")) {
+                    JOptionPane.showMessageDialog(null, "Tài khoản đang bị khóa thi, vui lòng liên hệ quản trị viên!");
                 } else {
-
                     String title = jTable1.getModel().getValueAt(row, 1) + "";
 
                     int a = JOptionPane.showConfirmDialog(null, "Start the exam ID " + s + ", with title " + title + " ?");
@@ -388,12 +431,13 @@ public class Exam_All extends javax.swing.JPanel {
                         }
                     }
                 }
+
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton_AddExam;
     private javax.swing.JComboBox<String> jComboBox_subject;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
