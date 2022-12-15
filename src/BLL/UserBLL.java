@@ -13,7 +13,7 @@ public class UserBLL {
         uDAL = new UserDAL();
     }
 
-    public List LoadUser(int page) throws SQLException {
+    public  List LoadUser(int page) throws SQLException {
         int numofrecords = 30;
         ArrayList list = uDAL.readUser();
         int size = list.size();
@@ -21,6 +21,16 @@ public class UserBLL {
         from = (page - 1) * numofrecords;
         to = page * numofrecords;
         return list.subList(from, Math.min(to, size));
+    }
+    
+    public  List LoadAllUser() throws SQLException {
+        ArrayList list = uDAL.readUser();
+        return list;
+    }
+    
+    public  List LoadOnlineUser() throws SQLException {
+        ArrayList list = uDAL.readOnlineUser();
+        return list;
     }
 
     /*

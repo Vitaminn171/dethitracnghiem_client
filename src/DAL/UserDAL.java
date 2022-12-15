@@ -25,7 +25,30 @@ public class UserDAL extends MyDatabaseManager {
                 u.setUserID(rs.getInt("UserID"));
                 u.setUsername(rs.getString("Username"));
                 u.setFullname(rs.getString("Fullname"));
-                u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
+                //u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
+                u.setDateofBirth(rs.getDate("Birth"));
+                u.setGender(rs.getBoolean("Gender"));
+                u.setLogStatus(rs.getBoolean("LogStatus"));
+                u.setBlocked(rs.getBoolean("BlockStatus"));
+                list.add(u);
+            }
+        }
+        return list;
+    }
+    
+    public ArrayList readOnlineUser() throws SQLException {
+        String query = "SELECT * FROM user WHERE LogStatus=1";
+        ResultSet rs = UserDAL.doReadQuery(query);
+        ArrayList list = new ArrayList();
+
+        if (rs != null) {
+            while (rs.next()) {
+                UserDTO u = new UserDTO();
+                u.setUserID(rs.getInt("UserID"));
+                u.setUsername(rs.getString("Username"));
+                u.setFullname(rs.getString("Fullname"));
+                //u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
+                u.setDateofBirth(rs.getDate("Birth"));
                 u.setGender(rs.getBoolean("Gender"));
                 u.setLogStatus(rs.getBoolean("LogStatus"));
                 u.setBlocked(rs.getBoolean("BlockLogin"));
@@ -40,8 +63,9 @@ public class UserDAL extends MyDatabaseManager {
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setString(1, Username);
         ResultSet rs = p.executeQuery();
-        UserDTO u = new UserDTO();
+        UserDTO u = null;
         if (rs != null) {
+            u = new UserDTO();
             while (rs.next()) {
                 u.setUserID(rs.getInt("UserID"));
                 u.setUsername(rs.getString("Username"));
@@ -114,7 +138,9 @@ public class UserDAL extends MyDatabaseManager {
             query = "SELECT COUNT(*) as usercount FROM user";
         }
         ResultSet rs = UserDAL.doReadQuery(query);
-        return rs.getInt("usercount");
+        rs.next();
+        int count = rs.getInt("usercount");
+        return count;
     }
     
     public int changePassword(String Username, String Password) throws SQLException {

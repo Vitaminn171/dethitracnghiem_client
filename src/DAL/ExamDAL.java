@@ -153,6 +153,32 @@ public class ExamDAL extends MyDatabaseManager {
         }
         return list;
     }
+    
+    //Tìm theo ID
+    public ExamDTO getExamByID(int ID) throws SQLException {
+        String query = "SELECT * FROM exam e, user u, subject s WHERE u.UserID = e.Creator AND s.SubjectID = e.SubjectID AND ExamID = ?";
+        PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ID);
+        ResultSet rs = p.executeQuery();
+        ExamDTO e = null;
+        if (rs != null) {
+            e = new ExamDTO();
+            while (rs.next()) {
+                e.setExamID(rs.getInt("ExamID"));
+                e.setTitle(rs.getString("ExamTitle"));
+                e.setSubjectname(rs.getString("SubjectName"));
+                e.setFullname(rs.getString("FullName"));
+                e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
+                e.setTime(rs.getInt("LimitTime"));
+                e.setStatus(rs.getBoolean("ExamStatus"));
+                e.setNumOfDo(rs.getInt("NumOfDo"));
+                e.setHighest(rs.getFloat("HighestScore"));
+                e.setLowest(rs.getFloat("LowestScore"));
+                e.setAvg(rs.getFloat("AvgScore"));
+            }
+        }
+        return e;
+    }
 
     // Thống kê tổng số đề
     public int getNumberOfExam() throws SQLException {

@@ -42,7 +42,7 @@ public class Controller_Server {
     public JSONObject checkFunction(JSONObject json) throws IOException, SQLException {
 
         switch (json.getString("func")) {
-            case "login" -> {
+            case "login" : {
                 UserDTO user = uBLL.getUser(json.getString("username"), json.getString("password"));
                 if (user == null) {
                     json.put("status", false);
@@ -84,7 +84,7 @@ public class Controller_Server {
                 }
                 break;
             }
-            case "otp" -> {
+            case "otp" : {
                 if (!json.getString("otpData").equals(json.getString("correctOtp"))) {
                     json.put("status", false);
                 } else {
@@ -93,7 +93,7 @@ public class Controller_Server {
                 break;
             }
 
-            case "changePass" -> {
+            case "changePass" : {
                 UserDTO user = uBLL.getUser(json.getString("username"), json.getString("password_old"));
                 if (user == null) {
                     json.put("status", false);
@@ -273,7 +273,7 @@ public class Controller_Server {
                 break;
             }
 
-            default -> {
+            default : {
 
             }
         }

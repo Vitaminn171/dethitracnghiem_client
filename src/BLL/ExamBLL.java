@@ -44,13 +44,11 @@ public class ExamBLL {
         int result = eDAL.updateExam(ExamID, ExamTitle, SubjectID, NumOfQuiz, LimitTime);
         return result;
     }
-
-    /*
-     * public ExamDTO getExam(int ExamID) throws SQLException {
-     * ExamDTO e = eDAL.getExam(ExamID);
-     * return e;
-     * }
-     */
+    
+     public ExamDTO getExamByID(int ExamID) throws SQLException {
+        ExamDTO e = eDAL.getExamByID(ExamID);
+        return e;
+    }
 
     public int deleteExam(int ExamID) throws SQLException {
         int result = eDAL.deleteExam(ExamID);
@@ -60,4 +58,7 @@ public class ExamBLL {
     public int getNumberOfExam() throws SQLException {
         return eDAL.getNumberOfExam();
     }
+    
+    
+    
 }

@@ -374,16 +374,18 @@ public class Signup extends javax.swing.JFrame {
                     || birthDate.toString().length() != 0
                     || G.getSelection().isSelected() != false) {
                 Date currentDate = new Date();
-
-                if (!Controller.validateEmail(username)) {
-                    JOptionPane.showMessageDialog(this, "Invalid email!");
-                }
-                if (!Controller.validatePassword(password)) {
-                    JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
-                }
-                if (!birthDate.before(currentDate)) {
-                    JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
+                if (!Controller.validateEmail(username) || !Controller.validatePassword(password) || !birthDate.before(currentDate)) {
+                    if (!Controller.validateEmail(username)) {
+                        JOptionPane.showMessageDialog(this, "Invalid email!");
+                    }
+                    if (!Controller.validatePassword(password)) {
+                        JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
+                    }
+                    if (!birthDate.before(currentDate)) {
+                        JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
+                    }
                 } else {
+                
                     String hashPass = MD5.getMd5(password);//hash md5 for password
 
 //                    Map<String, String> inputMap = new HashMap<String, String>();
@@ -415,8 +417,8 @@ public class Signup extends javax.swing.JFrame {
                     //Signup(username, password, email, fullname, dateString, gender);
                     this.dispose();
 //                    login.setVisible(true);
+                
                 }
-
                 //TODO push data to outputstream to BLL.Controller
             } else {
                 JOptionPane.showMessageDialog(this, "Do not leave fields blank!");
