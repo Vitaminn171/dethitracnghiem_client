@@ -1,6 +1,5 @@
 package BLL;
 
-
 import java.util.Base64;
 import java.util.Base64;
 import javax.crypto.Cipher;
@@ -12,23 +11,10 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Possible KEY_SIZE values are 128, 192 and 256
- * Possible T_LEN values are 128, 120, 112, 104 and 96
- * Possible KEY_SIZE values are 128, 192 and 256
- * Possible T_LEN values are 128, 120, 112, 104 and 96
+ * Possible KEY_SIZE values are 128, 192 and 256 Possible T_LEN values are 128, 120, 112, 104 and 96 Possible KEY_SIZE values are 128, 192 and 256 Possible T_LEN values are 128, 120, 112, 104 and 96
  */
-
-
 public class AES {
-    private SecretKey key;
-    private int KEY_SIZE = 128;
-    private int T_LEN = 128;
-    private byte[] IV;
 
-    public void init() throws Exception {
-        KeyGenerator generator = KeyGenerator.getInstance("AES");
-        generator.init(KEY_SIZE);
-        key = generator.generateKey();
     private SecretKey key;
     private int KEY_SIZE = 128;
     private int T_LEN = 128;
@@ -40,22 +26,10 @@ public class AES {
         key = generator.generateKey();
     }
 
-    public void initFromStrings(String secretKey, String IV){
-        key = new SecretKeySpec(decode(secretKey),"AES");
-        this.IV = decode(IV);
-
-    public void initFromStrings(String secretKey, String IV){
-        key = new SecretKeySpec(decode(secretKey),"AES");
+    public void initFromStrings(String secretKey, String IV) {
+        key = new SecretKeySpec(decode(secretKey), "AES");
         this.IV = decode(IV);
     }
-
-    public String encryptOld(String message) throws Exception {
-        byte[] messageInBytes = message.getBytes();
-        Cipher encryptionCipher = Cipher.getInstance("AES/GCM/NoPadding");
-        encryptionCipher.init(Cipher.ENCRYPT_MODE, key);
-        IV = encryptionCipher.getIV();
-        byte[] encryptedBytes = encryptionCipher.doFinal(messageInBytes);
-        return encode(encryptedBytes);
 
     public String encryptOld(String message) throws Exception {
         byte[] messageInBytes = message.getBytes();
@@ -69,8 +43,8 @@ public class AES {
     public String encrypt(String message) throws Exception {
         byte[] messageInBytes = message.getBytes();
         Cipher encryptionCipher = Cipher.getInstance("AES/GCM/NoPadding");
-        GCMParameterSpec spec = new GCMParameterSpec(T_LEN,IV);
-        encryptionCipher.init(Cipher.ENCRYPT_MODE, key,spec);
+        GCMParameterSpec spec = new GCMParameterSpec(T_LEN, IV);
+        encryptionCipher.init(Cipher.ENCRYPT_MODE, key, spec);
         byte[] encryptedBytes = encryptionCipher.doFinal(messageInBytes);
         return encode(encryptedBytes);
     }
@@ -91,32 +65,31 @@ public class AES {
     private byte[] decode(String data) {
         return Base64.getDecoder().decode(data);
     }
-    
-    public String getSecretKey(){
+
+    public String getSecretKey() {
         return encode(key.getEncoded());
     }
-    
-    public String getIV(){
+
+    public String getIV() {
         return encode(IV);
     }
 
-    private void exportKeys(){
-        System.err.println("SecretKey : "+encode(key.getEncoded()));
-        System.err.println("IV : "+encode(IV));
+    private void exportKeys() {
+        System.err.println("SecretKey : " + encode(key.getEncoded()));
+        System.err.println("IV : " + encode(IV));
     }
 
     public static void main(String[] args) {
         try {
             AES aes = new AES();
             aes.initFromStrings("YhvAfObsOauy88Vba8ZJjw==", "jPk33qX+nkgnBbxG");
-            
-            
+
 //            String encryptedMessage = aes.encryptOld("Huỳnh Hoàng Huy");
             String decryptedMessage = aes.decrypt("qF819w5shmC0pibBOhdGPWJ0OUBOkpV/G0evDR+beyU6ggCFC3t07hQ2bdZrR0Mn2EzGnGKtaXUYuMJL9IgYWQ75rh1JckFB36Kv2DPSr7dRYiVPTVvS1s4pFCti1u8=");
 //            aes.exportKeys();
 //            System.out.println("Encrypted Message : " + encryptedMessage);
             System.out.println("Decrypted Message : " + decryptedMessage);
-            
+
         } catch (Exception ignored) {
             System.out.println(ignored);
         }

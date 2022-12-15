@@ -34,16 +34,6 @@ public class UserBLL {
         return list;
     }
 
-    public List LoadAllUser() throws SQLException {
-        ArrayList list = uDAL.readUser();
-        return list;
-    }
-
-    public List LoadOnlineUser() throws SQLException {
-        ArrayList list = uDAL.readOnlineUser();
-        return list;
-    }
-
     /*
      * public List findUser(String str) throws SQLException {
      * List list = new ArrayList();

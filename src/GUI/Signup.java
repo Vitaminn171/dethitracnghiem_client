@@ -55,9 +55,9 @@ public class Signup extends javax.swing.JFrame {
         jPasswordField_password.putClientProperty("JComponent.roundRect", true);
         jPasswordField_password.putClientProperty("JTextField.placeholderText", "Password");
 
-        jButton_cancel.putClientProperty("JButton.buttonType", "roundRect");
+        jButton_signup.putClientProperty("JButton.buttonType", "roundRect");
 
-        jButton_submit.putClientProperty("JButton.buttonType", "roundRect");
+        jButton_cancel.putClientProperty("JButton.buttonType", "roundRect");
 
         G = new ButtonGroup();
         G.add(jRadioButton_male);
@@ -72,16 +72,6 @@ public class Signup extends javax.swing.JFrame {
         Image dimg = img.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         ImageIcon imageIcon = new ImageIcon(dimg);
         jButton_eye.setIcon(imageIcon);
-
-        /* 
-        if(jRadioButton_male.isSelected()){
-            //TODO
-        }else if(jRadioButton_female.isSelected()){
-            //TODO
-        }else{
-            JOptionPane.showMessageDialog(this, "error");
-    }
-         */
     }
 
     /**
@@ -107,8 +97,8 @@ public class Signup extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jRadioButton_male = new javax.swing.JRadioButton();
         jRadioButton_female = new javax.swing.JRadioButton();
+        jButton_signup = new javax.swing.JButton();
         jButton_cancel = new javax.swing.JButton();
-        jButton_submit = new javax.swing.JButton();
         jButton_eye = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -208,6 +198,11 @@ public class Signup extends javax.swing.JFrame {
         jXDatePicker1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jXDatePicker1.setMinimumSize(new java.awt.Dimension(120, 40));
         jXDatePicker1.setPreferredSize(new java.awt.Dimension(250, 40));
+        jXDatePicker1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXDatePicker1ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -247,6 +242,25 @@ public class Signup extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         jPanel1.add(jRadioButton_female, gridBagConstraints);
 
+        jButton_signup.setBackground(new java.awt.Color(34, 133, 225));
+        jButton_signup.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jButton_signup.setForeground(new java.awt.Color(255, 255, 255));
+        jButton_signup.setText("Submit");
+        jButton_signup.setBorderPainted(false);
+        jButton_signup.setPreferredSize(new java.awt.Dimension(100, 40));
+        jButton_signup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_signupActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 30, 30, 0);
+        jPanel1.add(jButton_signup, gridBagConstraints);
+
         jButton_cancel.setBackground(new java.awt.Color(255, 102, 102));
         jButton_cancel.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jButton_cancel.setForeground(new java.awt.Color(255, 255, 255));
@@ -259,31 +273,12 @@ public class Signup extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 30, 30, 0);
-        jPanel1.add(jButton_cancel, gridBagConstraints);
-
-        jButton_submit.setBackground(new java.awt.Color(34, 133, 225));
-        jButton_submit.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        jButton_submit.setForeground(new java.awt.Color(255, 255, 255));
-        jButton_submit.setText("Submit");
-        jButton_submit.setBorderPainted(false);
-        jButton_submit.setPreferredSize(new java.awt.Dimension(100, 40));
-        jButton_submit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_submitActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 13;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 30, 0);
-        jPanel1.add(jButton_submit, gridBagConstraints);
+        jPanel1.add(jButton_cancel, gridBagConstraints);
 
         jButton_eye.setForeground(new java.awt.Color(204, 204, 204));
         jButton_eye.setBorderPainted(false);
@@ -316,7 +311,13 @@ public class Signup extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
+    private void jButton_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cancelActionPerformed
+        this.dispose();
+        Login login = new Login();
+        login.setVisible(true);
+    }//GEN-LAST:event_jButton_cancelActionPerformed
+
+    private void jButton_signupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_signupActionPerformed
         // TODO add your handling code here:
         String username = jFormattedTextField_username.getText();
         String fullname = jFormattedTextField_fullname.getText();
@@ -329,15 +330,7 @@ public class Signup extends javax.swing.JFrame {
             gender = false; //female Selected
         }
         checkValidate(username, pass, fullname, birthDate, gender);
-
-    }//GEN-LAST:event_jButton_submitActionPerformed
-
-    private void jButton_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cancelActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-        Login login = new Login();
-        login.setVisible(true);
-    }//GEN-LAST:event_jButton_cancelActionPerformed
+    }//GEN-LAST:event_jButton_signupActionPerformed
 
     private void jButton_eyeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_eyeActionPerformed
         // TODO add your handling code here:
@@ -349,6 +342,10 @@ public class Signup extends javax.swing.JFrame {
             flag = false;
         }
     }//GEN-LAST:event_jButton_eyeActionPerformed
+
+    private void jXDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jXDatePicker1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -374,30 +371,18 @@ public class Signup extends javax.swing.JFrame {
                     || birthDate.toString().length() != 0
                     || G.getSelection().isSelected() != false) {
                 Date currentDate = new Date();
-                if (!Controller.validateEmail(username) || !Controller.validatePassword(password) || !birthDate.before(currentDate)) {
-                    if (!Controller.validateEmail(username)) {
-                        JOptionPane.showMessageDialog(this, "Invalid email!");
-                    }
-                    if (!Controller.validatePassword(password)) {
-                        JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
-                    }
-                    if (!birthDate.before(currentDate)) {
-                        JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
-                    }
+
+                if (!Controller.validateEmail(username)) {
+                    JOptionPane.showMessageDialog(this, "Invalid email!");
+                }
+                if (!Controller.validatePassword(password)) {
+                    JOptionPane.showMessageDialog(this, "Password too weak or invalid!");
+                }
+                if (!birthDate.before(currentDate)) {
+                    JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
                 } else {
-                
                     String hashPass = MD5.getMd5(password);//hash md5 for password
 
-//                    Map<String, String> inputMap = new HashMap<String, String>();
-//                    inputMap.put("username", username);//push username to inputMap
-//                    inputMap.put("password", hashPass);//push password hashed to inputMap
-//                    inputMap.put("fullname", fullname);//push fullname to inputMap
-////                    inputMap.put("birth", dateString);//push birthday to inputMap
-//                    inputMap.put("gender", String.valueOf(gender));//push gender to inputMap
-//                    inputMap.put("func", "signup");//push function to inputMap
-//                    inputMap.put("status", "true");
-                    
-                    
                     JSONObject jsonSend = new JSONObject();
                     jsonSend.put("username", username);
                     jsonSend.put("password", hashPass);
@@ -406,20 +391,13 @@ public class Signup extends javax.swing.JFrame {
                     jsonSend.put("gender", gender);
                     jsonSend.put("func", "signup");
                     jsonSend.put("status", true);
-                    
+
                     Controller controller = new Controller();
-                    
-                    //Signup(username, password, email, fullname, dateString, gender);
+
                     OTP otp = new OTP(jsonSend);
                     otp.setVisible(true);
-                    //Signup(data, controller);
-//                    Login login = new Login();
-                    //Signup(username, password, email, fullname, dateString, gender);
                     this.dispose();
-//                    login.setVisible(true);
-                
                 }
-                //TODO push data to outputstream to BLL.Controller
             } else {
                 JOptionPane.showMessageDialog(this, "Do not leave fields blank!");
             }
@@ -429,15 +407,12 @@ public class Signup extends javax.swing.JFrame {
     }
 
     public void Signup(String data, Controller controller) throws Exception {
-        //Controller controller = new Controller();
         try {
             String dataReceive = controller.SendReceiveData(data);
             System.out.println(dataReceive);
             JSONObject jsonReceive = new JSONObject(dataReceive);
-            if(jsonReceive.getBoolean("status")){
+            if (jsonReceive.getBoolean("status")) {
                 JOptionPane.showMessageDialog(this, "Created account success!");
-                //new Login().setVisible(true);
-                
                 this.dispose();
                 Login login = new Login();
                 login.setVisible(true);
@@ -456,7 +431,7 @@ public class Signup extends javax.swing.JFrame {
     private org.jdesktop.swingx.plaf.DatePickerAddon datePickerAddon1;
     private javax.swing.JButton jButton_cancel;
     private javax.swing.JButton jButton_eye;
-    private javax.swing.JButton jButton_submit;
+    private javax.swing.JButton jButton_signup;
     private javax.swing.JFormattedTextField jFormattedTextField_fullname;
     private javax.swing.JFormattedTextField jFormattedTextField_username;
     private javax.swing.JLabel jLabel1;
