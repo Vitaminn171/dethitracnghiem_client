@@ -2,6 +2,7 @@ package BLL;
 
 import DTO.ExamDTO;
 import DTO.ExamQuestionDTO;
+import DTO.ResultDTO;
 import DTO.SubjectDTO;
 import DTO.UserDTO;
 import GUI.Login;
@@ -245,6 +246,24 @@ public class Controller_Server {
                     json.put("message", "Thêm kết quả thi thành công!");
                 }
 
+            }
+            
+            case "getResultAll" -> {
+                List list = rBLL.getResult();
+                JSONArray examlist = new JSONArray();
+                for (int i = 0; i < list.size(); i++) {
+                    ResultDTO resultDTO = (ResultDTO) list.get(i);
+                    examlist.put(new JSONObject().put("resultID", resultDTO.getResultID())
+                            .put("examID", resultDTO.getExamID())
+                            .put("examinee", resultDTO.getFullname())
+                            .put("score", resultDTO.getScore())
+                            .put("correct", resultDTO.getCorrectQuiz())
+                            .put("wrong", resultDTO.getWrongQuiz())
+                            .put("date", resultDTO.getDate())
+                            );
+                }
+                json.put("data", examlist);
+                System.out.println(json.toString());
             }
 
             case "logout" -> {

@@ -28,6 +28,12 @@ public class ResultBLL {
         list = rDAL.findResult(str);
         return list;
     }
+    
+    public List getResult() throws SQLException {
+        List list = new ArrayList();
+        list = rDAL.readResult_1();
+        return list;
+    }
 
     public int insertResult(int ExamID, String Examinee, float Score, String Date, int Correct, int Wrong) throws SQLException {
         int result = rDAL.insertResult(ExamID, Examinee, Score, Date, Correct, Wrong);

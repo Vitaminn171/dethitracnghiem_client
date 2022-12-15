@@ -35,6 +35,27 @@ public class ResultDAL extends MyDatabaseManager {
         return list;
     }
     
+    public ArrayList readResult_1() throws SQLException {
+        String query = "SELECT * FROM result";
+        ResultSet rs = ResultDAL.doReadQuery(query);
+        ArrayList list = new ArrayList();
+
+        if (rs != null) {
+            while (rs.next()) {
+                ResultDTO r = new ResultDTO();
+                r.setResultID(rs.getInt("ResultID"));
+                r.setExamID(rs.getInt("ExamID"));
+                r.setFullname(rs.getString("Examinee"));
+                r.setScore(rs.getFloat("Score"));
+                r.setCorrectQuiz(rs.getInt("CorrectQuiz"));
+                r.setWrongQuiz(rs.getInt("WrongQuiz"));
+                r.setDate(Date.valueOf(rs.getString("Date")));
+                list.add(r);
+            }
+        }
+        return list;
+    }
+    
     // DEFAULT: Examinee là user đang login, ExamID là đề vừa thi, Score là điểm thi, CorrectQuiz là số câu đúng, WrongQuiz là số câu sai (WIP)
     public int insertResult(int ExamID, String Examinee, float Score, String Date, int Correct, int Wrong) throws SQLException {
         String query = "INSERT INTO result (ExamID, Examinee, Score, Date, CorrectQuiz, WrongQuiz) VALUES (?, ?, ?, ?, ?, ?)";

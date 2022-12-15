@@ -56,8 +56,10 @@ public class Dashboard extends javax.swing.JFrame {
             JSONObject json = new JSONObject(dataReceive);
             JPanel UserInformation = new UserInformation(json);
             JPanel Exam_All = new Exam_All(jsonSend.getString("username"));
+            JPanel Result_All = new Result_All(jsonSend.getString("username"));
             jTabbedPane1.addTab("User Information", UserInformation);
             jTabbedPane1.addTab("Exam", Exam_All);
+            jTabbedPane1.addTab("Result", Result_All);
         } catch (IOException ex) {
             Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -72,8 +74,10 @@ public class Dashboard extends javax.swing.JFrame {
         try {
             JPanel UserInformation = new UserInformation(json);
             JPanel Exam_All = new Exam_All(json.getString("username"));
+            JPanel Result_All = new Result_All(json.getString("username"));
             jTabbedPane1.addTab("User Information", UserInformation);
             jTabbedPane1.addTab("Exam", Exam_All);
+            jTabbedPane1.addTab("Result", Result_All);
         } catch (Exception ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
