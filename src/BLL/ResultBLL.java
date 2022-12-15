@@ -39,4 +39,8 @@ public class ResultBLL {
         int result = rDAL.insertResult(ExamID, Examinee, Score, Date, Correct, Wrong);
         return result;
     }
+
+    public int getRank(int ExamID, String Examinee, String Date) throws SQLException {
+        return rDAL.getRank(ExamID, Examinee, Date);
+    }
 }

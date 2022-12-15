@@ -34,7 +34,7 @@ public class ResultDAL extends MyDatabaseManager {
         }
         return list;
     }
-    
+
     public ArrayList readResult_1() throws SQLException {
         String query = "SELECT * FROM result";
         ResultSet rs = ResultDAL.doReadQuery(query);
@@ -55,9 +55,11 @@ public class ResultDAL extends MyDatabaseManager {
         }
         return list;
     }
-    
-    // DEFAULT: Examinee là user đang login, ExamID là đề vừa thi, Score là điểm thi, CorrectQuiz là số câu đúng, WrongQuiz là số câu sai (WIP)
-    public int insertResult(int ExamID, String Examinee, float Score, String Date, int Correct, int Wrong) throws SQLException {
+
+    // DEFAULT: Examinee là user đang login, ExamID là đề vừa thi, Score là điểm
+    // thi, CorrectQuiz là số câu đúng, WrongQuiz là số câu sai (WIP)
+    public int insertResult(int ExamID, String Examinee, float Score, String Date, int Correct, int Wrong)
+            throws SQLException {
         String query = "INSERT INTO result (ExamID, Examinee, Score, Date, CorrectQuiz, WrongQuiz) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement p = ResultDAL.getConnection().prepareStatement(query);
         p.setInt(1, ExamID);
@@ -68,6 +70,17 @@ public class ResultDAL extends MyDatabaseManager {
         p.setInt(6, Wrong);
         int result = p.executeUpdate();
         return result;
+    }
+
+    public int getRank(int ExamID, String Examinee, String Date) throws SQLException {
+        String query = "SELECT Rank FROM (SELECT ExamID, Examinee, Date, Score, RANK() OVER(ORDER BY Score DESC) Rank FROM result WHERE ExamID = ? ORDER BY Rank) WHERE Examinee = ? AND Date = ?";
+        PreparedStatement p = ResultDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
+        p.setString(2, Examinee);
+        p.setString(3, Date);
+        ResultSet rs = p.executeQuery();
+        rs.next();
+        return rs.getInt(1);
     }
 
     // Tìm theo tên người thi, tên đề hoặc ngày thi

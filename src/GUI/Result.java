@@ -55,7 +55,12 @@ public class Result extends javax.swing.JFrame {
         jsonResult.put("func", "addResult");
         Controller controller = new Controller();
         String dataReceive = controller.SendReceiveData(jsonResult.toString());
-        System.out.println(dataReceive);
+        JSONObject jResponse = new JSONObject(dataReceive);
+        //System.out.println(dataReceive);
+        
+        if(jResponse.getBoolean("status"))
+            jLabel_rank.setText(String.valueOf(jResponse.getInt("rank")));
+            
         jButton1.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
             try {
@@ -82,7 +87,6 @@ public class Result extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
         jLabel_examinee = new javax.swing.JLabel();
@@ -94,60 +98,26 @@ public class Result extends javax.swing.JFrame {
         jLabel_score_data = new javax.swing.JLabel();
         jLabel_correct_data = new javax.swing.JLabel();
         jLabel_wrong_data = new javax.swing.JLabel();
+        jLabel_rank = new javax.swing.JLabel();
+        jLabel_wrong1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(400, 300));
-        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Result");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
-        getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel_examinee.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_examinee.setText("Examinee :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
-        getContentPane().add(jLabel_examinee, gridBagConstraints);
 
         jLabel_score.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_score.setText("Score :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
-        getContentPane().add(jLabel_score, gridBagConstraints);
 
         jLabel_correct.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_correct.setText("Correct Quiz :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
-        getContentPane().add(jLabel_correct, gridBagConstraints);
 
         jLabel_wrong.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_wrong.setText("Wrong Quiz :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 42, 0, 0);
-        getContentPane().add(jLabel_wrong, gridBagConstraints);
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton1.setText("OK");
@@ -157,65 +127,106 @@ public class Result extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.insets = new java.awt.Insets(18, 18, 27, 18);
-        getContentPane().add(jButton1, gridBagConstraints);
 
         jLabel_examinee_data.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_examinee_data.setText("Examinee");
         jLabel_examinee_data.setMaximumSize(null);
         jLabel_examinee_data.setMinimumSize(null);
         jLabel_examinee_data.setPreferredSize(null);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 18, 0, 42);
-        getContentPane().add(jLabel_examinee_data, gridBagConstraints);
 
         jLabel_score_data.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_score_data.setText("score");
         jLabel_score_data.setMaximumSize(null);
         jLabel_score_data.setMinimumSize(null);
         jLabel_score_data.setPreferredSize(null);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 18, 0, 42);
-        getContentPane().add(jLabel_score_data, gridBagConstraints);
 
         jLabel_correct_data.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_correct_data.setText("correct");
         jLabel_correct_data.setMaximumSize(null);
         jLabel_correct_data.setMinimumSize(null);
         jLabel_correct_data.setPreferredSize(null);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 18, 0, 42);
-        getContentPane().add(jLabel_correct_data, gridBagConstraints);
 
         jLabel_wrong_data.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_wrong_data.setText("wrong");
         jLabel_wrong_data.setMaximumSize(null);
         jLabel_wrong_data.setMinimumSize(null);
         jLabel_wrong_data.setPreferredSize(null);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 16, 0, 42);
-        getContentPane().add(jLabel_wrong_data, gridBagConstraints);
+
+        jLabel_rank.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel_rank.setText("rank");
+
+        jLabel_wrong1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel_wrong1.setText("Rank:");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(185, 185, 185)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(118, 118, 118)
+                        .addComponent(jLabel_examinee, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel_examinee_data, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(118, 118, 118)
+                        .addComponent(jLabel_score, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel_score_data, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(118, 118, 118)
+                        .addComponent(jLabel_correct)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel_correct_data, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(180, 180, 180)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(118, 118, 118)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel_wrong1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(16, 16, 16)
+                                .addComponent(jLabel_rank, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel_wrong, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(16, 16, 16)
+                                .addComponent(jLabel_wrong_data, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(119, 119, 119))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel_examinee)
+                    .addComponent(jLabel_examinee_data, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel_score)
+                    .addComponent(jLabel_score_data, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel_correct)
+                    .addComponent(jLabel_correct_data, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel_wrong)
+                    .addComponent(jLabel_wrong_data, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel_wrong1)
+                    .addComponent(jLabel_rank))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap())
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -244,9 +255,11 @@ public class Result extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_correct_data;
     private javax.swing.JLabel jLabel_examinee;
     private javax.swing.JLabel jLabel_examinee_data;
+    private javax.swing.JLabel jLabel_rank;
     private javax.swing.JLabel jLabel_score;
     private javax.swing.JLabel jLabel_score_data;
     private javax.swing.JLabel jLabel_wrong;
+    private javax.swing.JLabel jLabel_wrong1;
     private javax.swing.JLabel jLabel_wrong_data;
     // End of variables declaration//GEN-END:variables
 }
