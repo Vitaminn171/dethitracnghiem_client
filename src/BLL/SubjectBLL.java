@@ -22,4 +22,9 @@ public class SubjectBLL {
         
         return new SubjectDAL().getSubjectByID(ID);
     }
+    
+    public SubjectDTO getSubjectByID(int ID) throws SQLException {
+        
+        return new SubjectDAL().getSubjectByID(ID);
+    }
 }

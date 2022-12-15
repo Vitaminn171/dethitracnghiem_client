@@ -105,6 +105,7 @@ public class Controller {
         out.close();
         socket.close();
         System.out.println("closeConnectToServer");
+        System.out.println("closeConnectToServer");
     }
 
     public String SendReceiveData(String data) throws IOException, Exception {

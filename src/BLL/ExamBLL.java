@@ -27,6 +27,11 @@ public class ExamBLL {
         List list = eDAL.readExam();
         return list;
     }
+    
+    public List LoadAllExam() throws SQLException {
+        ArrayList list = eDAL.readExam();
+        return list;
+    }
 
     public List findExam(String str) throws SQLException {
         List list = new ArrayList();

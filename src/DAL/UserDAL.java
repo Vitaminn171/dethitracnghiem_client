@@ -85,7 +85,6 @@ public class UserDAL extends MyDatabaseManager {
         ResultSet rs = p.executeQuery();
         UserDTO u = null;
         if (rs != null) {
-            u = new UserDTO();
             while (rs.next()) {
                 u.setUserID(rs.getInt("UserID"));
                 u.setUsername(rs.getString("Username"));
