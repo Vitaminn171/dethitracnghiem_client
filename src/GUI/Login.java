@@ -41,7 +41,7 @@ public class Login extends javax.swing.JFrame {
         jButton_login.putClientProperty( "JButton.buttonType", "roundRect" );
         jButton_login.putClientProperty( "JButton.focusWidth", 1 );
         jFormattedTextField1.putClientProperty( "JComponent.roundRect", true );
-        jFormattedTextField1.putClientProperty( "JTextField.placeholderText","Username");
+        jFormattedTextField1.putClientProperty( "JTextField.placeholderText","Email");
         jFormattedTextField1.putClientProperty( "JTextField.padding",12);
         jPasswordField2.putClientProperty( "JComponent.roundRect", true );
         jPasswordField2.putClientProperty( "JTextField.placeholderText","Password");
@@ -261,7 +261,7 @@ public class Login extends javax.swing.JFrame {
                     this.dispose();
                     dashboard.setVisible(true);
                 }else{
-                    JOptionPane.showMessageDialog(this, "Username or password is incorrect!");
+                    JOptionPane.showMessageDialog(this, json.getString("message"));
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);

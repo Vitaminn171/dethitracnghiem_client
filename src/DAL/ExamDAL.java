@@ -15,7 +15,7 @@ public class ExamDAL extends MyDatabaseManager {
     }
 
     public ArrayList readExam() throws SQLException {
-        String query = "SELECT * FROM exam, user, subject WHERE user.UserID = exam.Creator AND subject.SubjectID = exam.SubjectID";
+        String query = "SELECT * FROM exam, user, subject WHERE user.UserID = exam.Creator AND subject.SubjectID = exam.SubjectID AND exam.Visible = 1";
         ResultSet rs = ExamDAL.doReadQuery(query);
         ArrayList list = new ArrayList();
 
@@ -40,7 +40,7 @@ public class ExamDAL extends MyDatabaseManager {
     }
 
     public ArrayList getExamBySubject(int SubjectID) throws SQLException {
-        String query = "SELECT * FROM exam, user, subject WHERE user.UserID = exam.Creator AND subject.SubjectID = exam.SubjectID AND exam.SubjectID = ?";
+        String query = "SELECT * FROM exam, user, subject WHERE user.UserID = exam.Creator AND subject.SubjectID = exam.SubjectID AND exam.SubjectID = ? AND exam.Visible = 1";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
         p.setInt(1, SubjectID);
         ResultSet rs = p.executeQuery();
@@ -64,11 +64,11 @@ public class ExamDAL extends MyDatabaseManager {
         }
         return list;
     }
-    
-    public ArrayList getExamByUser(int UserID) throws SQLException {
-        String query = "SELECT * FROM exam, user, subject WHERE user.UserID = exam.Creator AND subject.SubjectID = exam.SubjectID AND exam.UserID = ?";
+
+    public ArrayList getExamByUser(String Username) throws SQLException {
+        String query = "SELECT * FROM exam, user, subject WHERE user.UserID = exam.Creator AND subject.SubjectID = exam.SubjectID AND user.Username = ? AND exam.Visible = 1";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
-        p.setInt(1, UserID);
+        p.setString(1, Username);
         ResultSet rs = p.executeQuery();
         ArrayList list = new ArrayList();
         if (rs != null) {
@@ -76,6 +76,7 @@ public class ExamDAL extends MyDatabaseManager {
                 ExamDTO e = new ExamDTO();
                 e.setExamID(rs.getInt("ExamID"));
                 e.setTitle(rs.getString("ExamTitle"));
+                e.setFullname(rs.getString("Fullname"));
                 e.setSubjectname(rs.getString("SubjectName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
@@ -104,24 +105,24 @@ public class ExamDAL extends MyDatabaseManager {
     }
 
     // Điều kiện để sửa: ExamStatus = 0 hoặc là NumOfDo = 0
-    public int updateExam(ExamDTO e) throws SQLException {
+    public int updateExam(int ExamID, String ExamTitle, int SubjectID, int NumOfQuiz, int LimitTime) throws SQLException {
         String query = "UPDATE exam SET ExamTitle = ?, SubjectID = ? , NumOfQuiz = ?, LimitTime = ? WHERE ExamID = ?";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
-        p.setString(1, e.getTitle());
-        p.setInt(2, e.getSubjectID());
-        p.setInt(3, e.getNumOfQuiz());
-        p.setInt(4, e.getTime());
+        p.setString(1, ExamTitle);
+        p.setInt(2, SubjectID);
+        p.setInt(3, NumOfQuiz);
+        p.setInt(4, LimitTime);
+        p.setInt(5, ExamID);
         int result = p.executeUpdate();
         return result;
     }
 
     // Điều kiện để xóa: ExamStatus = 0 hoặc là NumOfDo = 0
     public int deleteExam(int ExamID) throws SQLException {
-        String query = "DELETE FROM exam WHERE ExamID = ?";
+        String query = "UPDATE exam SET Visible = 0 WHERE ExamID = ?";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
         p.setInt(1, ExamID);
         int result = p.executeUpdate();
-
         return result;
     }
 
@@ -153,49 +154,72 @@ public class ExamDAL extends MyDatabaseManager {
         return list;
     }
 
+    // Thống kê tổng số đề
     public int getNumberOfExam() throws SQLException {
         String query = "SELECT COUNT(*) FROM exam";
         ResultSet rs = UserDAL.doReadQuery(query);
+        rs.next();
         return rs.getInt(1);
     }
 
-    // Tăng NumOfDo (Số lần thi) (WIP)
+    // Tăng NumOfDo (Tổng số lần thi theo đề) (Chưa test)
     public int Increase(int ExamID) throws SQLException {
-        String query = "UPDATE Exam SET NumOfDo = ? WHERE ExamID = ?";
+        String query = "UPDATE exam SET NumOfDo = NumOfDo + 1 WHERE ExamID = ?";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
-        // Tăng NumOfDo lên 1
-        p.setInt(2, ExamID);
-        int result = p.executeUpdate();
-        return result;
-    }
-
-    // Tính AvgScore (Điểm trung bình của đề) (WIP)
-    public int CalAvg(int ExamID, float Avg) throws SQLException {
-        String query = "UPDATE exam SET AvgScore = ? WHERE ExamID = ?";
-        PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
-
         p.setInt(1, ExamID);
         int result = p.executeUpdate();
         return result;
     }
 
-    // Cập nhật HighestScore (WIP)
-    public int Highest(int ExamID) throws SQLException {
-        String query = "UPDATE exam SET HighestScore = ? WHERE ExamID = ?";
-        PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
-        // Set HighestScore mới nếu lớn hơn HighestScore cũ
-        p.setInt(1, ExamID);
-        int result = p.executeUpdate();
+    // Tính AvgScore (Điểm trung bình tổng lần thi theo đề) (Chưa test)
+    public int CalAvg(int ExamID) throws SQLException {
+        String query1 = "SELECT AVG(Score) FROM result WHERE ExamID = ?";
+        PreparedStatement p1 = ExamDAL.getConnection().prepareStatement(query1);
+        p1.setInt(1, ExamID);
+        ResultSet rs = p1.executeQuery();
+        rs.next();
+
+        String query2 = "UPDATE exam SET AvgScore = ? WHERE ExamID = ?";
+        PreparedStatement p2 = ExamDAL.getConnection().prepareStatement(query2);
+        p2.setFloat(1, rs.getFloat(1));
+        p2.setInt(2, ExamID);
+        int result = p2.executeUpdate();
         return result;
     }
 
-    // Cập nhật LowestScore (WIP)
-    public int Lowest(int ExamID) throws SQLException {
-        String query = "UPDATE exam SET LowestScore = ? WHERE ExamID = ?";
-        PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
-        // Set LowestScore mới nếu nhỏ hơn LowestScore cũ
-        p.setInt(1, ExamID);
-        int result = p.executeUpdate();
-        return result;
+    // Cập nhật HighestScore (Chưa test)
+    public int Highest(int ExamID, float Score) throws SQLException {
+        String query1 = "SELECT HighestScore FROM exam WHERE ExamID = ?";
+        PreparedStatement p1 = ExamDAL.getConnection().prepareStatement(query1);
+        p1.setInt(1, ExamID);
+        ResultSet rs = p1.executeQuery();
+        rs.next();
+        if (Score > rs.getFloat(1)) {
+            String query2 = "UPDATE exam SET HighestScore = ? WHERE ExamID = ?";
+            PreparedStatement p2 = ExamDAL.getConnection().prepareStatement(query2);
+            p2.setFloat(1, Score);
+            p2.setInt(2, ExamID);
+            p2.executeUpdate();
+            return 1;
+        }
+        return 0;
+    }
+
+    // Cập nhật LowestScore (Chưa test)
+    public int Lowest(int ExamID, float Score) throws SQLException {
+        String query1 = "SELECT LowestScore FROM exam WHERE ExamID = ?";
+        PreparedStatement p1 = ExamDAL.getConnection().prepareStatement(query1);
+        p1.setInt(1, ExamID);
+        ResultSet rs = p1.executeQuery();
+        rs.next();
+        if (Score < rs.getFloat(1)) {
+            String query2 = "UPDATE exam SET LowestScore = ? WHERE ExamID = ?";
+            PreparedStatement p2 = ExamDAL.getConnection().prepareStatement(query2);
+            p2.setFloat(1, Score);
+            p2.setInt(2, ExamID);
+            p2.executeUpdate();
+            return 1;
+        }
+        return 0;
     }
 }

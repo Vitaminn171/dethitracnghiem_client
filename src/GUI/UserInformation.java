@@ -37,17 +37,15 @@ public class UserInformation extends javax.swing.JPanel {
 
     public UserInformation(JSONObject json) {
         initComponents();
-        File f1 = new File("C:\\Image\\user.png");
-        File f2 = new File("C:\\Image\\edit.png");
         BufferedImage img = null;
         BufferedImage img_edit = null;
         try {
-            img = ImageIO.read(f1);
-            img_edit = ImageIO.read(f2);
+            img = ImageIO.read(getClass().getResource("/GUI/Image/user.png"));
+            img_edit = ImageIO.read(getClass().getResource("/GUI/Image/edit.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Image dimg = img.getScaledInstance(160, 160, Image.SCALE_SMOOTH);
+        Image dimg = img.getScaledInstance(160, 160,Image.SCALE_SMOOTH);
         ImageIcon imageIcon = new ImageIcon(dimg);
         jLabel1.setIcon(imageIcon);
 
@@ -68,12 +66,12 @@ public class UserInformation extends javax.swing.JPanel {
             jLabel_gender.setText("Nữ");
         }
         //jLabel_gender.setText(String.valueOf(json.getBoolean("gender")));
-        if (json.getBoolean("blockStatus")) {
+        if (json.getBoolean("blockLogin")) {
             jLabel_blockStatus.setText("Đang bị block");
         } else {
             jLabel_blockStatus.setText("Không bị block");
         }
-        //jLabel_blockStatus.setText(String.valueOf(json.getBoolean("blockStatus")));
+
         this.json = json;
         jButton_edit.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
@@ -341,7 +339,9 @@ public class UserInformation extends javax.swing.JPanel {
 
     private void jButton_changePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_changePassActionPerformed
         // TODO add your handling code here:
-
+        Window window = SwingUtilities.getWindowAncestor(this);
+        window.dispose();
+        this.setVisible(false);
     }//GEN-LAST:event_jButton_changePassActionPerformed
 
     private void jButton_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_logoutActionPerformed
@@ -350,7 +350,7 @@ public class UserInformation extends javax.swing.JPanel {
             Controller controller = new Controller();
             Map<String, String> inputMap = new HashMap<String, String>();
             inputMap.put("func", "logout");//push username to inputMap
-            inputMap.put("userid", String.valueOf(json.getInt("userid")));
+            inputMap.put("userID", String.valueOf(json.getInt("userID")));
             inputMap.put("status", "true");
             String dataReceive = controller.SendReceiveData(controller.convertToJSON(inputMap));
             JSONObject jsonReceive = new JSONObject(dataReceive);
@@ -359,7 +359,6 @@ public class UserInformation extends javax.swing.JPanel {
                 parent.dispose();
                 Login login = new Login();
                 login.setVisible(true);
-                /* System.exit(0); */
             }
             else JOptionPane.showMessageDialog(this, "Logout fail!");
         } catch (IOException ex) {

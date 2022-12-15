@@ -35,11 +35,16 @@ public class ResultDAL extends MyDatabaseManager {
         return list;
     }
     
-    // DEFAULT: Examinee là user đang login, ExamID là đề
-    // Score là điểm thi, CorrectQuiz là số câu đúng, WrongWiz là số câu sai (WIP)
-    public int insertResult(ResultDTO r) throws SQLException {
-        String query = "INSERT INTO result () VALUES ()";
+    // DEFAULT: Examinee là user đang login, ExamID là đề vừa thi, Score là điểm thi, CorrectQuiz là số câu đúng, WrongQuiz là số câu sai (WIP)
+    public int insertResult(int ExamID, int Examinee, float Score, String Date, int Correct, int Wrong) throws SQLException {
+        String query = "INSERT INTO result (ExamID, Examinee, Score, Date, CorrectQuiz, WrongQuiz) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement p = ResultDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
+        p.setInt(2, Examinee);
+        p.setFloat(3, Score);
+        p.setString(4, Date);
+        p.setInt(5, Correct);
+        p.setInt(6, Wrong);
         int result = p.executeUpdate();
         return result;
     }
