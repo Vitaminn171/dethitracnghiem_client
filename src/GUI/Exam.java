@@ -97,6 +97,8 @@ public class Exam extends javax.swing.JFrame {
                         if(jsonReceive.getInt("correct") != correct){
                             score = jsonReceive.getInt("correct") * Double.parseDouble(String.valueOf(10 / jsonExam.getInt("numOfQuiz")));
                             correct = jsonReceive.getInt("correct");
+                            JOptionPane.showMessageDialog(null, "Correct answer!");
+                            
                         }
                         
                         if(number == jsonExam.getInt("numOfQuiz")){
