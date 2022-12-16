@@ -73,7 +73,9 @@ public class ResultDAL extends MyDatabaseManager {
     }
 
     public int getRank(int ExamID, String Examinee, String Date) throws SQLException {
-        String query = "SELECT Rank FROM (SELECT ExamID, Examinee, Date, Score, RANK() OVER(ORDER BY Score DESC) Rank FROM result WHERE ExamID = ? ORDER BY Rank) WHERE Examinee = ? AND Date = ?";
+        String query = "SELECT Rank" +
+                        "FROM (SELECT ExamID, Examinee, Date, Score, DENSE_RANK() OVER( ORDER BY Score DESC ) `Rank` FROM result WHERE ExamID = 3) `DATA`" +
+                        "WHERE Examinee = ? AND Date = ?";
         PreparedStatement p = ResultDAL.getConnection().prepareStatement(query);
         p.setInt(1, ExamID);
         p.setString(2, Examinee);
