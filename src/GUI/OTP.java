@@ -61,7 +61,7 @@ public class OTP extends javax.swing.JFrame {
         final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         final Runnable runnable = new Runnable() {
-            long countdownStarter = (long) (0.5 * 60000); //convert minute to milisecond
+            long countdownStarter = 10 * 60000; //convert minute to milisecond
 
             public void run() {
 
@@ -121,7 +121,7 @@ public class OTP extends javax.swing.JFrame {
         });
 
         jLabel_time.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel_time.setText("OTP hết hiệu lực sau: 10:00");
+        jLabel_time.setText("OTP expires after: 10:00");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

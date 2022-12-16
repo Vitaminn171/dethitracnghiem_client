@@ -145,12 +145,13 @@ public class UserDAL extends MyDatabaseManager {
     }
 
     public UserDTO getBlockStatus(String Username) throws SQLException {
-        String query = "SELECT BlockAddExam, BlockTakeExam FROM user WHERE Username = ?";
+        String query = "SELECT UserID, BlockAddExam, BlockTakeExam FROM user WHERE Username = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setString(1, Username);
         ResultSet rs = p.executeQuery();
         UserDTO u = new UserDTO();
         if (rs.next()) {
+            u.setUserID(rs.getInt("UserID"));
             u.setBlockAddExam(rs.getBoolean("BlockAddExam"));
             u.setBlockTakeExam(rs.getBoolean("BlockTakeExam"));
             return u;

@@ -36,10 +36,7 @@ public class Result extends javax.swing.JFrame {
         this.setTitle("Quiz Exam Result");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        
-        
 
-        
         jButton1.putClientProperty( "JButton.buttonType", "roundRect" );
         jButton1.putClientProperty( "JButton.focusWidth", 1 );
         
@@ -47,9 +44,7 @@ public class Result extends javax.swing.JFrame {
         jLabel_score_data.setText(String.valueOf(jsonResult.getDouble("score")));
         jLabel_correct_data.setText(String.valueOf(jsonResult.getInt("correct")));
         jLabel_wrong_data.setText(String.valueOf(jsonResult.getInt("wrong")));
-        
-        
-       
+
         LocalDate date = java.time.LocalDate.now();
         jsonResult.put("date", date.toString());
         jsonResult.put("func", "addResult");

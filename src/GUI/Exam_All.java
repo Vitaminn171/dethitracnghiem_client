@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package GUI;
 
 import BLL.Controller;
@@ -11,14 +7,11 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.SQLException;
-import java.util.Iterator;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -31,27 +24,16 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/**
- *
- * @author Quoc An
- */
 public class Exam_All extends javax.swing.JPanel {
 
     JSONObject jSONtemp;
 
-    /**
-     * Creates new form Exam_All
-     */
     public JPanel getjPanel1() {
         return jPanel1;
     }
 
-    public Exam_All(String username, int UserID) throws IOException, Exception {
+    public Exam_All(String username) throws IOException, Exception {
         initComponents();
         setCenterTable();
 
@@ -163,7 +145,7 @@ public class Exam_All extends javax.swing.JPanel {
                 if (jSONtemp.getBoolean("blockAddExam")) {
                     JOptionPane.showMessageDialog(null, "Tài khoản đang bị khóa thêm đề thi, vui lòng liên hệ quản trị viên!");
                 } else {
-                    AddExam ae = new AddExam(UserID);
+                    AddExam ae = new AddExam(jSONtemp.getInt("userID"));
                     ae.setVisible(true);
                 }
             }
@@ -408,7 +390,7 @@ public class Exam_All extends javax.swing.JPanel {
 
                         //JSONObject jsonExam = jSONArray.getJSONObject(id);
                         try {
-                            new Exam(jsonExam, username).setVisible(true);
+                            new Exam(jsonExam, username, jSONtemp.getInt("userID")).setVisible(true);
 
                         } catch (IOException ex) {
                             Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);

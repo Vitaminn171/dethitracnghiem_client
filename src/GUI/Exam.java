@@ -41,7 +41,7 @@ public class Exam extends javax.swing.JFrame {
     int number = 1;
     double score = 0;
     int correct = 0;
-    public Exam(JSONObject jsonExam, String username) throws IOException, Exception {
+    public Exam(JSONObject jsonExam, String username, int UserID) throws IOException, Exception {
         initComponents();
         this.setTitle("Quiz Exam");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -102,8 +102,9 @@ public class Exam extends javax.swing.JFrame {
                         if(number == jsonExam.getInt("numOfQuiz")){
                             JOptionPane.showMessageDialog(null, "Finish!");
                             JSONObject jsonResult = new JSONObject();
-                            jsonResult.put("examinee", username);
+                            jsonResult.put("userID", UserID);
                             jsonResult.put("examID", jsonExam.getInt("examID"));
+                            jsonResult.put("examinee", username);     
                             jsonResult.put("correct", correct);
                             jsonResult.put("score", score);
                             jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
@@ -315,6 +316,7 @@ public class Exam extends javax.swing.JFrame {
                             
                             
                             JSONObject jsonResult = new JSONObject();
+                            jsonResult.put("userID", UserID);
                             jsonResult.put("examID", jsonExam.getInt("examID"));
                             jsonResult.put("examinee", username);
                             jsonResult.put("correct", correct);
@@ -327,6 +329,7 @@ public class Exam extends javax.swing.JFrame {
                     }else{
                         try {
                             JSONObject jsonResult = new JSONObject();
+                            jsonResult.put("userID", UserID);
                             jsonResult.put("examID", jsonExam.getInt("examID"));
                             jsonResult.put("examinee", username);
                             jsonResult.put("correct", correct);

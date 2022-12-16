@@ -18,15 +18,9 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import org.json.JSONObject;
 
-/**
- *
- * @author Quoc An
- */
 public class Dashboard extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Dashboard
-     */
+    //Constructor execute when finish other function
     public Dashboard(String username) throws IOException, Exception {
         initComponents();
         this.setTitle("Quiz Exam");
@@ -46,7 +40,7 @@ public class Dashboard extends javax.swing.JFrame {
             System.out.println(dataReceive);
             JSONObject json = new JSONObject(dataReceive);
             JPanel UserInformation = new UserInformation(json);
-            JPanel Exam_All = new Exam_All(jsonSend.getString("username"), 10);
+            JPanel Exam_All = new Exam_All(jsonSend.getString("username"));
             JPanel Result_All = new Result_All(jsonSend.getString("username"));
             jTabbedPane1.addTab("User Information", UserInformation);
             jTabbedPane1.addTab("Exam", Exam_All);
@@ -56,6 +50,7 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }
 
+    //Constructor execute when login
     public Dashboard(JSONObject json) throws IOException {
 
         initComponents();
@@ -64,7 +59,7 @@ public class Dashboard extends javax.swing.JFrame {
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         try {
             JPanel UserInformation = new UserInformation(json);
-            JPanel Exam_All = new Exam_All(json.getString("username"), json.getInt("userID"));
+            JPanel Exam_All = new Exam_All(json.getString("username"));
             JPanel Result_All = new Result_All(json.getString("username"));
             jTabbedPane1.addTab("User Information", UserInformation);
             jTabbedPane1.addTab("Exam", Exam_All);
