@@ -69,7 +69,7 @@ public class AddExam extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(AddExam.class.getName()).log(Level.SEVERE, null, ex);
         }
-        jComboBox_subject.setSelectedIndex(1);
+        jComboBox_subject.setSelectedIndex(0);
         jButton_cancel.putClientProperty("JButton.buttonType", "roundRect");
 
         jButton_submit.putClientProperty("JButton.buttonType", "roundRect");
