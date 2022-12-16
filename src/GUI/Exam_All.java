@@ -197,7 +197,7 @@ public class Exam_All extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Title", "Subject", "Creator", "Num of Quiz", "Time", "Num Of Do", "Highest Score", "Lowest Score", "Avg Score"
+                "ID", "Title", "Subject", "Creator", "Time (minute)", "Num Of Do", "Num of Quiz", "Highest Score", "Lowest Score", "Avg Score"
             }
         ) {
             Class[] types = new Class [] {
@@ -353,7 +353,7 @@ public class Exam_All extends javax.swing.JPanel {
                     }
                     //update 16/12 by Quoc An
 
-                    int NumOfDo = Integer.parseInt(jTable1.getModel().getValueAt(row, 6).toString());
+                    int NumOfDo = Integer.parseInt(jTable1.getModel().getValueAt(row, 5).toString());
                     if ((option == 1 || option == 2) && NumOfDo > 0) {
                         JOptionPane.showMessageDialog(null, "Không thể sửa hoặc xóa khi đã được thi qua!");
                     } else {
@@ -361,8 +361,8 @@ public class Exam_All extends javax.swing.JPanel {
                             //jsonExam.put("func", "editExam");
                             jsonExam.put("examTitle", jTable1.getModel().getValueAt(row, 1) + "");
                             jsonExam.put("subjectName", jTable1.getModel().getValueAt(row, 2) + "");
-                            jsonExam.put("numOfQuiz", jTable1.getModel().getValueAt(row, 4) + "");
-                            jsonExam.put("limitTime", jTable1.getModel().getValueAt(row, 5) + "");
+                            jsonExam.put("numOfQuiz", jTable1.getModel().getValueAt(row, 6) + "");
+                            jsonExam.put("limitTime", jTable1.getModel().getValueAt(row, 4) + "");
                             System.out.println(jsonExam.toString());
                             EditExam editExam = new EditExam(jsonExam);
                             editExam.setVisible(true);

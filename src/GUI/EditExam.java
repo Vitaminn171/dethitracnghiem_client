@@ -129,7 +129,6 @@ public class EditExam extends javax.swing.JFrame {
         jFormattedTextField_numOfQuiz = new javax.swing.JFormattedTextField();
         jLabel4 = new javax.swing.JLabel();
         jFormattedTextField_limitTime = new javax.swing.JFormattedTextField();
-        jFormattedTextField_examID = new javax.swing.JFormattedTextField();
         jButton_file = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
 
@@ -199,10 +198,6 @@ public class EditExam extends javax.swing.JFrame {
         jFormattedTextField_limitTime.setMinimumSize(new java.awt.Dimension(120, 40));
         jFormattedTextField_limitTime.setPreferredSize(new java.awt.Dimension(250, 40));
 
-        jFormattedTextField_examID.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jFormattedTextField_examID.setMinimumSize(new java.awt.Dimension(120, 40));
-        jFormattedTextField_examID.setPreferredSize(new java.awt.Dimension(250, 40));
-
         jButton_file.setText("CHỌN FILE");
         jButton_file.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -253,11 +248,6 @@ public class EditExam extends javax.swing.JFrame {
                             .addComponent(jComboBox_subject, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jFormattedTextField_numOfQuiz, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addContainerGap(878, Short.MAX_VALUE)))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(81, 81, 81)
-                    .addComponent(jFormattedTextField_examID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(81, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,11 +282,6 @@ public class EditExam extends javax.swing.JFrame {
                     .addGap(5, 5, 5)
                     .addComponent(jFormattedTextField_limitTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(192, Short.MAX_VALUE)))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(140, 140, 140)
-                    .addComponent(jFormattedTextField_examID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(520, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -342,7 +327,6 @@ public class EditExam extends javax.swing.JFrame {
     private javax.swing.JButton jButton_file;
     private javax.swing.JButton jButton_submit;
     private javax.swing.JComboBox<String> jComboBox_subject;
-    private javax.swing.JFormattedTextField jFormattedTextField_examID;
     private javax.swing.JFormattedTextField jFormattedTextField_examTitle;
     private javax.swing.JFormattedTextField jFormattedTextField_limitTime;
     private javax.swing.JFormattedTextField jFormattedTextField_numOfQuiz;

@@ -68,9 +68,9 @@
                     <Column editable="true" title="Title" type="java.lang.String"/>
                     <Column editable="true" title="Subject" type="java.lang.String"/>
                     <Column editable="true" title="Creator" type="java.lang.String"/>
-                    <Column editable="true" title="Num of Quiz" type="java.lang.String"/>
-                    <Column editable="true" title="Time" type="java.lang.String"/>
+                    <Column editable="true" title="Time (minute)" type="java.lang.String"/>
                     <Column editable="true" title="Num Of Do" type="java.lang.String"/>
+                    <Column editable="true" title="Num of Quiz" type="java.lang.String"/>
                     <Column editable="true" title="Highest Score" type="java.lang.String"/>
                     <Column editable="true" title="Lowest Score" type="java.lang.String"/>
                     <Column editable="true" title="Avg Score" type="java.lang.String"/>

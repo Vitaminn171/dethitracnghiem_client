@@ -321,7 +321,7 @@ public class Controller_Server {
                     json.put("message", "Thêm kết quả thi thất bại!");
                 } else {
                     json.put("status", true);
-                    json.put("rank", rBLL.getRank(json.getInt("examID"), json.getString("examinee"), json.getString("date")));
+                    //json.put("rank", rBLL.getRank(json.getInt("examID"), json.getString("examinee"), json.getString("date")));
                     eBLL.calAvg(json.getInt("examID"));
                     eBLL.calHighest(json.getInt("examID"), json.getFloat("score"));
                     eBLL.calLowest(json.getInt("examID"), json.getFloat("score"));

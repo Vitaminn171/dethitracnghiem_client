@@ -58,8 +58,8 @@ public class Result extends javax.swing.JFrame {
         JSONObject jResponse = new JSONObject(dataReceive);
         //System.out.println(dataReceive);
         
-        if(jResponse.getBoolean("status"))
-            jLabel_rank.setText(String.valueOf(jResponse.getInt("rank")));
+//        if(jResponse.getBoolean("status"))
+//            jLabel_rank.setText(String.valueOf(jResponse.getInt("rank")));
             
         jButton1.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
@@ -98,11 +98,8 @@ public class Result extends javax.swing.JFrame {
         jLabel_score_data = new javax.swing.JLabel();
         jLabel_correct_data = new javax.swing.JLabel();
         jLabel_wrong_data = new javax.swing.JLabel();
-        jLabel_rank = new javax.swing.JLabel();
-        jLabel_wrong1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(400, 300));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Result");
@@ -152,12 +149,6 @@ public class Result extends javax.swing.JFrame {
         jLabel_wrong_data.setMinimumSize(null);
         jLabel_wrong_data.setPreferredSize(null);
 
-        jLabel_rank.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel_rank.setText("rank");
-
-        jLabel_wrong1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel_wrong1.setText("Rank:");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -187,15 +178,9 @@ public class Result extends javax.swing.JFrame {
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(118, 118, 118)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel_wrong1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(16, 16, 16)
-                                .addComponent(jLabel_rank, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel_wrong, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(16, 16, 16)
-                                .addComponent(jLabel_wrong_data, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(jLabel_wrong, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16)
+                        .addComponent(jLabel_wrong_data, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(119, 119, 119))
         );
         layout.setVerticalGroup(
@@ -219,11 +204,7 @@ public class Result extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel_wrong)
                     .addComponent(jLabel_wrong_data, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel_wrong1)
-                    .addComponent(jLabel_rank))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -255,11 +236,9 @@ public class Result extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_correct_data;
     private javax.swing.JLabel jLabel_examinee;
     private javax.swing.JLabel jLabel_examinee_data;
-    private javax.swing.JLabel jLabel_rank;
     private javax.swing.JLabel jLabel_score;
     private javax.swing.JLabel jLabel_score_data;
     private javax.swing.JLabel jLabel_wrong;
-    private javax.swing.JLabel jLabel_wrong1;
     private javax.swing.JLabel jLabel_wrong_data;
     // End of variables declaration//GEN-END:variables
 }
