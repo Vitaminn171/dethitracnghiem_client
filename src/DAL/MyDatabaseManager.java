@@ -18,7 +18,7 @@ public class MyDatabaseManager {
     public static void connectDB()
     {
         host = "localhost";
-        port = "3307";
+        port = "3306";
         dbUser = "root";
         dbName = "dethitracnghiem";
         dbPassword = "";

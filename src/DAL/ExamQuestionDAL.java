@@ -102,16 +102,17 @@ public class ExamQuestionDAL extends MyDatabaseManager {
      */
 
     //Tạo câu hỏi
-    public int insertQ(ExamQuestionDTO eq) throws SQLException {
-        String query = "INSERT INTO exam (Number, Question, Choice1, Choice2, Choice3, Choice4, Answer) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public int insertQ(int ExamID, int Number, String Question, String Choice1, String Choice2, String Choice3, String Choice4, String Answer) throws SQLException {
+        String query = "INSERT INTO examquestion (ExamID, Number, Question, Choice1, Choice2, Choice3, Choice4, Answer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
-        p.setInt(1, eq.getNumber());
-        p.setString(2, eq.getQuestion());
-        p.setString(3, eq.getChoice1());
-        p.setString(4, eq.getChoice2());
-        p.setString(5, eq.getChoice3());
-        p.setString(6, eq.getChoice4());
-        p.setString(7, eq.getAnswer());
+        p.setInt(1, ExamID);
+        p.setInt(2, Number);
+        p.setString(3, Question);
+        p.setString(4, Choice1);
+        p.setString(5, Choice2);
+        p.setString(6, Choice3);
+        p.setString(7, Choice4);
+        p.setString(8, Answer);
         int result = p.executeUpdate();
         return result;
     }

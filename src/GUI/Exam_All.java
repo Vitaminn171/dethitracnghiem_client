@@ -158,41 +158,13 @@ public class Exam_All extends javax.swing.JPanel {
             }
         });
 
-        jButton1.addActionListener(new ActionListener() {
+        jButton_AddExam.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (jSONtemp.getBoolean("blockAddExam")) {
                     JOptionPane.showMessageDialog(null, "Tài khoản đang bị khóa thêm đề thi, vui lòng liên hệ quản trị viên!");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Tài khoản không bị khóa thêm đề thi");
-                    
-                    JSONArray arrQuestion = new JSONArray();
-                    try {
-                        File file = new File("C:\\demo\\examquestion.xlsx");   //creating a new file instance  
-                        FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
-                        //creating Workbook instance that refers to .xlsx file  
-                        XSSFWorkbook wb = new XSSFWorkbook(fis);
-                        XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object  
-                        Iterator<Row> itr = sheet.iterator();    //iterating over excel file  
-                        while (itr.hasNext()) {
-                            Row row = itr.next();
-                            Iterator<Cell> cellIterator = row.cellIterator();   //iterating over each column  
-                            while (cellIterator.hasNext()) {
-                                Cell cell = cellIterator.next();
-                                switch (cell.getCellType()) {
-                                    case Cell.CELL_TYPE_STRING:    //field that represents string cell type  
-                                        System.out.print(cell.getStringCellValue() + "\t\t\t");
-                                        break;
-                                    case Cell.CELL_TYPE_NUMERIC:    //field that represents number cell type  
-                                        System.out.print(cell.getNumericCellValue() + "\t\t\t");
-                                        break;
-                                    default:
-                                }
-                            }
-                            System.out.println("");
-                        }
-                    } catch (IOException x) {
-                        x.printStackTrace();
-                    }
+                    AddExam ae = new AddExam(username);
+                    ae.setVisible(true);
                 }
             }
         });
@@ -211,7 +183,7 @@ public class Exam_All extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jComboBox_subject = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        jButton_AddExam = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -271,14 +243,14 @@ public class Exam_All extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(8, 6, 0, 0);
         jPanel1.add(jComboBox_subject, gridBagConstraints);
 
-        jButton1.setBackground(new java.awt.Color(34, 133, 225));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Add Exam");
-        jButton1.setBorderPainted(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_AddExam.setBackground(new java.awt.Color(34, 133, 225));
+        jButton_AddExam.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton_AddExam.setForeground(new java.awt.Color(255, 255, 255));
+        jButton_AddExam.setText("Add Exam");
+        jButton_AddExam.setBorderPainted(false);
+        jButton_AddExam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_AddExamActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -287,7 +259,7 @@ public class Exam_All extends javax.swing.JPanel {
         gridBagConstraints.ipady = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 457, 0, 0);
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(jButton_AddExam, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -307,9 +279,9 @@ public class Exam_All extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton_AddExamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddExamActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton_AddExamActionPerformed
 
     private ImageIcon setImageIcon(String path, int x, int y) {
         BufferedImage img = null;
@@ -365,26 +337,22 @@ public class Exam_All extends javax.swing.JPanel {
                     int option = JOptionPane.showOptionDialog(null, "Choese option below.", "Option",
                             JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
                             null, options, null);
-                    
+
                     if (option == 0) {
                         try {
                             //JOptionPane.showMessageDialog(null, "Xem chi tiết");
                             //todo
-                            new ExamDetail(id,username).setVisible(true);
+                            new ExamDetail(id, username).setVisible(true);
                             Window window = SwingUtilities.getWindowAncestor(getjPanel1());
                             window.dispose();
                             getjPanel1().setVisible(false);
                         } catch (Exception ex) {
                             Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        
-                        
-                        
-                        
+
                     }
                     //update 16/12 by Quoc An
-                    
-                    
+
                     int NumOfDo = Integer.parseInt(jTable1.getModel().getValueAt(row, 6).toString());
                     if ((option == 1 || option == 2) && NumOfDo > 0) {
                         JOptionPane.showMessageDialog(null, "Không thể sửa hoặc xóa khi đã được thi qua!");
@@ -455,7 +423,7 @@ public class Exam_All extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton_AddExam;
     private javax.swing.JComboBox<String> jComboBox_subject;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

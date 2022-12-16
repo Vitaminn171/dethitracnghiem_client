@@ -92,14 +92,16 @@ public class ExamDAL extends MyDatabaseManager {
     }
 
     // DEFAULT: Creator là người thêm đề, ExamStatus là 0, NumOfDo là 0, các Score
-    // là NULL (WIP)
-    public int insertExam(ExamDTO e) throws SQLException {
-        String query = "INSERT INTO exam (ExamTitle, SubjectID, NumOfQuiz, LimitTime) VALUES (?, ?, ?, ?)";
+    // là NULL (chưa test)
+    public int insertExam(int ExamID, String ExamTitle, String Creator, int SubjectID, int NumOfQuiz, int LimitTime) throws SQLException {
+        String query = "INSERT INTO exam (ExamID, ExamTitle, Creator, SubjectID, NumOfQuiz, LimitTime) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
-        p.setString(1, e.getTitle());
-        p.setInt(2, e.getSubjectID());
-        p.setInt(3, e.getNumOfQuiz());
-        p.setInt(4, e.getTime());
+        p.setInt(1, ExamID);
+        p.setString(2, ExamTitle);
+        p.setString(3, Creator);
+        p.setInt(4, SubjectID);
+        p.setInt(5, NumOfQuiz);
+        p.setInt(6, LimitTime);
         int result = p.executeUpdate();
         return result;
     }

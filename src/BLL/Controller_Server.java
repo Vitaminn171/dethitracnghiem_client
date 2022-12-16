@@ -59,6 +59,7 @@ public class Controller_Server {
                     json.put("status", true);
                     uBLL.Logon(user.getUserID());
                 }
+                break;
             }
 
             case "signup" -> {
@@ -68,6 +69,7 @@ public class Controller_Server {
                 } else {
                     json.put("status", true);
                 }
+                break;
             }
             case "user" -> {
                 UserDTO user = uBLL.getUserByUsername(json.getString("username"));
@@ -82,6 +84,7 @@ public class Controller_Server {
                     json.put("gender", user.isGender());
                     json.put("status", true);
                 }
+                break;
             }
             case "otp" -> {
                 if (!json.getString("otpData").equals(json.getString("correctOtp"))) {
@@ -89,6 +92,7 @@ public class Controller_Server {
                 } else {
                     json.put("status", true);
                 }
+                break;
             }
 
             case "changePass" -> {
@@ -103,6 +107,7 @@ public class Controller_Server {
                     uBLL.changePassword(json.getString("username"), json.getString("password_new"));
                     json.put("status", true);
                 }
+                break;
             }
 
             case "editUserInfor" -> {
@@ -119,6 +124,7 @@ public class Controller_Server {
                 UserDTO user = uBLL.getBlockStatus(json.getString("username"));
                 json.put("blockTakeExam", user.isBlockTakeExam());
                 json.put("blockAddExam", user.isBlockAddExam());
+                break;
             }
 
             case "getExamAll" -> {
@@ -139,6 +145,7 @@ public class Controller_Server {
                 }
                 json.put("examlist", examlist);
                 System.out.println(json.toString());
+                break;
             }
 
             case "getExamByUser" -> {
@@ -159,12 +166,13 @@ public class Controller_Server {
                 }
                 json.put("examlist", examlist);
                 System.out.println(json.toString());
+                break;
             }
-            
+
             //update 16/12 by Quoc An
             case "getExamByID" -> {
                 ExamDTO examDTO = eBLL.getExamByID(json.getInt("examID"));
-                
+
                 json.put("subject", examDTO.getSubjectname());
                 json.put("title", examDTO.getTitle());
                 json.put("numOfQuiz", examDTO.getNumOfQuiz());
@@ -173,8 +181,9 @@ public class Controller_Server {
                 json.put("avg", examDTO.getAvg());
                 json.put("time", examDTO.getTime());
                 json.put("creator", examDTO.getFullname());
-                
+
                 System.out.println(json.toString());
+                break;
             }
             //update 16/12 by Quoc An
 
@@ -196,9 +205,27 @@ public class Controller_Server {
                 }
                 json.put("examlist", examlist);
                 System.out.println(json.toString());
+                break;
             }
 
             case "addExam" -> {
+                if(eBLL.insertExam(json.getInt("examID"), json.getString("examTitle"), json.getString("creator"), json.getInt("subjectID") json.getInt("numOfQuiz"), json.getInt("limitTime")) == 0){
+                    json.put("status", false);
+                    json.put("message", "add exam fail!");
+                } else
+                
+                JSONArray questionlist = json.getJSONArray("questionlist");
+
+                for (int i = 0; i < questionlist.length(); i++) {
+                    JSONObject jQuestion = questionlist.getJSONObject(i);
+                    if (examQuestionBLL.insertQ(json.getInt("examID"), jQuestion.getInt("number"), jQuestion.getString("question"), jQuestion.getString("choice1"), jQuestion.getString("choice2"),
+                            jQuestion.getString("choice3"), jQuestion.getString("choice4"), jQuestion.getString("answer")) == 0) {
+                        json.put("status", false);
+                        json.put("message", "error when adding" + jQuestion.getInt("number"));
+                        break;
+                    } else json.put("status", true);
+                }
+                break;
             }
 
             case "editExam" -> {
@@ -210,6 +237,7 @@ public class Controller_Server {
                     json.put("status", true);
                     json.put("message", "Cập nhật đề thi thành công!");
                 }
+                break;
             }
 
             case "deleteExam" -> {
@@ -220,6 +248,7 @@ public class Controller_Server {
                     json.put("status", true);
                     json.put("message", "Xóa đề thi thành công");
                 }
+                break;
             }
 
             case "getExamQuest" -> {
@@ -234,8 +263,9 @@ public class Controller_Server {
                 json.put("choice4", examQuest.getChoice4());
 
                 System.out.println(json.toString());
+                break;
             }
-            
+
             //update 16/12 by Quoc An
             case "getExamDetailByID" -> {
                 List list = examQuestionBLL.getExamQuestion(json.getInt("examID"));
@@ -252,6 +282,7 @@ public class Controller_Server {
                 }
                 json.put("data", examlist);
                 System.out.println(json.toString());
+                break;
             }
             //update 16/12 by Quoc An
 
@@ -265,6 +296,7 @@ public class Controller_Server {
                 // json.put("score", score);
 
                 System.out.println(json.toString());
+                break;
             }
 
             case "getSubject" -> {
@@ -277,6 +309,7 @@ public class Controller_Server {
                 }
                 json.put("subjectlist", subjectlist);
                 System.out.println(json.toString());
+                break;
             }
 
             case "addResult" -> {
@@ -291,8 +324,9 @@ public class Controller_Server {
                     eBLL.calHighest(json.getInt("examID"), json.getFloat("score"));
                     eBLL.calLowest(json.getInt("examID"), json.getFloat("score"));
                 }
+                break;
             }
-            
+
             case "getResultAll" -> {
                 List list = rBLL.getResult();
                 JSONArray examlist = new JSONArray();
@@ -305,10 +339,11 @@ public class Controller_Server {
                             .put("correct", resultDTO.getCorrectQuiz())
                             .put("wrong", resultDTO.getWrongQuiz())
                             .put("date", resultDTO.getDate())
-                            );
+                    );
                 }
                 json.put("data", examlist);
                 System.out.println(json.toString());
+                break;
             }
 
             case "logout" -> {
@@ -317,6 +352,7 @@ public class Controller_Server {
                 } else {
                     json.put("status", true);
                 }
+                break;
             }
 
             default -> {
