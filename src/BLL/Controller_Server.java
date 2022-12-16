@@ -126,6 +126,7 @@ public class Controller_Server {
                 UserDTO user = uBLL.getBlockStatus(json.getString("username"));
                 json.put("blockTakeExam", user.isBlockTakeExam());
                 json.put("blockAddExam", user.isBlockAddExam());
+                json.put("userID", user.getUserID());
                 break;
             }
 
@@ -338,8 +339,19 @@ public class Controller_Server {
                     json.put("status", false);
                     json.put("message", "Thêm kết quả thi thất bại!");
                 } else {
+                    //int rank = rBLL.getRank(json.getInt("examID"), json.getString("examinee"), json.getString("date"));
                     json.put("status", true);
-                    json.put("rank", rBLL.getRank(json.getInt("examID"), json.getString("examinee"), json.getString("date")));
+                    //json.put("time", rank);
+                    
+                    long milisec = json.getLong("time");
+                    long minutes = (milisec / 1000) / 60;
+
+                            // formula for conversion for
+                            // milliseconds to seconds
+                    long seconds = (milisec / 1000) % 60;
+                    json.remove("time");
+                    json.put("timeDoQuiz", String.valueOf(minutes + ":" +seconds));
+                    
                     eBLL.calAvg(json.getInt("examID"));
                     eBLL.calHighest(json.getInt("examID"), json.getFloat("score"));
                     eBLL.calLowest(json.getInt("examID"), json.getFloat("score"));

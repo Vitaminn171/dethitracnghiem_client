@@ -21,6 +21,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import org.json.JSONArray;
@@ -41,13 +42,18 @@ public class Exam extends javax.swing.JFrame {
     int number = 1;
     double score = 0;
     int correct = 0;
+    public long countdownStarter;
+    
+    private JFrame jframe = this;
     public Exam(JSONObject jsonExam, String username, int UserID) throws IOException, Exception {
         initComponents();
         this.setTitle("Quiz Exam");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 
-        // set the time with "limit time" and countdown
+        
+        countdownStarter = jsonExam.getInt("limitTime") * 60000;//convert minute to milisecond
+        // set the time with "limit time" and countdownW
         jButton_next.putClientProperty("JButton.buttonType", "roundRect");
         jButton_next.putClientProperty("JButton.focusWidth", 1);
 //        jButton_prev.putClientProperty("JButton.buttonType", "roundRect");
@@ -74,6 +80,80 @@ public class Exam extends javax.swing.JFrame {
         JSONObject jsonReceive = getExamReceive(controller,jsonExam);
         jsonReceive.put("score", score);
         setDataToExam(jsonReceive,G);
+        
+        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        final Runnable runnable = new Runnable() {
+//            long countdownStarter = jsonExam.getInt("limitTime") * 60000;//convert minute to milisecond
+
+            public void run() {
+
+                // formula for conversion for
+                // milliseconds to minutes.
+                long minutes = (countdownStarter / 1000) / 60;
+
+                // formula for conversion for
+                // milliseconds to seconds
+                long seconds = (countdownStarter / 1000) % 60;
+
+                // Print the output
+                jLabel_time.setText(String.valueOf("Time left " + minutes + ":" + seconds + "."));
+//                System.out.println(countdownStarter + " Milliseconds = "
+//                                   + minutes + " minutes and "
+//                                   + seconds + " seconds.");
+                countdownStarter--;
+
+                if (countdownStarter == 0) {
+                    scheduler.shutdown();
+                    JOptionPane.showMessageDialog(null, "Out of time!");
+                    
+                    if(G.getSelection() != null){
+                        try {
+                            JSONObject jsonSend = new JSONObject();
+                            jsonSend.put("examID", jsonExam.getInt("examID"));
+                            jsonSend.put("number", number);
+                            jsonSend.put("answer", G.getSelection().getActionCommand());
+                            jsonSend.put("username", username);
+                            jsonSend.put("correct", correct);
+                            jsonSend.put("func", "receiveAnswer");
+                            
+                            JSONObject jsonReceive = getExamReceive(controller,jsonSend);
+                            if(jsonReceive.getInt("correct") != correct){
+                                score = jsonReceive.getInt("correct") * Double.parseDouble(String.valueOf(10 / jsonExam.getInt("numOfQuiz")));
+                                correct = jsonReceive.getInt("correct");
+                            }
+     
+                            JSONObject jsonResult = new JSONObject();
+                            jsonResult.put("userID", UserID);
+                            jsonResult.put("examID", jsonExam.getInt("examID"));
+                            jsonResult.put("examinee", username);
+                            jsonResult.put("correct", correct);
+                            jsonResult.put("score", score);
+                            jsonResult.put("time", jsonExam.getInt("limitTime") * 60000);
+                            jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
+                            new Result(jsonResult).setVisible(true);
+                            jframe.dispose();
+                        } catch (Exception ex) {
+                            Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }else{
+                        try {
+                            JSONObject jsonResult = new JSONObject();
+                            jsonResult.put("userID", UserID);
+                            jsonResult.put("examID", jsonExam.getInt("examID"));
+                            jsonResult.put("examinee", username);
+                            jsonResult.put("correct", correct);
+                            jsonResult.put("score", score);
+                            jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
+                            new Result(jsonResult).setVisible(true);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        };
+        scheduler.scheduleAtFixedRate(runnable, 0, 1, TimeUnit.MILLISECONDS);
        
         
         jButton_next.addActionListener(new ActionListener() {
@@ -108,7 +188,11 @@ public class Exam extends javax.swing.JFrame {
                             jsonResult.put("correct", correct);
                             jsonResult.put("score", score);
                             jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
+                            long time = (jsonExam.getInt("limitTime") * 60000) - countdownStarter;
+                            jsonResult.put("time", time);
+                                    
                             new Result(jsonResult).setVisible(true);
+                            jframe.dispose();
                             
                         }else{
                             number = jsonSend.getInt("number") + 1;
@@ -271,110 +355,7 @@ public class Exam extends javax.swing.JFrame {
 //
 //        });
 
-        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-        final Runnable runnable = new Runnable() {
-            long countdownStarter = jsonExam.getInt("limitTime") * 60000;//convert minute to milisecond
-
-            public void run() {
-
-                // formula for conversion for
-                // milliseconds to minutes.
-                long minutes = (countdownStarter / 1000) / 60;
-
-                // formula for conversion for
-                // milliseconds to seconds
-                long seconds = (countdownStarter / 1000) % 60;
-
-                // Print the output
-                jLabel_time.setText(String.valueOf("Time left " + minutes + ":" + seconds + "."));
-//                System.out.println(countdownStarter + " Milliseconds = "
-//                                   + minutes + " minutes and "
-//                                   + seconds + " seconds.");
-                countdownStarter--;
-
-                if (countdownStarter == 0) {
-                    scheduler.shutdown();
-                    JOptionPane.showMessageDialog(null, "Out of time!");
-                    
-                    if(G.getSelection() != null){
-                        try {
-                            JSONObject jsonSend = new JSONObject();
-                            jsonSend.put("examID", jsonExam.getInt("examID"));
-                            jsonSend.put("number", number);
-                            jsonSend.put("answer", G.getSelection().getActionCommand());
-                            jsonSend.put("username", username);
-                            jsonSend.put("correct", correct);
-                            jsonSend.put("func", "receiveAnswer");
-                            
-                            JSONObject jsonReceive = getExamReceive(controller,jsonSend);
-                            if(jsonReceive.getInt("correct") != correct){
-                                score = jsonReceive.getInt("correct") * Double.parseDouble(String.valueOf(10 / jsonExam.getInt("numOfQuiz")));
-                                correct = jsonReceive.getInt("correct");
-                            }
-                            
-                            
-                            
-                            JSONObject jsonResult = new JSONObject();
-                            jsonResult.put("userID", UserID);
-                            jsonResult.put("examID", jsonExam.getInt("examID"));
-                            jsonResult.put("examinee", username);
-                            jsonResult.put("correct", correct);
-                            jsonResult.put("score", score);
-                            jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
-                            new Result(jsonResult).setVisible(true);
-                        } catch (Exception ex) {
-                            Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }else{
-                        try {
-                            JSONObject jsonResult = new JSONObject();
-                            jsonResult.put("userID", UserID);
-                            jsonResult.put("examID", jsonExam.getInt("examID"));
-                            jsonResult.put("examinee", username);
-                            jsonResult.put("correct", correct);
-                            jsonResult.put("score", score);
-                            jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
-                            new Result(jsonResult).setVisible(true);
-                        } catch (Exception ex) {
-                            Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-                    
-                    
-//                    for (int i = 0; i < examQuestion.length(); i++) {
-//                        JSONObject data = examQuestion.getJSONObject(i);
-//                        try {
-//                            data.getString("answer");
-//                        } catch (Exception ex) {
-//                            data.put("answer", "none");
-//                            examQuestion.put(i, data);
-//                        }
-//
-//                    }
-//                    Controller controller = new Controller();
-//                    JSONObject jsonSend = new JSONObject();
-//                    jsonSend.put("username", username);
-//                    jsonSend.put("func", "receiveAnswer");
-//                    jsonSend.put("examID", jsonExam.getInt("examID"));
-//                    jsonSend.put("data", examQuestion);
-//
-//                    String data;
-//                    try {
-//                        data = controller.SendReceiveData(jsonSend.toString());
-//                        JSONObject jsonResult = new JSONObject(data);
-//                        Result result = new Result(jsonResult);
-//                        result.setVisible(true);
-//                    } catch (IOException ex) {
-//                        Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
-//                    } catch (Exception ex) {
-//                        Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-                }
-            }
-        };
-        scheduler.scheduleAtFixedRate(runnable, 0, 1, TimeUnit.MILLISECONDS);
+        
 
         // if (time == 0)
         //      then finish quiz and save all the answer
@@ -575,6 +556,7 @@ public class Exam extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         FlatLightLaf.setup();
+        
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
 //                new Exam().setVisible(true);
