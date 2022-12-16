@@ -39,8 +39,8 @@ public class ExamQuestionBLL {
         return eq;
     }
 
-    public int insertQ(int ExamID, int Number, String Question, String Choice1, String Choice2, String Choice3, String Choice4, String Answer) throws SQLException {
-        int result = eqDAL.insertQ(ExamID, Number, Question, Choice1, Choice2, Choice3, Choice4, Answer);
+    public int insertQ(int ExamID, int Number, String Question, String Choice1, String Choice2, String Choice3, String Choice4) throws SQLException {
+        int result = eqDAL.insertQ(ExamID, Number, Question, Choice1, Choice2, Choice3, Choice4);
         return result;
     }
 

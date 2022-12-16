@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import DTO.ExamQuestionDTO;
 import DTO.UserDTO;
-import java.sql.Date;
 
 public class ExamQuestionDAL extends MyDatabaseManager {
 
@@ -27,6 +26,7 @@ public class ExamQuestionDAL extends MyDatabaseManager {
         if (rs != null) {
             while (rs.next()) {
                 ExamQuestionDTO eq = new ExamQuestionDTO();
+                eq.setNumber(rs.getInt("Number"));
                 eq.setQuestion(rs.getString("Question"));
                 eq.setChoice1(rs.getString("Choice1"));
                 eq.setChoice2(rs.getString("Choice2"));
@@ -81,31 +81,8 @@ public class ExamQuestionDAL extends MyDatabaseManager {
         return null;
     }
 
-
-    /*
-     * public ExamChoiceDTO getUser(int UserID) throws SQLException {
-     * String query = "SELECT * FROM exam WHERE UserID = ?";
-     * PreparedStatement p = ExamChoiceDAL.getConnection().prepareStatement(query);
-     * p.setInt(1, UserID);
-     * ResultSet rs = p.executeQuery();
-     * ExamChoiceDTO eq = new ExamChoiceDTO();
-     * if (rs != null) {
-     * while (rs.next()) {
-     * eq.setUserID(rs.getInt("UserID"));
-     * eq.setUsername(rs.getString("Username"));
-     * eq.setFullname(rs.getString("Fullname"));
-     * eq.setDateofBirth(Date.valueOf(rs.getString("Birth")));
-     * eq.setGender(rs.getBoolean("Gender"));
-     * eq.setLogStatus(rs.getBoolean("LogStatus"));
-     * eq.setBlocked(rs.getBoolean("BlockStatus"));
-     * }
-     * }
-     * return eq;
-     * }
-     */
-
     //Tạo câu hỏi
-    public int insertQ(int ExamID, int Number, String Question, String Choice1, String Choice2, String Choice3, String Choice4, String Answer) throws SQLException {
+    public int insertQ(int ExamID, int Number, String Question, String Choice1, String Choice2, String Choice3, String Choice4) throws SQLException {
         String query = "INSERT INTO examquestion (ExamID, Number, Question, Choice1, Choice2, Choice3, Choice4) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
         p.setInt(1, ExamID);

@@ -67,9 +67,6 @@ public class ExamDetail extends javax.swing.JFrame {
        jLabel_time_data.setText(String.valueOf(jsonReceiveExam.getInt("time"))); 
         
        //set data to label
-        
-        
-        
         jsonSend.remove("func");
         jsonSend.put("func", "getExamDetailByID");
         String receiveQuiz = controller.SendReceiveData(jsonSend.toString());
@@ -165,7 +162,6 @@ public class ExamDetail extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(773, 700));
-        setPreferredSize(new java.awt.Dimension(1030, 950));
         setSize(new java.awt.Dimension(1030, 900));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
@@ -312,14 +308,14 @@ public class ExamDetail extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Question", "Choice 1", "Choice 2", "Choice 3", "Choice 4", "Answer"
+                "Number", "Question", "Choice 1", "Choice 2", "Choice 3", "Choice 4", "Answer"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true, false
+                true, false, false, false, false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -426,7 +422,8 @@ public class ExamDetail extends javax.swing.JFrame {
     private void setDataToTable(JSONArray jSONArray, DefaultTableModel model) {
         for (int i = 0; i < jSONArray.length(); i++) {
             JSONObject jOBJ = jSONArray.getJSONObject(i);
-            Object[] row = {jOBJ.get("question").toString(),
+            Object[] row = {jOBJ.get("number").toString(),
+                jOBJ.get("question").toString(),
                 jOBJ.get("choice1").toString(),
                 jOBJ.get("choice2").toString(),
                 jOBJ.get("choice3").toString(),

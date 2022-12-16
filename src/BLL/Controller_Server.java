@@ -124,6 +124,7 @@ public class Controller_Server {
 
             case "getBlockStatus" -> {
                 UserDTO user = uBLL.getBlockStatus(json.getString("username"));
+                json.put("userID", user.getUserID());
                 json.put("blockTakeExam", user.isBlockTakeExam());
                 json.put("blockAddExam", user.isBlockAddExam());
                 json.put("userID", user.getUserID());
@@ -172,7 +173,6 @@ public class Controller_Server {
                 break;
             }
 
-            
             case "getExamByID" -> {
                 ExamDTO examDTO = eBLL.getExamByID(json.getInt("examID"));
 
@@ -212,7 +212,8 @@ public class Controller_Server {
             }
 
             case "addExam" -> {
-                if (eBLL.insertExam(json.getInt("examID"), json.getString("examTitle"), json.getInt("creator"), json.getInt("subjectID"), json.getInt("numOfQuiz"), json.getInt("limitTime")) == 0) {
+                int result = eBLL.insertExam(json.getString("examTitle"), json.getInt("creator"), json.getInt("subjectID"), json.getInt("numOfQuiz"), json.getInt("limitTime"));
+                if (result == 0) {
                     json.put("status", false);
                     json.put("message", "add exam fail!");
                 } else {
@@ -220,8 +221,8 @@ public class Controller_Server {
 
                     for (int i = 0; i < questionlist.length(); i++) {
                         JSONObject jQuestion = questionlist.getJSONObject(i);
-                        if (examQuestionBLL.insertQ(json.getInt("examID"), jQuestion.getInt("number"), jQuestion.getString("question"), jQuestion.getString("choice1"), jQuestion.getString("choice2"),
-                                jQuestion.getString("choice3"), jQuestion.getString("choice4"), jQuestion.getString("answer")) == 0) {
+                        if (examQuestionBLL.insertQ(result, jQuestion.getInt("number"), jQuestion.getString("question"), jQuestion.getString("choice1"), jQuestion.getString("choice2"),
+                                jQuestion.getString("choice3"), jQuestion.getString("choice4")) == 0) {
                             json.put("status", false);
                             json.put("message", "error when adding" + jQuestion.getInt("number"));
                             break;
@@ -263,10 +264,9 @@ public class Controller_Server {
                 mylist.add("choice1");
                 mylist.add("choice2");
                 mylist.add("choice3");
-                mylist.add("choice4");    
+                mylist.add("choice4");
                 Collections.shuffle(mylist);
-                
-                
+
                 ExamQuestionDTO examQuest = examQuestionBLL.getExamQuestion(json.getInt("examID"),
                         json.getInt("number"));
 
@@ -275,7 +275,7 @@ public class Controller_Server {
                 json.put(mylist.get(1), examQuest.getChoice2());
                 json.put(mylist.get(2), examQuest.getChoice3());
                 json.put(mylist.get(3), examQuest.getChoice4());
-                
+
                 //update by Quoc An newest
                 System.out.println(json.toString());
                 break;
@@ -287,13 +287,14 @@ public class Controller_Server {
                 mylist.add("choice1");
                 mylist.add("choice2");
                 mylist.add("choice3");
-                mylist.add("choice4");    
+                mylist.add("choice4");
                 Collections.shuffle(mylist);
                 List list = examQuestionBLL.getExamQuestion(json.getInt("examID"));
                 JSONArray examlist = new JSONArray();
                 for (int i = 0; i < list.size(); i++) {
                     ExamQuestionDTO examQuestionDTO = (ExamQuestionDTO) list.get(i);
                     examlist.put(new JSONObject()
+                            .put("number", examQuestionDTO.getNumber())
                             .put("question", examQuestionDTO.getQuestion())
                             .put(mylist.get(0), examQuestionDTO.getChoice1())
                             .put(mylist.get(1), examQuestionDTO.getChoice2())
@@ -355,7 +356,7 @@ public class Controller_Server {
                     eBLL.calAvg(json.getInt("examID"));
                     eBLL.calHighest(json.getInt("examID"), json.getFloat("score"));
                     eBLL.calLowest(json.getInt("examID"), json.getFloat("score"));
-                    
+
                     //update by Quoc An newest
                     eBLL.increase(json.getInt("examID"));
                     //update by Quoc An newest

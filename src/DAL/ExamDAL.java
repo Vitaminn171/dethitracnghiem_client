@@ -28,8 +28,8 @@ public class ExamDAL extends MyDatabaseManager {
                 e.setSubjectname(rs.getString("SubjectName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
-                //update by Quoc An newest
-                //delete examstatus
+                // update by Quoc An newest
+                // delete examstatus
                 e.setNumOfDo(rs.getInt("NumOfDo"));
                 e.setHighest(rs.getFloat("HighestScore"));
                 e.setLowest(rs.getFloat("LowestScore"));
@@ -55,8 +55,8 @@ public class ExamDAL extends MyDatabaseManager {
                 e.setSubjectname(rs.getString("SubjectName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
-                //update by Quoc An newest
-                //delete examstatus
+                // update by Quoc An newest
+                // delete examstatus
                 e.setNumOfDo(rs.getInt("NumOfDo"));
                 e.setHighest(rs.getFloat("HighestScore"));
                 e.setLowest(rs.getFloat("LowestScore"));
@@ -82,8 +82,8 @@ public class ExamDAL extends MyDatabaseManager {
                 e.setSubjectname(rs.getString("SubjectName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
-                //update by Quoc An newest
-                //delete examstatus
+                // update by Quoc An newest
+                // delete examstatus
                 e.setNumOfDo(rs.getInt("NumOfDo"));
                 e.setHighest(rs.getFloat("HighestScore"));
                 e.setLowest(rs.getFloat("LowestScore"));
@@ -96,21 +96,24 @@ public class ExamDAL extends MyDatabaseManager {
 
     // DEFAULT: Creator là người thêm đề, ExamStatus là 0, NumOfDo là 0, các Score
     // là NULL (chưa test)
-    public int insertExam(int ExamID, String ExamTitle, int Creator, int SubjectID, int NumOfQuiz, int LimitTime) throws SQLException {
-        String query = "INSERT INTO exam (ExamID, ExamTitle, Creator, SubjectID, NumOfQuiz, LimitTime) VALUES (?, ?, ?, ?, ?, ?)";
-        PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
-        p.setInt(1, ExamID);
-        p.setString(2, ExamTitle);
-        p.setInt(3, Creator);
-        p.setInt(4, SubjectID);
-        p.setInt(5, NumOfQuiz);
-        p.setInt(6, LimitTime);
-        int result = p.executeUpdate();
-        return result;
+    public int insertExam(String ExamTitle, int Creator, int SubjectID, int NumOfQuiz, int LimitTime) throws SQLException {
+        String query = "INSERT INTO exam (ExamTitle, Creator, SubjectID, NumOfQuiz, LimitTime) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement p = ExamDAL.getConnection().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        p.setString(1, ExamTitle);
+        p.setInt(2, Creator);
+        p.setInt(3, SubjectID);
+        p.setInt(4, NumOfQuiz);
+        p.setInt(5, LimitTime);
+        p.executeUpdate();
+        ResultSet rs = p.getGeneratedKeys();
+        if (rs.next())
+            return rs.getInt(1);
+        return 0;
     }
 
     // Điều kiện để sửa: ExamStatus = 0 hoặc là NumOfDo = 0
-    public int updateExam(int ExamID, String ExamTitle, int SubjectID, int NumOfQuiz, int LimitTime) throws SQLException {
+    public int updateExam(int ExamID, String ExamTitle, int SubjectID, int NumOfQuiz, int LimitTime)
+            throws SQLException {
         String query = "UPDATE exam SET ExamTitle = ?, SubjectID = ? , NumOfQuiz = ?, LimitTime = ? WHERE ExamID = ?";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
         p.setString(1, ExamTitle);
@@ -148,8 +151,8 @@ public class ExamDAL extends MyDatabaseManager {
                 e.setSubjectname(rs.getString("SubjectName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
-                //update by Quoc An newest
-                //delete examstatus
+                // update by Quoc An newest
+                // delete examstatus
                 e.setNumOfDo(rs.getInt("NumOfDo"));
                 e.setHighest(rs.getFloat("HighestScore"));
                 e.setLowest(rs.getFloat("LowestScore"));
@@ -159,8 +162,8 @@ public class ExamDAL extends MyDatabaseManager {
         }
         return list;
     }
-    
-    //Tìm theo ID
+
+    // Tìm theo ID
     public ExamDTO getExamByID(int ID) throws SQLException {
         String query = "SELECT * FROM exam e, user u, subject s WHERE u.UserID = e.Creator AND s.SubjectID = e.SubjectID AND ExamID = ?";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
@@ -193,7 +196,7 @@ public class ExamDAL extends MyDatabaseManager {
     }
 
     // Tăng NumOfDo (Tổng số lần thi theo đề) (Chưa test)
-    public void Increase(int ExamID) throws SQLException { //update by Quoc An newest
+    public void Increase(int ExamID) throws SQLException { // update by Quoc An newest
         String query = "UPDATE exam SET NumOfDo = NumOfDo + 1 WHERE ExamID = ?";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
         p.setInt(1, ExamID);
