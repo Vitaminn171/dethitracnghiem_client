@@ -40,7 +40,7 @@ public class AddExam extends javax.swing.JFrame {
 
     String path = "";
 
-    public AddExam(String username) {
+    public AddExam(int UserID) {
 
         initComponents();
         this.setTitle("Quiz Exam");
@@ -90,7 +90,7 @@ public class AddExam extends javax.swing.JFrame {
                     JSONObject jsonSend = new JSONObject();
                     jsonSend.put("examID", examID);
                     jsonSend.put("examTitle", examTitle);
-                    jsonSend.put("creator", username);
+                    jsonSend.put("creator", UserID);
                     jsonSend.put("subjectID", subjectID);
                     jsonSend.put("numOfQuiz", numOfQuiz);
                     jsonSend.put("limitTime", limitTime);

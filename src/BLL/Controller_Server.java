@@ -209,21 +209,23 @@ public class Controller_Server {
             }
 
             case "addExam" -> {
-                if(eBLL.insertExam(json.getInt("examID"), json.getString("examTitle"), json.getString("creator"), json.getInt("subjectID") json.getInt("numOfQuiz"), json.getInt("limitTime")) == 0){
+                if (eBLL.insertExam(json.getInt("examID"), json.getString("examTitle"), json.getInt("creator"), json.getInt("subjectID"), json.getInt("numOfQuiz"), json.getInt("limitTime")) == 0) {
                     json.put("status", false);
                     json.put("message", "add exam fail!");
-                } else
-                
-                JSONArray questionlist = json.getJSONArray("questionlist");
+                } else {
+                    JSONArray questionlist = json.getJSONArray("questionlist");
 
-                for (int i = 0; i < questionlist.length(); i++) {
-                    JSONObject jQuestion = questionlist.getJSONObject(i);
-                    if (examQuestionBLL.insertQ(json.getInt("examID"), jQuestion.getInt("number"), jQuestion.getString("question"), jQuestion.getString("choice1"), jQuestion.getString("choice2"),
-                            jQuestion.getString("choice3"), jQuestion.getString("choice4"), jQuestion.getString("answer")) == 0) {
-                        json.put("status", false);
-                        json.put("message", "error when adding" + jQuestion.getInt("number"));
-                        break;
-                    } else json.put("status", true);
+                    for (int i = 0; i < questionlist.length(); i++) {
+                        JSONObject jQuestion = questionlist.getJSONObject(i);
+                        if (examQuestionBLL.insertQ(json.getInt("examID"), jQuestion.getInt("number"), jQuestion.getString("question"), jQuestion.getString("choice1"), jQuestion.getString("choice2"),
+                                jQuestion.getString("choice3"), jQuestion.getString("choice4"), jQuestion.getString("answer")) == 0) {
+                            json.put("status", false);
+                            json.put("message", "error when adding" + jQuestion.getInt("number"));
+                            break;
+                        } else {
+                            json.put("status", true);
+                        }
+                    }
                 }
                 break;
             }

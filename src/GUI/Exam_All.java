@@ -51,7 +51,7 @@ public class Exam_All extends javax.swing.JPanel {
         return jPanel1;
     }
 
-    public Exam_All(String username) throws IOException, Exception {
+    public Exam_All(String username, int UserID) throws IOException, Exception {
         initComponents();
         setCenterTable();
 
@@ -163,7 +163,7 @@ public class Exam_All extends javax.swing.JPanel {
                 if (jSONtemp.getBoolean("blockAddExam")) {
                     JOptionPane.showMessageDialog(null, "Tài khoản đang bị khóa thêm đề thi, vui lòng liên hệ quản trị viên!");
                 } else {
-                    AddExam ae = new AddExam(username);
+                    AddExam ae = new AddExam(UserID);
                     ae.setVisible(true);
                 }
             }

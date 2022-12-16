@@ -46,7 +46,7 @@ public class Dashboard extends javax.swing.JFrame {
             System.out.println(dataReceive);
             JSONObject json = new JSONObject(dataReceive);
             JPanel UserInformation = new UserInformation(json);
-            JPanel Exam_All = new Exam_All(jsonSend.getString("username"));
+            JPanel Exam_All = new Exam_All(jsonSend.getString("username"), json.getInt("userid"));
             JPanel Result_All = new Result_All(jsonSend.getString("username"));
             jTabbedPane1.addTab("User Information", UserInformation);
             jTabbedPane1.addTab("Exam", Exam_All);
@@ -64,7 +64,7 @@ public class Dashboard extends javax.swing.JFrame {
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         try {
             JPanel UserInformation = new UserInformation(json);
-            JPanel Exam_All = new Exam_All(json.getString("username"));
+            JPanel Exam_All = new Exam_All(json.getString("username"), json.getInt("userID"));
             JPanel Result_All = new Result_All(json.getString("username"));
             jTabbedPane1.addTab("User Information", UserInformation);
             jTabbedPane1.addTab("Exam", Exam_All);

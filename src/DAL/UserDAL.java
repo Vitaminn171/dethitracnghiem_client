@@ -65,23 +65,22 @@ public class UserDAL extends MyDatabaseManager {
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setInt(1, UserID);
         ResultSet rs = p.executeQuery();
-        if (rs != null) {
+        if (rs.next()) {
             UserDTO u = new UserDTO();
-            while (rs.next()) {
-                u.setUserID(rs.getInt("UserID"));
-                u.setUsername(rs.getString("Username"));
-                u.setFullname(rs.getString("Fullname"));
-                u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
-                u.setGender(rs.getBoolean("Gender"));
-                u.setBlockLogin(rs.getBoolean("BlockLogin"));
-                u.setBlockAddExam(rs.getBoolean("BlockAddExam"));
-                u.setBlockTakeExam(rs.getBoolean("BlockTakeExam"));
-            }
+            u.setUserID(rs.getInt("UserID"));
+            u.setUsername(rs.getString("Username"));
+            u.setFullname(rs.getString("Fullname"));
+            u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
+            u.setGender(rs.getBoolean("Gender"));
+            u.setBlockLogin(rs.getBoolean("BlockLogin"));
+            u.setBlockAddExam(rs.getBoolean("BlockAddExam"));
+            u.setBlockTakeExam(rs.getBoolean("BlockTakeExam"));
+            return u;
         }
+
         return null;
     }
 
-    
     //update 16/12 by Quoc An
     public UserDTO getUserByUsername(String Username) throws SQLException {
         String query = "SELECT * FROM user WHERE Username = ?";
@@ -90,12 +89,12 @@ public class UserDAL extends MyDatabaseManager {
         ResultSet rs = p.executeQuery();
         UserDTO u = new UserDTO();
         if (rs.next()) {
-            
-                u.setUserID(rs.getInt("UserID"));
-                u.setUsername(rs.getString("Username"));
-                u.setFullname(rs.getString("Fullname"));
-                u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
-                u.setGender(rs.getBoolean("Gender"));
+
+            u.setUserID(rs.getInt("UserID"));
+            u.setUsername(rs.getString("Username"));
+            u.setFullname(rs.getString("Fullname"));
+            u.setDateofBirth(Date.valueOf(rs.getString("Birth")));
+            u.setGender(rs.getBoolean("Gender"));
             return u;
         }
         return null;

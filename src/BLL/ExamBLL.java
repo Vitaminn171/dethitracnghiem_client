@@ -41,7 +41,7 @@ public class ExamBLL {
         return list;
     }
 
-    public int insertExam(int ExamID, String ExamTitle, String Creator, int SubjectID, int NumOfQuiz, int LimitTime) throws SQLException {
+    public int insertExam(int ExamID, String ExamTitle, int Creator, int SubjectID, int NumOfQuiz, int LimitTime) throws SQLException {
         int result = eDAL.insertExam(ExamID, ExamTitle, Creator, SubjectID, NumOfQuiz, LimitTime);
         return result;
     }
