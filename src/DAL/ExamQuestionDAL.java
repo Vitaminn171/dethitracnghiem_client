@@ -32,13 +32,15 @@ public class ExamQuestionDAL extends MyDatabaseManager {
                 eq.setChoice2(rs.getString("Choice2"));
                 eq.setChoice3(rs.getString("Choice3"));
                 eq.setChoice4(rs.getString("Choice4"));
-                eq.setAnswer(rs.getString("Answer"));
+                //update by Quoc An newest
+                eq.setAnswer(rs.getString("Choice1"));// answer always choice 1
                 list.add(eq);
             }
         }
         return list;
     }
-    //update 16/12 by Quoc An
+    
+ 
     
     public ExamQuestionDTO readExam(int ExamID, int num) throws SQLException {
         String query = "SELECT * FROM examquestion WHERE ExamID = ? AND Number = ?" ;
@@ -72,7 +74,8 @@ public class ExamQuestionDAL extends MyDatabaseManager {
         if(rs.next()){
                 eq.setExamID(rs.getInt("ExamID"));
                 eq.setNumber(rs.getInt("Number"));
-                eq.setAnswer(rs.getString("Answer"));
+                //update by Quoc An newest
+                eq.setAnswer(rs.getString("Choice1"));
                 return eq;
         }
         return null;
@@ -103,7 +106,7 @@ public class ExamQuestionDAL extends MyDatabaseManager {
 
     //Tạo câu hỏi
     public int insertQ(int ExamID, int Number, String Question, String Choice1, String Choice2, String Choice3, String Choice4, String Answer) throws SQLException {
-        String query = "INSERT INTO examquestion (ExamID, Number, Question, Choice1, Choice2, Choice3, Choice4, Answer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO examquestion (ExamID, Number, Question, Choice1, Choice2, Choice3, Choice4) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
         p.setInt(1, ExamID);
         p.setInt(2, Number);
@@ -112,23 +115,21 @@ public class ExamQuestionDAL extends MyDatabaseManager {
         p.setString(5, Choice2);
         p.setString(6, Choice3);
         p.setString(7, Choice4);
-        p.setString(8, Answer);
         int result = p.executeUpdate();
         return result;
     }
 
     //Cập nhật câu hỏi
     public int updateQ(ExamQuestionDTO eq) throws SQLException {
-        String query = "UPDATE examquestion SET Question = ?, Choice1 = ? , Choice2 = ?, Choice3 = ?, Choice4 = ?, Answer = ? WHERE ExamID = ? AND Number = ?";
+        String query = "UPDATE examquestion SET Question = ?, Choice1 = ? , Choice2 = ?, Choice3 = ?, Choice4 = ? WHERE ExamID = ? AND Number = ?";
         PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
         p.setString(1, eq.getQuestion());
         p.setString(2, eq.getChoice1());
         p.setString(3, eq.getChoice2());
         p.setString(4, eq.getChoice3());
         p.setString(5, eq.getChoice4());
-        p.setString(6, eq.getAnswer());
-        p.setInt(7, eq.getExamID());
-        p.setInt(8, eq.getNumber());
+        p.setInt(6, eq.getExamID());
+        p.setInt(7, eq.getNumber());
         
         int result = p.executeUpdate();
         return result;

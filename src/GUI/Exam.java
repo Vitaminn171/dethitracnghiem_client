@@ -55,10 +55,8 @@ public class Exam extends javax.swing.JFrame {
 //        jButton_finish.putClientProperty("JButton.buttonType", "roundRect");
 //        jButton_finish.putClientProperty("JButton.focusWidth", 1);
 
-        jRadioButton_answer_1.setActionCommand("A");
-        jRadioButton_answer_2.setActionCommand("B");
-        jRadioButton_answer_3.setActionCommand("C");
-        jRadioButton_answer_4.setActionCommand("D");
+        //update by Quoc An newest
+        //move jRadioButton_answer_1.setActionCommand to func setDataToExam()
 
         
         G = new ButtonGroup();
@@ -609,12 +607,18 @@ public class Exam extends javax.swing.JFrame {
         int num = json.getInt("number");
         jLabel_questNum.setText("Question " + num + ":");
         jLabel_questTitle.setText(json.getString("question"));
-        jRadioButton_answer_1.setText(json.getString("choice1"));
-        jRadioButton_answer_2.setText(json.getString("choice2"));
-        jRadioButton_answer_3.setText(json.getString("choice3"));
-        jRadioButton_answer_4.setText(json.getString("choice4"));
+        jRadioButton_answer_1.setText("A. " + json.getString("choice1"));
+        jRadioButton_answer_2.setText("B. " + json.getString("choice2"));
+        jRadioButton_answer_3.setText("C. " + json.getString("choice3"));
+        jRadioButton_answer_4.setText("D. " + json.getString("choice4"));
         jLabel_score.setText("Score : "+ json.getDouble("score"));
         
+        //update by Quoc An newest
+        jRadioButton_answer_1.setActionCommand(json.getString("choice1"));
+        jRadioButton_answer_2.setActionCommand(json.getString("choice2"));
+        jRadioButton_answer_3.setActionCommand(json.getString("choice3"));
+        jRadioButton_answer_4.setActionCommand(json.getString("choice4"));
+        //update by Quoc An newest
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -77,5 +77,10 @@ public class ExamBLL {
     public void calLowest(int ExamID, float score) throws SQLException {
         eDAL.Lowest(ExamID, score);
     }
-
+    
+    //update by Quoc An newest
+    public void increase(int ExamID) throws SQLException {
+        eDAL.Increase(ExamID);
+    }
+    //update by Quoc An newest
 }

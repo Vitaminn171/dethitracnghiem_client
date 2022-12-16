@@ -20,6 +20,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.Key;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -169,7 +171,7 @@ public class Controller_Server {
                 break;
             }
 
-            //update 16/12 by Quoc An
+            
             case "getExamByID" -> {
                 ExamDTO examDTO = eBLL.getExamByID(json.getInt("examID"));
 
@@ -185,7 +187,7 @@ public class Controller_Server {
                 System.out.println(json.toString());
                 break;
             }
-            //update 16/12 by Quoc An
+            //update by Quoc An newest
 
             case "getExam" -> {
                 List list = eBLL.getExamBySubject(json.getInt("subjectID"));
@@ -255,38 +257,54 @@ public class Controller_Server {
 
             case "getExamQuest" -> {
 
+                //update by Quoc An newest
+                ArrayList<String> mylist = new ArrayList<String>();
+                mylist.add("choice1");
+                mylist.add("choice2");
+                mylist.add("choice3");
+                mylist.add("choice4");    
+                Collections.shuffle(mylist);
+                
+                
                 ExamQuestionDTO examQuest = examQuestionBLL.getExamQuestion(json.getInt("examID"),
                         json.getInt("number"));
 
                 json.put("question", examQuest.getQuestion());
-                json.put("choice1", examQuest.getChoice1());
-                json.put("choice2", examQuest.getChoice2());
-                json.put("choice3", examQuest.getChoice3());
-                json.put("choice4", examQuest.getChoice4());
-
+                json.put(mylist.get(0), examQuest.getChoice1());
+                json.put(mylist.get(1), examQuest.getChoice2());
+                json.put(mylist.get(2), examQuest.getChoice3());
+                json.put(mylist.get(3), examQuest.getChoice4());
+                
+                //update by Quoc An newest
                 System.out.println(json.toString());
                 break;
             }
 
-            //update 16/12 by Quoc An
+            //update by Quoc An newest
             case "getExamDetailByID" -> {
+                ArrayList<String> mylist = new ArrayList<String>();
+                mylist.add("choice1");
+                mylist.add("choice2");
+                mylist.add("choice3");
+                mylist.add("choice4");    
+                Collections.shuffle(mylist);
                 List list = examQuestionBLL.getExamQuestion(json.getInt("examID"));
                 JSONArray examlist = new JSONArray();
                 for (int i = 0; i < list.size(); i++) {
                     ExamQuestionDTO examQuestionDTO = (ExamQuestionDTO) list.get(i);
                     examlist.put(new JSONObject()
                             .put("question", examQuestionDTO.getQuestion())
-                            .put("choice1", examQuestionDTO.getChoice1())
-                            .put("choice2", examQuestionDTO.getChoice2())
-                            .put("choice3", examQuestionDTO.getChoice3())
-                            .put("choice4", examQuestionDTO.getChoice4())
+                            .put(mylist.get(0), examQuestionDTO.getChoice1())
+                            .put(mylist.get(1), examQuestionDTO.getChoice2())
+                            .put(mylist.get(2), examQuestionDTO.getChoice3())
+                            .put(mylist.get(3), examQuestionDTO.getChoice4())
                             .put("answer", examQuestionDTO.getAnswer()));
                 }
                 json.put("data", examlist);
                 System.out.println(json.toString());
                 break;
             }
-            //update 16/12 by Quoc An
+            //update by Quoc An newest
 
             case "receiveAnswer" -> {
 
@@ -325,6 +343,10 @@ public class Controller_Server {
                     eBLL.calAvg(json.getInt("examID"));
                     eBLL.calHighest(json.getInt("examID"), json.getFloat("score"));
                     eBLL.calLowest(json.getInt("examID"), json.getFloat("score"));
+                    
+                    //update by Quoc An newest
+                    eBLL.increase(json.getInt("examID"));
+                    //update by Quoc An newest
                 }
                 break;
             }

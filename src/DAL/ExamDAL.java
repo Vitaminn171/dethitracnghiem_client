@@ -28,7 +28,8 @@ public class ExamDAL extends MyDatabaseManager {
                 e.setSubjectname(rs.getString("SubjectName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
-                e.setStatus(rs.getBoolean("ExamStatus"));
+                //update by Quoc An newest
+                //delete examstatus
                 e.setNumOfDo(rs.getInt("NumOfDo"));
                 e.setHighest(rs.getFloat("HighestScore"));
                 e.setLowest(rs.getFloat("LowestScore"));
@@ -54,7 +55,8 @@ public class ExamDAL extends MyDatabaseManager {
                 e.setSubjectname(rs.getString("SubjectName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
-                e.setStatus(rs.getBoolean("ExamStatus"));
+                //update by Quoc An newest
+                //delete examstatus
                 e.setNumOfDo(rs.getInt("NumOfDo"));
                 e.setHighest(rs.getFloat("HighestScore"));
                 e.setLowest(rs.getFloat("LowestScore"));
@@ -80,7 +82,8 @@ public class ExamDAL extends MyDatabaseManager {
                 e.setSubjectname(rs.getString("SubjectName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
-                e.setStatus(rs.getBoolean("ExamStatus"));
+                //update by Quoc An newest
+                //delete examstatus
                 e.setNumOfDo(rs.getInt("NumOfDo"));
                 e.setHighest(rs.getFloat("HighestScore"));
                 e.setLowest(rs.getFloat("LowestScore"));
@@ -145,7 +148,8 @@ public class ExamDAL extends MyDatabaseManager {
                 e.setSubjectname(rs.getString("SubjectName"));
                 e.setNumOfQuiz(rs.getInt("NumOfQuiz"));
                 e.setTime(rs.getInt("LimitTime"));
-                e.setStatus(rs.getBoolean("ExamStatus"));
+                //update by Quoc An newest
+                //delete examstatus
                 e.setNumOfDo(rs.getInt("NumOfDo"));
                 e.setHighest(rs.getFloat("HighestScore"));
                 e.setLowest(rs.getFloat("LowestScore"));
@@ -189,12 +193,11 @@ public class ExamDAL extends MyDatabaseManager {
     }
 
     // Tăng NumOfDo (Tổng số lần thi theo đề) (Chưa test)
-    public int Increase(int ExamID) throws SQLException {
+    public void Increase(int ExamID) throws SQLException { //update by Quoc An newest
         String query = "UPDATE exam SET NumOfDo = NumOfDo + 1 WHERE ExamID = ?";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
         p.setInt(1, ExamID);
-        int result = p.executeUpdate();
-        return result;
+        p.executeUpdate();
     }
 
     // Tính AvgScore (Điểm trung bình tổng lần thi theo đề) (Chưa test)
