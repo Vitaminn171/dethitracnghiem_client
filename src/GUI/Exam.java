@@ -190,6 +190,8 @@ public class Exam extends javax.swing.JFrame {
                             jsonResult.put("wrong", jsonExam.getInt("numOfQuiz") - correct);
                             long time = (jsonExam.getInt("limitTime") * 60000) - countdownStarter;
                             jsonResult.put("time", time);
+                            
+                            
                                     
                             new Result(jsonResult).setVisible(true);
                             jframe.dispose();

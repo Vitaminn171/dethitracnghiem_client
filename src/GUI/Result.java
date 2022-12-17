@@ -35,19 +35,13 @@ public class Result extends javax.swing.JFrame {
 
         jButton1.putClientProperty("JButton.buttonType", "roundRect");
         jButton1.putClientProperty("JButton.focusWidth", 1);
-        long milisec = jsonResult.getLong("time");
-        long minutes = (milisec / 1000) / 60;
-
-                // formula for conversion for
-                // milliseconds to seconds
-        long seconds = (milisec / 1000) % 60;
         
         
         jLabel_examinee_data.setText(jsonResult.getString("examinee"));
         jLabel_score_data.setText(String.valueOf(jsonResult.getDouble("score")));
         jLabel_correct_data.setText(String.valueOf(jsonResult.getInt("correct")));
         jLabel_wrong_data.setText(String.valueOf(jsonResult.getInt("wrong")));
-        jLabel_time_data.setText(String.valueOf(minutes + ":" +seconds));
+        //jLabel_time_data.setText(String.valueOf(minutes + ":" +seconds));
 
         LocalDate date = java.time.LocalDate.now();
         jsonResult.put("date", date.toString());
@@ -99,8 +93,6 @@ public class Result extends javax.swing.JFrame {
         jLabel_wrong_data = new javax.swing.JLabel();
         jLabel_rank_data = new javax.swing.JLabel();
         jLabel_rank = new javax.swing.JLabel();
-        jLabel_time = new javax.swing.JLabel();
-        jLabel_time_data = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -239,24 +231,6 @@ public class Result extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(18, 118, 0, 0);
         getContentPane().add(jLabel_rank, gridBagConstraints);
 
-        jLabel_time.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel_time.setText("Time:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 118, 0, 0);
-        getContentPane().add(jLabel_time, gridBagConstraints);
-
-        jLabel_time_data.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel_time_data.setText("time");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 16, 0, 119);
-        getContentPane().add(jLabel_time_data, gridBagConstraints);
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -288,8 +262,6 @@ public class Result extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_rank_data;
     private javax.swing.JLabel jLabel_score;
     private javax.swing.JLabel jLabel_score_data;
-    private javax.swing.JLabel jLabel_time;
-    private javax.swing.JLabel jLabel_time_data;
     private javax.swing.JLabel jLabel_wrong;
     private javax.swing.JLabel jLabel_wrong_data;
     // End of variables declaration//GEN-END:variables

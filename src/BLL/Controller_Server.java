@@ -351,14 +351,14 @@ public class Controller_Server {
                     json.put("rank", rank);
                     // json.put("time", rank);
 
-                    long milisec = json.getLong("time");
-                    long minutes = (milisec / 1000) / 60;
+                    /* long milisec = json.getLong("time");
+                    long minutes = (milisec / 1000) / 60; */
 
                     // formula for conversion for
                     // milliseconds to seconds
-                    long seconds = (milisec / 1000) % 60;
+                    //long seconds = (milisec / 1000) % 60;
                     json.remove("time");
-                    json.put("timeDoQuiz", String.valueOf(minutes + ":" + seconds));
+                    //json.put("timeDoQuiz", String.valueOf(minutes + ":" + seconds));
                 }
                 break;
             }

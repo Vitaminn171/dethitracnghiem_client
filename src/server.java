@@ -49,10 +49,10 @@ public class server {
     }
 
     public static void main(String[] args) throws IOException {
-        // server lấy local IP bằng cách tạo socket đến 1 website tạm
+        // Server lấy local IP bằng cách tạo socket đến 1 website tạm
         Socket socket = new Socket("thongtindaotao.sgu.edu.vn", 80);
         localIP = socket.getLocalAddress().toString().substring(1);
-        // SV tự generate API tại https://retool.com/api-generator/
+        // Generate API tại https://retool.com/api-generator/
         String api = "https://retoolapi.dev/FFY4oG/data/1"; // Ghi vào dòng 1 trong DB
         String jsonData = "{\"ip\":\"" + localIP + "\"}";
 
@@ -99,7 +99,6 @@ class serverToClient implements Runnable {
                 ClientHandler clientHandler = new ClientHandler(client);
                 clients.add(clientHandler);
                 pool.execute(clientHandler);
-                // server.close();
             } catch (IOException e) {
                 System.err.println(e);
             }
@@ -138,7 +137,6 @@ class server_command implements Runnable {
                 "3.block/unblock {UserID} : Block/Unblock all features on user with ID.",
                 "4.block/unblock [login/addexam/takeexam] {UserID} : Block/Unblock login/addexam/takeexam on user with ID.",
                 "5.exam [all/id] : show all exam/exam information."
-        // "5.server [close]: Close server."
         );
     }
 
@@ -148,10 +146,7 @@ class server_command implements Runnable {
         // Xuất số lượng người dùng
         show("Number of User: " + users.size());
 
-        /*
-         * Xuất danh sách người dùng
-         * 
-         */
+        //Xuất danh sách người dùng
         String[][] arr = new String[users.size()][9];
         int i = 0;
         for (UserDTO u : users) {
@@ -190,13 +185,6 @@ class server_command implements Runnable {
 
         String[] tableHeaders = {"ID", "Fullname", "Email", "Date of Birth", "Gender", "Log Status", "Account Status",
             "AddExam Status", "TakeExam Status"};
-
-        // for(int k=0;k<i;k++){
-        // for(int j = 0;j<6;j++){
-        // System.out.print(arr[k][j]+" ");
-        // }
-        // System.out.println();
-        // }
         ASCIITable.getInstance().printTable(tableHeaders, arr);
     }
 
@@ -206,10 +194,7 @@ class server_command implements Runnable {
         // Xuất số lượng người dùng
         show("Number of User: " + users.size());
 
-        /*
-         * Xuất danh sách người dùng
-         * 
-         */
+        //Xuất danh sách người dùng
         if (users.size() != 0) {
             String[][] arr = new String[users.size()][9];
             int i = 0;
@@ -249,12 +234,6 @@ class server_command implements Runnable {
 
             String[] tableHeaders = {"ID", "Fullname", "Email", "Date of Birth", "Gender", "Log Status", "Account Status", "AddExam Status", "TakeExam Status"};
 
-            // for(int k=0;k<i;k++){
-            // for(int j = 0;j<6;j++){
-            // System.out.print(arr[k][j]+" ");
-            // }
-            // System.out.println();
-            // }
             ASCIITable.getInstance().printTable(tableHeaders, arr);
         }
     }
@@ -265,11 +244,7 @@ class server_command implements Runnable {
         // Xuất số lượng đề thi
         show("Number of Exam: " + exams.size());
 
-        /*
-         * Xuất danh sách đề thi
-         * (ExamID,ExamTitle,Creator,SubjectID,NumofQuiz,LimitTime)
-         * 
-         */
+        //Xuất danh sách đề thi
         String[][] arr = new String[exams.size()][6];
         int i = 0;
         for (ExamDTO o : exams) {
@@ -284,12 +259,7 @@ class server_command implements Runnable {
         }
 
         String[] tableHeaders = {"ID", "Title", "Creator", "Subject", "Number of Quiz", "Limit time"};
-        // for(int k=0;k<i;k++){
-        // for(int j = 0;j<6;j++){
-        // System.out.print(arr[k][j]+" ");
-        // }
-        // System.out.println();
-        // }
+        
         ASCIITable.getInstance().printTable(tableHeaders, arr);
     }
 
@@ -316,7 +286,6 @@ class server_command implements Runnable {
                                     System.out.println("UserID is not exist!");
                                 }
                             } catch (Exception e) {
-                                // System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                                 System.out.println("Wrong command! Try 'block {UserID}' or 'block [login/addexam/takeexam] {UserID}.");
                             }
                             break;
@@ -334,7 +303,6 @@ class server_command implements Runnable {
                                             System.out.println("UserID is not exist!");
                                         }
                                     } catch (Exception e) {
-                                        // System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                                         System.out.println("Wrong command! Try 'block {UserID}' or 'block [login/addexam/takeexam] {UserID}.");
                                     }
                                     break;
@@ -350,7 +318,6 @@ class server_command implements Runnable {
                                             System.out.println("UserID is not exist!");
                                         }
                                     } catch (Exception e) {
-                                        // System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                                         System.out.println("Wrong command! Try 'block {UserID}' or 'block [login/addexam/takeexam] {UserID}.");
                                     }
                                     break;
@@ -366,7 +333,6 @@ class server_command implements Runnable {
                                             System.out.println("UserID is not exist!");
                                         }
                                     } catch (Exception e) {
-                                        // System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                                         System.out.println("Wrong command! Try 'block {UserID}' or 'block [login/addexam/takeexam] {UserID}.");
                                     }
                                     break;
@@ -396,7 +362,6 @@ class server_command implements Runnable {
                                     System.out.println("UserID is not exist!");
                                 }
                             } catch (Exception e) {
-                                // System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                                 System.out.println("Wrong command! Try 'unblock {UserID}' or 'unblock [login/addexam/takeexam] {UserID}.");
                             }
                             break;
@@ -414,7 +379,6 @@ class server_command implements Runnable {
                                             System.out.println("UserID is not exist!");
                                         }
                                     } catch (Exception e) {
-                                        // System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                                         System.out.println("Wrong command! Try 'unblock {UserID}' or 'unblock [login/addexam/takeexam] {UserID}.");
                                     }
                                     break;
@@ -430,7 +394,6 @@ class server_command implements Runnable {
                                             System.out.println("UserID is not exist!");
                                         }
                                     } catch (Exception e) {
-                                        // System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                                         System.out.println("Wrong command! Try 'unblock {UserID}' or 'unblock [login/addexam/takeexam] {UserID}.");
                                     }
                                     break;
@@ -447,7 +410,6 @@ class server_command implements Runnable {
                                             System.out.println("UserID is not exist!");
                                         }
                                     } catch (Exception e) {
-                                        // System.out.println("Wrong type of UserID! ID's type should be: Integer.");
                                         System.out.println("Wrong command! Try 'unblock {UserID}' or 'unblock [login/addexam/takeexam] {UserID}.");
                                     }
                                     break;
@@ -477,17 +439,6 @@ class server_command implements Runnable {
                                 }
                                 break;
                             }
-                            /*
-                             * case "close": {
-                             * System.out.println("Server is closing...");
-                             * try {
-                             * server.stopThread();
-                             * } catch (IOException ex) {
-                             * Logger.getLogger(server_command.class.getName()).log(Level.SEVERE, null, ex);
-                             * }
-                             * break;
-                             * }
-                             */
                             default: {
                                 System.out.println("Wrong command! Try 'server [show]'.");
                             }
@@ -553,24 +504,6 @@ class server_command implements Runnable {
                                 System.out.println("Wrong command! Try 'user [all/online]'.");
                             }
                         }
-                        // try {
-                        // int eid = Integer.parseInt(cmd[1]);
-                        // if(eBLL.getExamByID(eid)!= null) {
-                        // ExamDTO e=eBLL.getExamByID(eid);
-                        // show(
-                        // "Title: "+e.getTitle(),
-                        // "Creator: "+e.getFullname(),
-                        // "Subject: "+e.getSubjectname(),
-                        // "Highest Score: "+e.getHighest(),
-                        // "Lowest Score: "+e.getLowest(),
-                        // "Average Score: "+e.getAvg()
-                        // );
-                        // } else {
-                        // System.out.println("ExamID is not exist!");
-                        // }
-                        // } catch (Exception e) {
-                        // System.out.println("Wrong type of ExamID! ID's type should be: Integer.");
-                        // }
                     }
                     break;
                 }

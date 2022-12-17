@@ -7,9 +7,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-/**
- * Possible KEY_SIZE values are 128, 192 and 256 Possible T_LEN values are 128, 120, 112, 104 and 96 Possible KEY_SIZE values are 128, 192 and 256 Possible T_LEN values are 128, 120, 112, 104 and 96
- */
 public class AES {
 
     private SecretKey key;
@@ -34,7 +31,7 @@ public class AES {
 
     public static SecretKey StringtoSecretKey(String key){//chuyển chuỗi khóa về dạng object SecretKey(khóa bí mật của AES)
         byte[] decodedKey = Base64.getDecoder().decode(key);
-// rebuild key using SecretKeySpec
+        // rebuild key using SecretKeySpec
         SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
         return originalKey;// trả về đối tượng là SecretKey
     }
