@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Random;
 import DTO.UserDTO;
 
 public class UserDAL extends MyDatabaseManager {
@@ -14,6 +13,7 @@ public class UserDAL extends MyDatabaseManager {
         UserDAL.connectDB();
     }
 
+    // Lấy danh sách người dùng
     public ArrayList readUser() throws SQLException {
         String query = "SELECT * FROM user";
         ResultSet rs = UserDAL.doReadQuery(query);
@@ -37,6 +37,7 @@ public class UserDAL extends MyDatabaseManager {
         return list;
     }
 
+    // Lấy danh sách người dùng đang online
     public ArrayList readOnlineUser() throws SQLException {
         String query = "SELECT * FROM user WHERE LogStatus = 1";
         ResultSet rs = UserDAL.doReadQuery(query);
@@ -60,11 +61,13 @@ public class UserDAL extends MyDatabaseManager {
         return list;
     }
 
+    // Lấy thông tin người dùng theo userID
     public UserDTO getUserByID(int UserID) throws SQLException {
         String query = "SELECT * FROM user WHERE UserID = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setInt(1, UserID);
         ResultSet rs = p.executeQuery();
+
         if (rs.next()) {
             UserDTO u = new UserDTO();
             u.setUserID(rs.getInt("UserID"));
@@ -81,7 +84,7 @@ public class UserDAL extends MyDatabaseManager {
         return null;
     }
 
-    //update 16/12 by Quoc An
+    // Lấy thông tin người dùng theo Username (email)
     public UserDTO getUserByUsername(String Username) throws SQLException {
         String query = "SELECT * FROM user WHERE Username = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
@@ -89,7 +92,6 @@ public class UserDAL extends MyDatabaseManager {
         ResultSet rs = p.executeQuery();
         UserDTO u = new UserDTO();
         if (rs.next()) {
-
             u.setUserID(rs.getInt("UserID"));
             u.setUsername(rs.getString("Username"));
             u.setFullname(rs.getString("Fullname"));
@@ -99,8 +101,8 @@ public class UserDAL extends MyDatabaseManager {
         }
         return null;
     }
-    //update 16/12 by Quoc An
 
+    // Lấy thông tin người dùng khi đăng nhập
     public UserDTO getUser(String Username, String Password) throws SQLException {
         String query = "SELECT * FROM user WHERE Username = ? AND Password = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
@@ -108,6 +110,7 @@ public class UserDAL extends MyDatabaseManager {
         p.setString(2, Password);
         ResultSet rs = p.executeQuery();
         UserDTO u = new UserDTO();
+
         if (rs.next()) {
             u.setUserID(rs.getInt("UserID"));
             u.setUsername(rs.getString("Username"));
@@ -120,6 +123,7 @@ public class UserDAL extends MyDatabaseManager {
         return null;
     }
 
+    // Lưu thông tin đăng ký
     public int insertUser(String Username, String Password, String Fullname, boolean Gender, String Birth)
             throws SQLException {
         String query = "INSERT INTO user (Username, Password, Fullname, Gender, Birth) VALUES (?, ?, ?, ? ,?)";
@@ -133,6 +137,7 @@ public class UserDAL extends MyDatabaseManager {
         return result;
     }
 
+    // Thay đổi thông tin cá nhân
     public int updateUser(String Username, String Fullname, boolean Gender, String Birth) throws SQLException {
         String query = "UPDATE user SET Fullname = ? , Gender = ?, Birth = ? WHERE Username = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
@@ -144,12 +149,14 @@ public class UserDAL extends MyDatabaseManager {
         return result;
     }
 
+    // Lấy trạng thái block của người dùng
     public UserDTO getBlockStatus(String Username) throws SQLException {
         String query = "SELECT UserID, BlockAddExam, BlockTakeExam FROM user WHERE Username = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
         p.setString(1, Username);
         ResultSet rs = p.executeQuery();
         UserDTO u = new UserDTO();
+
         if (rs.next()) {
             u.setUserID(rs.getInt("UserID"));
             u.setBlockAddExam(rs.getBoolean("BlockAddExam"));
@@ -159,6 +166,7 @@ public class UserDAL extends MyDatabaseManager {
         return null;
     }
 
+    // Server chặn đăng nhập
     public int blockLogin(int UserID, boolean block) throws SQLException {
         String query = "UPDATE user SET BlockLogin = ? WHERE UserID = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
@@ -168,6 +176,7 @@ public class UserDAL extends MyDatabaseManager {
         return result;
     }
 
+    // Server chặn người dùng thêm đề thi
     public int blockAddExam(int UserID, boolean block) throws SQLException {
         String query = "UPDATE user SET BlockAddExam = ? WHERE UserID = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
@@ -177,6 +186,7 @@ public class UserDAL extends MyDatabaseManager {
         return result;
     }
 
+    // Server chặn người dùng thi 
     public int blockTakeExam(int UserID, boolean block) throws SQLException {
         String query = "UPDATE user SET BlockTakeExam = ? WHERE UserID = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
@@ -186,6 +196,7 @@ public class UserDAL extends MyDatabaseManager {
         return result;
     }
 
+    // Lấy số lượng người dùng (tất cả hoặc online)
     public int getNumberOfUser(String str) throws SQLException {
         String query;
         if (str.equals("online")) {
@@ -199,6 +210,7 @@ public class UserDAL extends MyDatabaseManager {
         return count;
     }
 
+    // Thay đổi mật khẩu
     public int changePassword(String Username, String Password) throws SQLException {
         String query = "UPDATE user SET Password = ? WHERE Username = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
@@ -208,6 +220,7 @@ public class UserDAL extends MyDatabaseManager {
         return result;
     }
 
+    // Đăng nhập
     public int Logon(int UserID) throws SQLException {
         String query = "UPDATE user SET LogStatus = 1 WHERE UserID = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);
@@ -216,6 +229,7 @@ public class UserDAL extends MyDatabaseManager {
         return result;
     }
 
+    // Đăng xuất
     public int Logout(int UserID) throws SQLException {
         String query = "UPDATE user SET LogStatus = 0 WHERE UserID = ?";
         PreparedStatement p = UserDAL.getConnection().prepareStatement(query);

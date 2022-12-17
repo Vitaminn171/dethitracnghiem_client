@@ -12,6 +12,7 @@ public class SubjectDAL extends MyDatabaseManager {
         SubjectDAL.connectDB();
     }
 
+    // Lấy danh sách môn
     public ArrayList readSubject() throws SQLException {
         String query = "SELECT * FROM subject";
         ResultSet rs = UserDAL.doReadQuery(query);
@@ -28,12 +29,14 @@ public class SubjectDAL extends MyDatabaseManager {
         return list;
     }
     
+    // Lấy thông tin môn theo mã môn
     public SubjectDTO getSubjectByID(int SubID) throws SQLException {
         String query = "SELECT * FROM subject WHERE SubjectID = ?";
         PreparedStatement p = SubjectDAL.getConnection().prepareStatement(query);
         p.setInt(1, SubID);
         ResultSet rs = p.executeQuery();
         SubjectDTO s = null;
+        
         if (rs != null) {
             s= new SubjectDTO();
             while (rs.next()) {

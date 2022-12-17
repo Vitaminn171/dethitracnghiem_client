@@ -24,13 +24,6 @@ public class UserBLL {
         return list;
     }
 
-    /*
-     * public List findUser(String str) throws SQLException {
-     * List list = new ArrayList();
-     * list = uDAL.findUser(str);
-     * return list;
-     * }
-     */
     public int insertUser(String Username, String Password, String Fullname, boolean Gender, String Birth)
             throws SQLException {
         int result = uDAL.insertUser(Username, Password, Fullname, Gender, Birth);

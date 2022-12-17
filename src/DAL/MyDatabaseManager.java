@@ -14,7 +14,6 @@ public class MyDatabaseManager {
     
     private static String host, port, dbName, dbUser, dbPassword;
     
-    
     public static void connectDB()
     {
         host = "localhost";
@@ -27,16 +26,14 @@ public class MyDatabaseManager {
         try {
             c = (Connection) DriverManager.getConnection(dbPath, dbUser, dbPassword);
             s = c.createStatement();
-            
-//            System.out.println("Connected");
         } catch (SQLException ex) {
             System.out.print(ex.getMessage());
         }
     }
-    public static Connection getConnection()
-    {
+    public static Connection getConnection(){
         return c;
     }
+    
     //run sql
     public static ResultSet doReadQuery(String sql) {
         ResultSet rs = null;
@@ -49,8 +46,6 @@ public class MyDatabaseManager {
         }
         return rs;
     }
-
-    
 
     //test connection
     public static void main(String[] args) {

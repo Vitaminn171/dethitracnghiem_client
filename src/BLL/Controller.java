@@ -1,13 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BLL;
 
 import DTO.UserDTO;
 import GUI.Login;
 import com.google.gson.Gson;
-import java.awt.Container;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -35,10 +30,6 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-/**
- *
- * @author Quoc An
- */
 public class Controller {
 
     public static Socket socket = null;
@@ -51,14 +42,14 @@ public class Controller {
             = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private static SecretKey key;
     public static final Pattern VALID_PASSWORD_REGEX = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$");
-    //^                                   # start of line
+    //  ^                                 # start of line
     //  (?=.*[0-9])                       # positive lookahead, digit [0-9]
     //  (?=.*[a-z])                       # positive lookahead, one lowercase character [a-z]
     //  (?=.*[A-Z])                       # positive lookahead, one uppercase character [A-Z]
     //  (?=.*[!@#&()–[{}]:;',?/*~$^+=<>]) # positive lookahead, one of the special character in this [..]
     //  .                                 # matches anything
     //  {8,20}                            # length at least 8 characters and maximum of 20 characters
-    //$                                   # end of line
+    //  $                                 # end of line
 
     public static final Pattern VALID_OTP_REGEX = Pattern.compile("^[0-9]{1,6}$");
 
@@ -80,39 +71,35 @@ public class Controller {
     private static byte[] decode(String data) {
         return Base64.getDecoder().decode(data);
     }
-    
-    private static void sendKey() throws IOException, Exception{
-        while(true) {
-            
+
+    private static void sendKey() throws IOException, Exception {
+        while (true) {
+
             String line = in.readLine();
-            if(line!=null){
-//                System.out.println(line);
+            if (line != null) {
                 AES aes = new AES();
                 aes.init();
-//                System.out.println(aes.getSecretKey());
                 String key_send = aes.getSecretKey();
                 RSA rsa = new RSA();
-                X509EncodedKeySpec spec= new X509EncodedKeySpec(decode(line));
+                X509EncodedKeySpec spec = new X509EncodedKeySpec(decode(line));
                 KeyFactory kf = KeyFactory.getInstance("RSA");
                 PublicKey publicKey = kf.generatePublic(spec);
-                String data =rsa.Encrpytion(key_send, publicKey);
+                String data = rsa.Encrpytion(key_send, publicKey);
                 key = AES.StringtoSecretKey(key_send);
-//                System.out.println("Key :"+key);
-//                System.out.println("En :"+aes.encrypt("Huỳnh Hoàng Huy", aes.getSKey()));
                 out.write(data);
                 out.newLine();
                 out.flush();
-                
+
                 return;
             }
-               
+
         }
-        
+
     }
-    
+
     public static void startConnectToServer() throws Exception {
         try {
-            //TODO: use api to auto get ip from server
+            // TODO: use api to auto get ip from server
             // Lên trang mà server để local ip để lấy về
             Document doc = Jsoup.connect("https://retoolapi.dev/FFY4oG/data/1")
                     .ignoreContentType(true).ignoreHttpErrors(true)
@@ -129,7 +116,6 @@ public class Controller {
             new Login().setVisible(true);
         } catch (UnknownHostException e) {
             e.printStackTrace();
-
         } catch (IOException e) {
             System.out.println("Server not available!");
 
@@ -138,7 +124,6 @@ public class Controller {
 
     public static void closeConnectToServer() throws IOException {
         //close
-
         in.close();
         out.close();
         socket.close();
@@ -161,7 +146,6 @@ public class Controller {
     }
 
     public String generateOTP() {
-
         // Using numeric values
         String numbers = "0123456789";
 
@@ -178,4 +162,3 @@ public class Controller {
         return String.valueOf(otp);
     }
 }
-

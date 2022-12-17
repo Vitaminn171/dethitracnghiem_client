@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package GUI;
 
 import BLL.Controller;
@@ -10,7 +6,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -22,14 +17,9 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.json.JSONObject;
 
-/**
- *
- * @author Quoc An
- */
 public class UserInformation extends javax.swing.JPanel {
 
     JSONObject json = new JSONObject();
@@ -317,7 +307,6 @@ public class UserInformation extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_changePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_changePassActionPerformed
-        // TODO add your handling code here:
         Window window = SwingUtilities.getWindowAncestor(this);
         window.dispose();
         this.setVisible(false);
@@ -348,13 +337,10 @@ public class UserInformation extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton_logoutActionPerformed
 
     private void jButton_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_editActionPerformed
-        // TODO add your handling code here:
         Window window = SwingUtilities.getWindowAncestor(this);
         window.dispose();
         this.setVisible(false);
-
     }//GEN-LAST:event_jButton_editActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_changePass;

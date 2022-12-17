@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package GUI;
 
 import BLL.Controller;
@@ -14,8 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -24,15 +18,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
 
-/**
- *
- * @author Quoc An
- */
 public class Signup extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Signup
-     */
     ButtonGroup G;
     public boolean flag = false;
 
@@ -198,11 +185,6 @@ public class Signup extends javax.swing.JFrame {
         jXDatePicker1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jXDatePicker1.setMinimumSize(new java.awt.Dimension(120, 40));
         jXDatePicker1.setPreferredSize(new java.awt.Dimension(250, 40));
-        jXDatePicker1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXDatePicker1ActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -318,7 +300,6 @@ public class Signup extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_cancelActionPerformed
 
     private void jButton_signupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_signupActionPerformed
-        // TODO add your handling code here:
         String username = jFormattedTextField_username.getText();
         String fullname = jFormattedTextField_fullname.getText();
         String pass = String.valueOf(jPasswordField_password.getPassword());
@@ -332,8 +313,8 @@ public class Signup extends javax.swing.JFrame {
         checkValidate(username, pass, fullname, birthDate, gender);
     }//GEN-LAST:event_jButton_signupActionPerformed
 
+    // Hiện / ẩn mật khẩu
     private void jButton_eyeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_eyeActionPerformed
-        // TODO add your handling code here:
         if (!flag) {
             jPasswordField_password.setEchoChar((char) 0);
             flag = true;
@@ -342,10 +323,6 @@ public class Signup extends javax.swing.JFrame {
             flag = false;
         }
     }//GEN-LAST:event_jButton_eyeActionPerformed
-
-    private void jXDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jXDatePicker1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -359,11 +336,11 @@ public class Signup extends javax.swing.JFrame {
         });
     }
 
+    // Kiểm tra thông tin đăng ký
     private void checkValidate(String username, String password, String fullname, Date birthDate, boolean gender) {
         try {
-
             SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = formater.format(jXDatePicker1.getDate());//get string date 
+            String dateString = formater.format(jXDatePicker1.getDate()); //get string date 
 
             if (fullname.length() != 0
                     || username.length() != 0
@@ -381,7 +358,7 @@ public class Signup extends javax.swing.JFrame {
                 if (!birthDate.before(currentDate)) {
                     JOptionPane.showMessageDialog(this, "Birthday must before " + dateString + "(today)!");
                 } else {
-                    String hashPass = MD5.getMd5(password);//hash md5 for password
+                    String hashPass = MD5.getMd5(password); //hash md5 for password
 
                     JSONObject jsonSend = new JSONObject();
                     jsonSend.put("username", username);
@@ -406,6 +383,7 @@ public class Signup extends javax.swing.JFrame {
         }
     }
 
+    // Gửi thông tin đăng ký sang server
     public void Signup(String data, Controller controller) throws Exception {
         try {
             String dataReceive = controller.SendReceiveData(data);

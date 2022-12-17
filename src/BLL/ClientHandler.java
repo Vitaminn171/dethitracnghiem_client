@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package BLL;
 
 import java.io.BufferedReader;
@@ -11,21 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.sql.SQLException;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.SecretKey;
 import org.json.JSONObject;
 
-
-/**
- *
- * @author thieu
- */
 public class ClientHandler implements Runnable{
     public Socket client ;
     private BufferedReader in;
@@ -57,8 +43,6 @@ public class ClientHandler implements Runnable{
         out.flush();
 
         key = AES.StringtoSecretKey(rsa.Descrpytion(in.readLine(), privateKey));
-//        System.out.println("Key: "+key);
-//        System.out.println("De :"+ new AES().decrypt("Kpj9hl1QWkedCS2XeZdB6NCBY0cJiosm+5G8I0nSUog="));
     }
     
     @Override
@@ -94,6 +78,4 @@ public class ClientHandler implements Runnable{
             System.err.println(e);
         } 
     }
-    
-    
 }

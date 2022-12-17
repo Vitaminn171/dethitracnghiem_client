@@ -13,12 +13,10 @@ public class ExamQuestionBLL {
         eqDAL = new ExamQuestionDAL();
     }
     
-    //update 16/12 by Quoc An
     public List getExamQuestion(int examID) throws SQLException{
         ArrayList list = eqDAL.readExamQ(examID);
         return list;
     }
-    //update 16/12 by Quoc An
     
     public ExamQuestionDTO getExamQuestion(int examID, int num) throws SQLException{
         ExamQuestionDTO eq = eqDAL.readExam(examID,num);
@@ -38,11 +36,6 @@ public class ExamQuestionBLL {
         int result = eqDAL.updateQ(eq);
         return result;
     }
-    
-    /* public ExamQuestionDTO getExam(int ExamID) throws SQLException {
-        ExamQuestionDTO eq = eqDAL.getExam(ExamID);
-        return eq;
-    } */
 
     public int deleteQ(int ExamID, int number) throws SQLException {
         int result = eqDAL.deleteQ(ExamID, number);

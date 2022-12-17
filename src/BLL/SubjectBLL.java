@@ -19,7 +19,6 @@ public class SubjectBLL {
     }
     
     public SubjectDTO getSubjectByID(int ID) throws SQLException {
-        
         return new SubjectDAL().getSubjectByID(ID);
     }
 }

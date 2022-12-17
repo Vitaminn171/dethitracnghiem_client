@@ -5,34 +5,13 @@ import DTO.ExamQuestionDTO;
 import DTO.ResultDTO;
 import DTO.SubjectDTO;
 import DTO.UserDTO;
-import GUI.Login;
-import com.google.gson.Gson;
-import java.awt.Container;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.security.Key;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 public class Controller_Server {
 
@@ -317,14 +296,9 @@ public class Controller_Server {
             }
 
             case "receiveAnswer" -> {
-
                 ExamQuestionDTO eq = examQuestionBLL.getExamAnswer(json.getInt("examID"), json.getInt("number"));
-
                 int correct = checkAnswer(eq.getAnswer(), json.getString("answer"), json.getInt("correct"));
-                // int score = correct * (10 / (jsonSend.getInt("numOfQuiz")));
                 json.put("correct", correct);
-                // json.put("score", score);
-
                 break;
             }
 
@@ -349,16 +323,7 @@ public class Controller_Server {
                     int rank = rBLL.getRank(json.getInt("examID"), json.getString("examinee"), json.getString("date"));
                     json.put("status", true);
                     json.put("rank", rank);
-                    // json.put("time", rank);
-
-                    /* long milisec = json.getLong("time");
-                    long minutes = (milisec / 1000) / 60; */
-
-                    // formula for conversion for
-                    // milliseconds to seconds
-                    //long seconds = (milisec / 1000) % 60;
                     json.remove("time");
-                    //json.put("timeDoQuiz", String.valueOf(minutes + ":" + seconds));
                 }
                 break;
             }

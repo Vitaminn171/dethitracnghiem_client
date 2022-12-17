@@ -8,15 +8,15 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.util.StreamProvider;
 import java.util.Properties;
 
 public class SendMail {
 
     public static void SendOTP(String email,String OTP) {
 
-        final String username = "huynhcamco42@gmail.com";
-        final String password = "trxatvmaclkdvwzb";
+        //username là gmail dùng để tạo app password, password được generate sau khi tạo app password
+        final String username = "";
+        final String password = "";
 
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");

@@ -35,12 +35,6 @@ public class ExamBLL {
         return list;
     }
 
-    public List findExam(String str) throws SQLException {
-        List list = new ArrayList();
-        list = eDAL.findExam(str);
-        return list;
-    }
-
     public int insertExam(String ExamTitle, int Creator, int SubjectID, int NumOfQuiz, int LimitTime) throws SQLException {
         int result = eDAL.insertExam(ExamTitle, Creator, SubjectID, NumOfQuiz, LimitTime);
         return result;
@@ -60,9 +54,5 @@ public class ExamBLL {
     public int deleteExam(int ExamID) throws SQLException {
         int result = eDAL.deleteExam(ExamID);
         return result;
-    }
-
-    public int getNumberOfExam() throws SQLException {
-        return eDAL.getNumberOfExam();
     }
 }
