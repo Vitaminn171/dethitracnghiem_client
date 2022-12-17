@@ -209,7 +209,8 @@ public class Controller_Server {
             }
 
             case "addExam" -> {
-                int result = eBLL.insertExam(json.getString("examTitle"), json.getInt("creator"), json.getInt("subjectID"), json.getInt("numOfQuiz"), json.getInt("limitTime"));
+                int result = eBLL.insertExam(json.getString("examTitle"), json.getInt("creator"),
+                        json.getInt("subjectID"), json.getInt("numOfQuiz"), json.getInt("limitTime"));
                 if (result == 0) {
                     json.put("status", false);
                     json.put("message", "add exam fail!");
@@ -218,7 +219,8 @@ public class Controller_Server {
 
                     for (int i = 0; i < questionlist.length(); i++) {
                         JSONObject jQuestion = questionlist.getJSONObject(i);
-                        if (examQuestionBLL.insertQ(result, jQuestion.getInt("number"), jQuestion.getString("question"), jQuestion.getString("choice1"), jQuestion.getString("choice2"),
+                        if (examQuestionBLL.insertQ(result, jQuestion.getInt("number"), jQuestion.getString("question"),
+                                jQuestion.getString("choice1"), jQuestion.getString("choice2"),
                                 jQuestion.getString("choice3"), jQuestion.getString("choice4")) == 0) {
                             json.put("status", false);
                             json.put("message", "error when adding" + jQuestion.getInt("number"));
@@ -232,13 +234,29 @@ public class Controller_Server {
             }
 
             case "editExam" -> {
-                if (eBLL.updateExam(json.getInt("examID"), json.getString("examTitle"), json.getInt("subjectID"),
-                        json.getInt("numOfQuiz"), json.getInt("limitTime")) == 0) {
+                int examID = json.getInt("examID");
+                if (eBLL.updateExam(examID, json.getString("examTitle"), json.getInt("subjectID"),
+                        json.getInt("limitTime")) == 0) {
                     json.put("status", false);
-                    json.put("message", "Cập nhật đề thi thất bại!");
+                    json.put("message", "update exam fail!");
+                } else if (examQuestionBLL.deleteAllQ(examID) == 0) {
+                    json.put("status", false);
+                    json.put("message", "delete all question fail!");
                 } else {
-                    json.put("status", true);
-                    json.put("message", "Cập nhật đề thi thành công!");
+                    JSONArray questionlist = json.getJSONArray("questionlist");
+                    for (int i = 0; i < questionlist.length(); i++) {
+                        JSONObject jQuestion = questionlist.getJSONObject(i);
+                        if (examQuestionBLL.insertQ(examID, jQuestion.getInt("number"),
+                                jQuestion.getString("question"), jQuestion.getString("choice1"),
+                                jQuestion.getString("choice2"),
+                                jQuestion.getString("choice3"), jQuestion.getString("choice4")) == 0) {
+                            json.put("status", false);
+                            json.put("message", "error when updating" + jQuestion.getInt("number"));
+                            break;
+                        } else {
+                            json.put("status", true);
+                        }
+                    }
                 }
                 break;
             }
@@ -331,7 +349,7 @@ public class Controller_Server {
                     int rank = rBLL.getRank(json.getInt("examID"), json.getString("examinee"), json.getString("date"));
                     json.put("status", true);
                     json.put("rank", rank);
-                    //json.put("time", rank);
+                    // json.put("time", rank);
 
                     long milisec = json.getLong("time");
                     long minutes = (milisec / 1000) / 60;
@@ -356,8 +374,7 @@ public class Controller_Server {
                             .put("score", resultDTO.getScore())
                             .put("correct", resultDTO.getCorrectQuiz())
                             .put("wrong", resultDTO.getWrongQuiz())
-                            .put("date", resultDTO.getDate())
-                    );
+                            .put("date", resultDTO.getDate()));
                 }
                 json.put("data", examlist);
                 break;

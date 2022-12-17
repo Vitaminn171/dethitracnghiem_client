@@ -50,8 +50,6 @@ public class AddExam extends javax.swing.JFrame {
 
         jFormattedTextField_examTitle.putClientProperty("JComponent.roundRect", true);
 
-        jFormattedTextField_numOfQuiz.putClientProperty("JComponent.roundRect", true);
-
         jFormattedTextField_limitTime.putClientProperty("JComponent.roundRect", true);
 
         Controller controller = new Controller();
@@ -103,7 +101,6 @@ public class AddExam extends javax.swing.JFrame {
                     } catch (Exception ex) {
                         Logger.getLogger(AddExam.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 }
             }
         });
@@ -126,8 +123,6 @@ public class AddExam extends javax.swing.JFrame {
         jFormattedTextField_examTitle = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
         jComboBox_subject = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        jFormattedTextField_numOfQuiz = new javax.swing.JFormattedTextField();
         jLabel4 = new javax.swing.JLabel();
         jFormattedTextField_limitTime = new javax.swing.JFormattedTextField();
         jButton_file = new javax.swing.JButton();
@@ -180,18 +175,6 @@ public class AddExam extends javax.swing.JFrame {
         jComboBox_subject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jComboBox_subject.setModel(new javax.swing.DefaultComboBoxModel<>());
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jLabel3.setText("Question Amount");
-
-        jFormattedTextField_numOfQuiz.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jFormattedTextField_numOfQuiz.setMinimumSize(new java.awt.Dimension(120, 40));
-        jFormattedTextField_numOfQuiz.setPreferredSize(new java.awt.Dimension(250, 40));
-        jFormattedTextField_numOfQuiz.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField_numOfQuizActionPerformed(evt);
-            }
-        });
-
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel4.setText("Time Limit");
 
@@ -223,10 +206,8 @@ public class AddExam extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jFormattedTextField_examTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
                         .addComponent(jComboBox_subject, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jFormattedTextField_numOfQuiz, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jFormattedTextField_limitTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel2)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -253,11 +234,7 @@ public class AddExam extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(8, 8, 8)
                 .addComponent(jComboBox_subject, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jFormattedTextField_numOfQuiz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jFormattedTextField_limitTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -269,7 +246,7 @@ public class AddExam extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_submit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(171, 171, 171))
+                .addGap(251, 251, 251))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -280,7 +257,7 @@ public class AddExam extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -294,10 +271,6 @@ public class AddExam extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton_cancelActionPerformed
 
-    private void jFormattedTextField_numOfQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField_numOfQuizActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField_numOfQuizActionPerformed
-
     private void jButton_fileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_fileActionPerformed
         JFileChooser fc = new JFileChooser();
         File f;
@@ -309,6 +282,7 @@ public class AddExam extends javax.swing.JFrame {
     private void disposeFrame(){
         this.dispose();
     }
+    
     private JSONArray readExcel() {
         JSONArray arrQuestion = new JSONArray();
         try {
@@ -362,10 +336,8 @@ public class AddExam extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox_subject;
     private javax.swing.JFormattedTextField jFormattedTextField_examTitle;
     private javax.swing.JFormattedTextField jFormattedTextField_limitTime;
-    private javax.swing.JFormattedTextField jFormattedTextField_numOfQuiz;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

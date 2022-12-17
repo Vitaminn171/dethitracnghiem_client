@@ -10,11 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +25,10 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -33,6 +39,7 @@ import org.json.JSONObject;
 public class EditExam extends javax.swing.JFrame {
 
     String path = "";
+
     public EditExam(JSONObject json) {
 
         initComponents();
@@ -42,9 +49,6 @@ public class EditExam extends javax.swing.JFrame {
 
         jFormattedTextField_examTitle.putClientProperty("JComponent.roundRect", true);
         jFormattedTextField_examTitle.setText(json.getString("examTitle"));
-
-        jFormattedTextField_numOfQuiz.putClientProperty("JComponent.roundRect", true);
-        jFormattedTextField_numOfQuiz.setText(json.getString("numOfQuiz"));
 
         jFormattedTextField_limitTime.putClientProperty("JComponent.roundRect", true);
         jFormattedTextField_limitTime.setText(json.getString("limitTime"));
@@ -72,29 +76,24 @@ public class EditExam extends javax.swing.JFrame {
         jButton_submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String examTitle = jFormattedTextField_examTitle.getText();
-                String numOfQuiz = jFormattedTextField_numOfQuiz.getText();
                 String limitTime = jFormattedTextField_limitTime.getText();
                 int subjectID = jComboBox_subject.getSelectedIndex() + 1;
-                if (examTitle.length() == 0
-                        || numOfQuiz.length() == 0
-                        || limitTime.length() == 0) {
-
+                if (examTitle.length() == 0 || limitTime.length() == 0) {
+                    JOptionPane.showMessageDialog(null, "Do not leave blank fields!");
                 } else {
-
                     JSONObject jsonSend = new JSONObject();
                     jsonSend.put("examID", json.getInt("examID"));
+                    jsonSend.put("questionlist", readExcel());
                     jsonSend.put("examTitle", examTitle);
                     jsonSend.put("subjectID", subjectID);
-                    jsonSend.put("numOfQuiz", numOfQuiz);
                     jsonSend.put("limitTime", limitTime);
                     jsonSend.put("func", "editExam");
                     try {
                         String response = controller.SendReceiveData(jsonSend.toString());
                         JSONObject jResponse = new JSONObject(response);
                         if (jResponse.getBoolean("status")) {
-                            JOptionPane.showMessageDialog(null, jResponse.getString("message"));
-                            //this.dispose();
-
+                            JOptionPane.showMessageDialog(null, "Sửa đề thi thành công!");
+                            disposeFrame();
                         } else {
                             JOptionPane.showMessageDialog(null, jResponse.getString("message"));
                         }
@@ -106,6 +105,54 @@ public class EditExam extends javax.swing.JFrame {
             }
         });
 
+    }
+
+    private void disposeFrame() {
+        this.dispose();
+    }
+
+    private JSONArray readExcel() {
+        JSONArray arrQuestion = new JSONArray();
+        try {
+            File file = new File(path);
+            FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
+            //creating Workbook instance that refers to .xlsx file  
+            XSSFWorkbook wb = new XSSFWorkbook(fis);
+            XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object  
+            Iterator<Row> itr = sheet.iterator();    //iterating over excel file
+            String[] questions = new String[7];
+//            numOfQuiz = sheet.getPhysicalNumberOfRows();
+            int count;
+            while (itr.hasNext()) {
+                Row row = itr.next();
+                count = 0;
+                Iterator<Cell> cellIterator = row.cellIterator();   //iterating over each column  
+                while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next();
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_STRING:    //field that represents string cell type 
+                            questions[count++] = cell.getStringCellValue();
+//                                        System.out.print(cell.getStringCellValue() + "\t\t\t");
+                            break;
+                        case Cell.CELL_TYPE_NUMERIC:    //field that represents number cell type
+                            questions[count++] = String.valueOf((int) cell.getNumericCellValue());
+//                                        System.out.print(cell.getNumericCellValue() + "\t\t\t");
+                            break;
+                        default:
+                    }
+                }
+                arrQuestion.put(new JSONObject().put("number", Integer.parseInt(questions[0]))
+                        .put("question", questions[1])
+                        .put("choice1", questions[2])
+                        .put("choice2", questions[3])
+                        .put("choice3", questions[4])
+                        .put("choice4", questions[5]));
+                System.out.println("line" + row.getRowNum());
+            }
+        } catch (IOException x) {
+            x.printStackTrace();
+        }
+        return arrQuestion;
     }
 
     /**
@@ -125,12 +172,10 @@ public class EditExam extends javax.swing.JFrame {
         jFormattedTextField_examTitle = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
         jComboBox_subject = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        jFormattedTextField_numOfQuiz = new javax.swing.JFormattedTextField();
-        jLabel4 = new javax.swing.JLabel();
         jFormattedTextField_limitTime = new javax.swing.JFormattedTextField();
         jButton_file = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -179,21 +224,6 @@ public class EditExam extends javax.swing.JFrame {
         jComboBox_subject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jComboBox_subject.setModel(new javax.swing.DefaultComboBoxModel<>());
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jLabel3.setText("Question Amount");
-
-        jFormattedTextField_numOfQuiz.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jFormattedTextField_numOfQuiz.setMinimumSize(new java.awt.Dimension(120, 40));
-        jFormattedTextField_numOfQuiz.setPreferredSize(new java.awt.Dimension(250, 40));
-        jFormattedTextField_numOfQuiz.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField_numOfQuizActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jLabel4.setText("Time Limit");
-
         jFormattedTextField_limitTime.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jFormattedTextField_limitTime.setMinimumSize(new java.awt.Dimension(120, 40));
         jFormattedTextField_limitTime.setPreferredSize(new java.awt.Dimension(250, 40));
@@ -208,80 +238,63 @@ public class EditExam extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel6.setText("NHÓM CÂU HỎI");
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel7.setText("Time Limit");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(54, 54, 54)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
+                        .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton_file, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton_submit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(114, 114, 114)
-                                .addComponent(jButton_cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(67, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(62, 62, 62)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(6, 6, 6)
-                            .addComponent(jLabel2))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jFormattedTextField_examTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jFormattedTextField_limitTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jComboBox_subject, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jFormattedTextField_numOfQuiz, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addContainerGap(878, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jButton_submit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton_cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jFormattedTextField_limitTime, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel5)
+                            .addComponent(jFormattedTextField_examTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox_subject, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(130, 130, 130)
+                .addGap(49, 49, 49)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 361, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jFormattedTextField_examTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox_subject, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jFormattedTextField_limitTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jButton_file, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_submit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(71, 71, 71))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(192, 192, 192)
-                    .addComponent(jLabel2)
-                    .addGap(5, 5, 5)
-                    .addComponent(jFormattedTextField_examTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(14, 14, 14)
-                    .addComponent(jLabel5)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jComboBox_subject, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jLabel3)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jFormattedTextField_numOfQuiz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(13, 13, 13)
-                    .addComponent(jLabel4)
-                    .addGap(5, 5, 5)
-                    .addComponent(jFormattedTextField_limitTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(192, Short.MAX_VALUE)))
+                .addGap(262, 262, 262))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -292,7 +305,7 @@ public class EditExam extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -306,10 +319,6 @@ public class EditExam extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton_cancelActionPerformed
-
-    private void jFormattedTextField_numOfQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField_numOfQuizActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField_numOfQuizActionPerformed
 
     private void jButton_fileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_fileActionPerformed
         JFileChooser fc = new JFileChooser();
@@ -329,13 +338,11 @@ public class EditExam extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox_subject;
     private javax.swing.JFormattedTextField jFormattedTextField_examTitle;
     private javax.swing.JFormattedTextField jFormattedTextField_limitTime;
-    private javax.swing.JFormattedTextField jFormattedTextField_numOfQuiz;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 

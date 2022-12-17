@@ -87,15 +87,14 @@ public class ExamDAL extends MyDatabaseManager {
         return 0;
     }
 
-    public int updateExam(int ExamID, String ExamTitle, int SubjectID, int NumOfQuiz, int LimitTime)
+    public int updateExam(int ExamID, String ExamTitle, int SubjectID, int LimitTime)
             throws SQLException {
-        String query = "UPDATE exam SET ExamTitle = ?, SubjectID = ? , NumOfQuiz = ?, LimitTime = ? WHERE ExamID = ?";
+        String query = "UPDATE exam SET ExamTitle = ?, SubjectID = ?, LimitTime = ? WHERE ExamID = ?";
         PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
         p.setString(1, ExamTitle);
         p.setInt(2, SubjectID);
-        p.setInt(3, NumOfQuiz);
-        p.setInt(4, LimitTime);
-        p.setInt(5, ExamID);
+        p.setInt(3, LimitTime);
+        p.setInt(4, ExamID);
         int result = p.executeUpdate();
         return result;
     }

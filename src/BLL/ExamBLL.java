@@ -46,9 +46,9 @@ public class ExamBLL {
         return result;
     }
 
-    public int updateExam(int ExamID, String ExamTitle, int SubjectID, int NumOfQuiz, int LimitTime)
+    public int updateExam(int ExamID, String ExamTitle, int SubjectID, int LimitTime)
             throws SQLException {
-        int result = eDAL.updateExam(ExamID, ExamTitle, SubjectID, NumOfQuiz, LimitTime);
+        int result = eDAL.updateExam(ExamID, ExamTitle, SubjectID, LimitTime);
         return result;
     }
 

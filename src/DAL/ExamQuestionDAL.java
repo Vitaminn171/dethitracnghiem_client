@@ -123,6 +123,14 @@ public class ExamQuestionDAL extends MyDatabaseManager {
         return result;
     }
 
+    public int deleteAllQ(int ExamID) throws SQLException {
+        String query = "DELETE FROM examquestion WHERE ExamID = ?";
+        PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
+        int result = p.executeUpdate();
+        return result;
+    }
+
     public int getNumOfQuiz(int ExamID) throws SQLException {
         String query = "SELECT COUNT(*) FROM examquestion WHERE ExamID = ?";
         PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);

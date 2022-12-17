@@ -44,8 +44,13 @@ public class ExamQuestionBLL {
         return eq;
     } */
 
-    public int deleteExamQuestion(int ExamID, int number) throws SQLException {
+    public int deleteQ(int ExamID, int number) throws SQLException {
         int result = eqDAL.deleteQ(ExamID, number);
+        return result;
+    }
+
+    public int deleteAllQ(int ExamID) throws SQLException {
+        int result = eqDAL.deleteAllQ(ExamID);
         return result;
     }
 
