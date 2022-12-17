@@ -136,19 +136,19 @@ public class Controller_Server {
                 JSONArray examlist = new JSONArray();
                 for (int i = 0; i < list.size(); i++) {
                     ExamDTO examDTO = (ExamDTO) list.get(i);
-                    examlist.put(new JSONObject().put("examID", examDTO.getExamID())
+                    int ExamID = examDTO.getExamID();
+                    examlist.put(new JSONObject().put("examID", ExamID)
                             .put("subjectName", examDTO.getSubjectname())
                             .put("examTitle", examDTO.getTitle())
-                            .put("numOfQuiz", examDTO.getNumOfQuiz())
-                            .put("lowestScore", examDTO.getLowest())
-                            .put("highestScore", examDTO.getHighest())
-                            .put("avgScore", examDTO.getAvg())
+                            .put("numOfQuiz", examQuestionBLL.getNumOfQuiz(ExamID))
+                            .put("lowestScore", rBLL.Lowest(ExamID))
+                            .put("highestScore", rBLL.Highest(ExamID))
+                            .put("avgScore", rBLL.AvgScore(ExamID))
                             .put("limitTime", examDTO.getTime())
-                            .put("numOfDo", examDTO.getNumOfDo())
+                            .put("numOfDo", rBLL.getNumOfDo(ExamID))
                             .put("creator", examDTO.getFullname()));
                 }
                 json.put("examlist", examlist);
-                System.out.println(json.toString());
                 break;
             }
 
@@ -157,57 +157,54 @@ public class Controller_Server {
                 JSONArray examlist = new JSONArray();
                 for (int i = 0; i < list.size(); i++) {
                     ExamDTO examDTO = (ExamDTO) list.get(i);
-                    examlist.put(new JSONObject().put("examID", examDTO.getExamID())
+                    int ExamID = examDTO.getExamID();
+                    examlist.put(new JSONObject().put("examID", ExamID)
                             .put("subjectName", examDTO.getSubjectname())
                             .put("examTitle", examDTO.getTitle())
-                            .put("numOfQuiz", examDTO.getNumOfQuiz())
-                            .put("lowestScore", examDTO.getLowest())
-                            .put("highestScore", examDTO.getHighest())
-                            .put("avgScore", examDTO.getAvg())
+                            .put("numOfQuiz", examQuestionBLL.getNumOfQuiz(ExamID))
+                            .put("lowestScore", rBLL.Lowest(ExamID))
+                            .put("highestScore", rBLL.Highest(ExamID))
+                            .put("avgScore", rBLL.AvgScore(ExamID))
                             .put("limitTime", examDTO.getTime())
-                            .put("numOfDo", examDTO.getNumOfDo())
+                            .put("numOfDo", rBLL.getNumOfDo(ExamID))
                             .put("creator", examDTO.getFullname()));
                 }
                 json.put("examlist", examlist);
-                System.out.println(json.toString());
                 break;
             }
 
             case "getExamByID" -> {
                 ExamDTO examDTO = eBLL.getExamByID(json.getInt("examID"));
-
+                int ExamID = examDTO.getExamID();
                 json.put("subject", examDTO.getSubjectname());
                 json.put("title", examDTO.getTitle());
-                json.put("numOfQuiz", examDTO.getNumOfQuiz());
-                json.put("lowest", examDTO.getLowest());
-                json.put("highest", examDTO.getHighest());
-                json.put("avg", examDTO.getAvg());
+                json.put("numOfQuiz", examQuestionBLL.getNumOfQuiz(ExamID));
+                json.put("lowest", rBLL.Lowest(ExamID));
+                json.put("highest", rBLL.Highest(ExamID));
+                json.put("avg", rBLL.AvgScore(ExamID));
                 json.put("time", examDTO.getTime());
                 json.put("creator", examDTO.getFullname());
-
-                System.out.println(json.toString());
                 break;
             }
-            //update by Quoc An newest
 
             case "getExam" -> {
                 List list = eBLL.getExamBySubject(json.getInt("subjectID"));
                 JSONArray examlist = new JSONArray();
                 for (int i = 0; i < list.size(); i++) {
                     ExamDTO examDTO = (ExamDTO) list.get(i);
-                    examlist.put(new JSONObject().put("examID", examDTO.getExamID())
+                    int ExamID = examDTO.getExamID();
+                    examlist.put(new JSONObject().put("examID", ExamID)
                             .put("subjectName", examDTO.getSubjectname())
                             .put("examTitle", examDTO.getTitle())
-                            .put("numOfQuiz", examDTO.getNumOfQuiz())
-                            .put("lowestScore", examDTO.getLowest())
-                            .put("highestScore", examDTO.getHighest())
-                            .put("avgScore", examDTO.getAvg())
+                            .put("numOfQuiz", examQuestionBLL.getNumOfQuiz(ExamID))
+                            .put("lowestScore", rBLL.Lowest(ExamID))
+                            .put("highestScore", rBLL.Highest(ExamID))
+                            .put("avgScore", rBLL.AvgScore(ExamID))
                             .put("limitTime", examDTO.getTime())
-                            .put("numOfDo", examDTO.getNumOfDo())
+                            .put("numOfDo", rBLL.getNumOfDo(ExamID))
                             .put("creator", examDTO.getFullname()));
                 }
                 json.put("examlist", examlist);
-                System.out.println(json.toString());
                 break;
             }
 
@@ -259,7 +256,6 @@ public class Controller_Server {
 
             case "getExamQuest" -> {
 
-                //update by Quoc An newest
                 ArrayList<String> mylist = new ArrayList<String>();
                 mylist.add("choice1");
                 mylist.add("choice2");
@@ -275,13 +271,9 @@ public class Controller_Server {
                 json.put(mylist.get(1), examQuest.getChoice2());
                 json.put(mylist.get(2), examQuest.getChoice3());
                 json.put(mylist.get(3), examQuest.getChoice4());
-
-                //update by Quoc An newest
-                System.out.println(json.toString());
                 break;
             }
 
-            //update by Quoc An newest
             case "getExamDetailByID" -> {
                 ArrayList<String> mylist = new ArrayList<String>();
                 mylist.add("choice1");
@@ -303,10 +295,8 @@ public class Controller_Server {
                             .put("answer", examQuestionDTO.getAnswer()));
                 }
                 json.put("data", examlist);
-                System.out.println(json.toString());
                 break;
             }
-            //update by Quoc An newest
 
             case "receiveAnswer" -> {
 
@@ -317,7 +307,6 @@ public class Controller_Server {
                 json.put("correct", correct);
                 // json.put("score", score);
 
-                System.out.println(json.toString());
                 break;
             }
 
@@ -330,7 +319,6 @@ public class Controller_Server {
                             new JSONObject().put("subjectID", e.getSubjectID()).put("subjectName", e.getSubjectname()));
                 }
                 json.put("subjectlist", subjectlist);
-                System.out.println(json.toString());
                 break;
             }
 
@@ -343,23 +331,15 @@ public class Controller_Server {
                     //int rank = rBLL.getRank(json.getInt("examID"), json.getString("examinee"), json.getString("date"));
                     json.put("status", true);
                     //json.put("time", rank);
-                    
+
                     long milisec = json.getLong("time");
                     long minutes = (milisec / 1000) / 60;
 
-                            // formula for conversion for
-                            // milliseconds to seconds
+                    // formula for conversion for
+                    // milliseconds to seconds
                     long seconds = (milisec / 1000) % 60;
                     json.remove("time");
-                    json.put("timeDoQuiz", String.valueOf(minutes + ":" +seconds));
-                    
-                    eBLL.calAvg(json.getInt("examID"));
-                    eBLL.calHighest(json.getInt("examID"), json.getFloat("score"));
-                    eBLL.calLowest(json.getInt("examID"), json.getFloat("score"));
-
-                    //update by Quoc An newest
-                    eBLL.increase(json.getInt("examID"));
-                    //update by Quoc An newest
+                    json.put("timeDoQuiz", String.valueOf(minutes + ":" + seconds));
                 }
                 break;
             }
@@ -379,7 +359,6 @@ public class Controller_Server {
                     );
                 }
                 json.put("data", examlist);
-                System.out.println(json.toString());
                 break;
             }
 

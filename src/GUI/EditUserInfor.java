@@ -384,7 +384,6 @@ public class EditUserInfor extends javax.swing.JFrame {
         
         try {
             String dataReceive = controller.SendReceiveData(jsonSend.toString());
-            System.out.println(dataReceive);
             JSONObject json = new JSONObject(dataReceive);
             if(json.getBoolean("status")){
                 JOptionPane.showMessageDialog(this, "Change information success!");

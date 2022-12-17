@@ -173,7 +173,6 @@ public class OTP extends javax.swing.JFrame {
     }
 
     public void checkOtpValid(String otpData, JSONObject json, String correctOtp) throws Exception {
-        System.out.println(String.valueOf(json));
         if (!Controller.validateOTP(otpData)) {
             JOptionPane.showMessageDialog(this, "OTP invalid type! Need to be 6 digits");
         } else {

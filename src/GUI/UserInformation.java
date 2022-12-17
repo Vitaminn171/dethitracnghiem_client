@@ -325,7 +325,6 @@ public class UserInformation extends javax.swing.JPanel {
 
     private void jButton_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_logoutActionPerformed
         try {
-            System.out.println(String.valueOf(json));
             Controller controller = new Controller();
             Map<String, String> inputMap = new HashMap<String, String>();
             inputMap.put("func", "logout");//push username to inputMap

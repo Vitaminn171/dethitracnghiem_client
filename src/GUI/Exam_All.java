@@ -124,7 +124,6 @@ public class Exam_All extends javax.swing.JPanel {
                         //receive data and push it to table 
                         dataReceive_1 = controller.SendReceiveData(jsonSend_1.toString());
                         JSONObject jSONObject_1 = new JSONObject(dataReceive_1);
-                        System.out.println(dataReceive_1);
                         JSONArray arrayReceive_1 = jSONObject_1.getJSONArray("examlist");
                         // get json array inside json object
 
@@ -346,7 +345,6 @@ public class Exam_All extends javax.swing.JPanel {
                             jsonExam.put("subjectName", jTable1.getModel().getValueAt(row, 2) + "");
                             jsonExam.put("numOfQuiz", jTable1.getModel().getValueAt(row, 6) + "");
                             jsonExam.put("limitTime", jTable1.getModel().getValueAt(row, 4) + "");
-                            System.out.println(jsonExam.toString());
                             EditExam editExam = new EditExam(jsonExam);
                             editExam.setVisible(true);
                         }
@@ -392,7 +390,6 @@ public class Exam_All extends javax.swing.JPanel {
                         //JSONObject jsonExam = jSONArray.getJSONObject(id);
                         try {
                             new Exam(jsonExam, username, jSONtemp.getInt("userID")).setVisible(true);
-
                         } catch (IOException ex) {
                             Logger.getLogger(Exam_All.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (Exception ex) {

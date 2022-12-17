@@ -12,16 +12,6 @@ public class ExamQuestionBLL {
     public ExamQuestionBLL() {
         eqDAL = new ExamQuestionDAL();
     }
-
-//    public List LoadExamQuestion(int page, int examID, int num) throws SQLException {
-//        int numofrecords = 30;
-//        ArrayList list = eqDAL.readExamQ(examID,limit);
-//        int size = list.size();
-//        int from, to;
-//        from = (page - 2) * numofrecords;
-//        to = page * numofrecords;
-//        return list.subList(from, Math.min(to, size));
-//    }
     
     //update 16/12 by Quoc An
     public List getExamQuestion(int examID) throws SQLException{
@@ -57,5 +47,9 @@ public class ExamQuestionBLL {
     public int deleteExamQuestion(int ExamID, int number) throws SQLException {
         int result = eqDAL.deleteQ(ExamID, number);
         return result;
+    }
+
+    public int getNumOfQuiz(int ExamID) throws SQLException {
+        return eqDAL.getNumOfQuiz(ExamID);
     }
 }

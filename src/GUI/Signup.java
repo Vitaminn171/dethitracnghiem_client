@@ -409,7 +409,6 @@ public class Signup extends javax.swing.JFrame {
     public void Signup(String data, Controller controller) throws Exception {
         try {
             String dataReceive = controller.SendReceiveData(data);
-            System.out.println(dataReceive);
             JSONObject jsonReceive = new JSONObject(dataReceive);
             if (jsonReceive.getBoolean("status")) {
                 JOptionPane.showMessageDialog(this, "Created account success!");

@@ -43,4 +43,20 @@ public class ResultBLL {
     public int getRank(int ExamID, String Examinee, String Date) throws SQLException {
         return rDAL.getRank(ExamID, Examinee, Date);
     }
+
+    public int getNumOfDo(int ExamID) throws SQLException {
+        return rDAL.getNumOfDo(ExamID);
+    }
+    
+    public int Lowest(int ExamID) throws SQLException {
+        return rDAL.Lowest(ExamID);
+    }
+
+    public int Highest(int ExamID) throws SQLException {
+        return rDAL.Highest(ExamID);
+    }
+
+    public float AvgScore(int ExamID) throws SQLException {
+        return rDAL.AvgScore(ExamID);
+    }
 }

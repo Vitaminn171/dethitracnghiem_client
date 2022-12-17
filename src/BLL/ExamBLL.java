@@ -65,22 +65,4 @@ public class ExamBLL {
     public int getNumberOfExam() throws SQLException {
         return eDAL.getNumberOfExam();
     }
-
-    public void calAvg(int ExamID) throws SQLException {
-        eDAL.CalAvg(ExamID);
-    }
-
-    public void calHighest(int ExamID, float score) throws SQLException {
-        eDAL.Highest(ExamID, score);
-    }
-
-    public void calLowest(int ExamID, float score) throws SQLException {
-        eDAL.Lowest(ExamID, score);
-    }
-    
-    //update by Quoc An newest
-    public void increase(int ExamID) throws SQLException {
-        eDAL.Increase(ExamID);
-    }
-    //update by Quoc An newest
 }

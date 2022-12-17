@@ -258,7 +258,6 @@ public class Login extends javax.swing.JFrame {
             jsonSend.put("func", "login");
             try {
                 String dataReceive = controller.SendReceiveData(jsonSend.toString());
-                System.out.println(dataReceive);
                 JSONObject json = new JSONObject(dataReceive);
 
                 if (json.getBoolean("status")) { //status = true -> login

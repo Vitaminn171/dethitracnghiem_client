@@ -73,11 +73,21 @@ public class ResultDAL extends MyDatabaseManager {
     }
 
     public int getRank(int ExamID, String Examinee, String Date) throws SQLException {
-        String query = "SELECT Rank FROM (SELECT ExamID, Examinee, Date, Score, DENSE_RANK() OVER( ORDER BY Score DESC ) `Rank` FROM result WHERE ExamID = ?) `DATA`" + "WHERE Examinee = ? AND Date = ?";
+        String query = "SELECT Rank FROM (SELECT ExamID, Examinee, Date, Score, DENSE_RANK() OVER( ORDER BY Score DESC ) `Rank` FROM result WHERE ExamID = ?) `DATA`"
+                + "WHERE Examinee = ? AND Date = ?";
         PreparedStatement p = ResultDAL.getConnection().prepareStatement(query);
         p.setInt(1, ExamID);
         p.setString(2, Examinee);
         p.setString(3, Date);
+        ResultSet rs = p.executeQuery();
+        rs.next();
+        return rs.getInt(1);
+    }
+
+    public int getNumOfDo(int ExamID) throws SQLException {
+        String query = "SELECT COUNT(*) FROM result WHERE ExamID = ?";
+        PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
         ResultSet rs = p.executeQuery();
         rs.next();
         return rs.getInt(1);
@@ -106,5 +116,35 @@ public class ResultDAL extends MyDatabaseManager {
             }
         }
         return list;
+    }
+
+    public int Lowest(int ExamID) throws SQLException {
+        String query = "SELECT MIN(Score) FROM result WHERE ExamID = ?";
+        PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
+        ResultSet rs = p.executeQuery();
+        if (rs.next())
+            return rs.getInt(1);
+        return -1;
+    }
+
+    public int Highest(int ExamID) throws SQLException {
+        String query = "SELECT MAX(Score) FROM result WHERE ExamID = ?";
+        PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
+        ResultSet rs = p.executeQuery();
+        if (rs.next())
+            return rs.getInt(1);
+        return -1;
+    }
+
+    public float AvgScore(int ExamID) throws SQLException {
+        String query = "SELECT AVG(Score) FROM result WHERE ExamID = ?";
+        PreparedStatement p = ExamDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
+        ResultSet rs = p.executeQuery();
+        if (rs.next())
+            return rs.getFloat(1);
+        return -1;
     }
 }

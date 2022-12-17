@@ -39,6 +39,7 @@ import org.json.JSONObject;
 public class AddExam extends javax.swing.JFrame {
 
     String path = "";
+    int numOfQuiz;
 
     public AddExam(int UserID) {
 
@@ -76,29 +77,26 @@ public class AddExam extends javax.swing.JFrame {
         jButton_submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String examTitle = jFormattedTextField_examTitle.getText();
-                String numOfQuiz = jFormattedTextField_numOfQuiz.getText();
+                //String numOfQuiz = jFormattedTextField_numOfQuiz.getText();
                 String limitTime = jFormattedTextField_limitTime.getText();
                 int subjectID = jComboBox_subject.getSelectedIndex() + 1;
-                if (examTitle.length() == 0
-                        || numOfQuiz.length() == 0
-                        || limitTime.length() == 0) {
-
+                if (examTitle.length() == 0 || limitTime.length() == 0) {
+                    JOptionPane.showMessageDialog(null, "Do not leave blank fields!");
                 } else {
-
                     JSONObject jsonSend = new JSONObject();
+                    jsonSend.put("questionlist", readExcel());
                     jsonSend.put("examTitle", examTitle);
                     jsonSend.put("creator", UserID);
                     jsonSend.put("subjectID", subjectID);
-                    jsonSend.put("numOfQuiz", numOfQuiz);
                     jsonSend.put("limitTime", limitTime);
-                    jsonSend.put("questionlist", readExcel());
                     jsonSend.put("func", "addExam");
+                    jsonSend.put("numOfQuiz", numOfQuiz);
                     try {
                         String response = controller.SendReceiveData(jsonSend.toString());
                         JSONObject jResponse = new JSONObject(response);
                         if (jResponse.getBoolean("status")) {
                             JOptionPane.showMessageDialog(null, "Thêm đề thi thành công!");
-
+                            disposeFrame();
                         } else {
                             JOptionPane.showMessageDialog(null, jResponse.getString("message"));
                         }
@@ -109,7 +107,6 @@ public class AddExam extends javax.swing.JFrame {
                 }
             }
         });
-
     }
 
     /**
@@ -309,6 +306,9 @@ public class AddExam extends javax.swing.JFrame {
         path = f.getAbsolutePath();
     }//GEN-LAST:event_jButton_fileActionPerformed
 
+    private void disposeFrame(){
+        this.dispose();
+    }
     private JSONArray readExcel() {
         JSONArray arrQuestion = new JSONArray();
         try {
@@ -319,6 +319,7 @@ public class AddExam extends javax.swing.JFrame {
             XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object  
             Iterator<Row> itr = sheet.iterator();    //iterating over excel file
             String[] questions = new String[7];
+            numOfQuiz = sheet.getPhysicalNumberOfRows();
             int count;
             while (itr.hasNext()) {
                 Row row = itr.next();

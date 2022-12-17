@@ -123,6 +123,15 @@ public class ExamQuestionDAL extends MyDatabaseManager {
         return result;
     }
 
+    public int getNumOfQuiz(int ExamID) throws SQLException {
+        String query = "SELECT COUNT(*) FROM examquestion WHERE ExamID = ?";
+        PreparedStatement p = ExamQuestionDAL.getConnection().prepareStatement(query);
+        p.setInt(1, ExamID);
+        ResultSet rs = p.executeQuery();
+        rs.next();
+        return rs.getInt(1);
+    }
+
     // So sánh kết quả (WIP)
     public int Compare(String choice) throws SQLException {
         String query = "";

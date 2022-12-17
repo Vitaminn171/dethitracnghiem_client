@@ -37,7 +37,6 @@ public class Dashboard extends javax.swing.JFrame {
         //data demo
         try {
             String dataReceive = controller.SendReceiveData(jsonSend.toString());
-            System.out.println(dataReceive);
             JSONObject json = new JSONObject(dataReceive);
             JPanel UserInformation = new UserInformation(json);
             JPanel Exam_All = new Exam_All(jsonSend.getString("username"));

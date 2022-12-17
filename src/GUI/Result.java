@@ -21,16 +21,12 @@ import org.json.JSONObject;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import javax.swing.JFrame;
 
-/**
- *
- * @author Quoc An
- */
+
 public class Result extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Result
-     */
+    private JFrame frame = this;
     public Result(JSONObject jsonResult) throws Exception {
         initComponents();
         this.setTitle("Quiz Exam Result");
@@ -59,11 +55,10 @@ public class Result extends javax.swing.JFrame {
         Controller controller = new Controller();
         String dataReceive = controller.SendReceiveData(jsonResult.toString());
         JSONObject jResponse = new JSONObject(dataReceive);
-        //System.out.println(dataReceive);
-
-//        if (jResponse.getBoolean("status")) {
-//            jLabel_rank_data.setText(String.valueOf(jResponse.getInt("rank")));
-//        }
+        
+        if (jResponse.getBoolean("status")) {
+            jLabel_rank_data.setText(String.valueOf(jResponse.getInt("rank")));
+        }
 
         jButton1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -72,7 +67,8 @@ public class Result extends javax.swing.JFrame {
                     //this.dispose();
                     Dashboard dashboard = new Dashboard(jsonResult.getString("examinee"));
                     dashboard.setVisible(true);
-                    getContentPane().setVisible(false);
+                    frame.dispose();
+                    //getContentPane().setVisible(false);
                 } catch (IOException ex) {
                     Logger.getLogger(Result.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
