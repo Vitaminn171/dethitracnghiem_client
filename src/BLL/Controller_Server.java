@@ -14,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Controller_Server {
-
     UserBLL uBLL = new UserBLL();
     SubjectBLL sBLL = new SubjectBLL();
     ExamBLL eBLL = new ExamBLL();
@@ -24,6 +23,8 @@ public class Controller_Server {
     public JSONObject checkFunction(JSONObject json) throws IOException, SQLException {
 
         switch (json.getString("func")) {
+            
+            // Chức năng đăng nhập
             case "login" -> {
                 UserDTO user = uBLL.getUser(json.getString("username"), json.getString("password"));
                 if (user == null) {
@@ -43,6 +44,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng đăng ký
             case "signup" -> {
                 if (uBLL.insertUser(json.getString("username"), json.getString("password"), json.getString("fullname"),
                         json.getBoolean("gender"), json.getString("birth")) == 0) {
@@ -52,6 +54,8 @@ public class Controller_Server {
                 }
                 break;
             }
+            
+            // Chức năng lấy thông tin cá nhân (thông qua username)
             case "user" -> {
                 UserDTO user = uBLL.getUserByUsername(json.getString("username"));
                 if (user == null) {
@@ -67,6 +71,8 @@ public class Controller_Server {
                 }
                 break;
             }
+            
+            // Chức năng kiểm tra OTP
             case "otp" -> {
                 if (!json.getString("otpData").equals(json.getString("correctOtp"))) {
                     json.put("status", false);
@@ -76,6 +82,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng thay mật khẩu
             case "changePass" -> {
                 UserDTO user = uBLL.getUser(json.getString("username"), json.getString("password_old"));
                 if (user == null) {
@@ -91,6 +98,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng cập nhật thông tin cá nhân
             case "editUserInfor" -> {
                 if (uBLL.updateUser(json.getString("username"), json.getString("fullname"), json.getBoolean("gender"),
                         json.getString("birth")) == 0) {
@@ -101,6 +109,7 @@ public class Controller_Server {
                 }
             }
 
+            // Chức năng lấy các trạng thái chặn của người dùng
             case "getBlockStatus" -> {
                 UserDTO user = uBLL.getBlockStatus(json.getString("username"));
                 json.put("userID", user.getUserID());
@@ -110,6 +119,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng lấy danh sách tất cả đề thi
             case "getExamAll" -> {
                 List list = eBLL.readExam();
                 JSONArray examlist = new JSONArray();
@@ -131,6 +141,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng lấy danh sách đề thi tạo bởi người dang dùng chương trình
             case "getExamByUser" -> {
                 List list = eBLL.getExamByUser(json.getString("username"));
                 JSONArray examlist = new JSONArray();
@@ -152,6 +163,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng lấy thông tin đề thi theo mã đề thi
             case "getExamByID" -> {
                 ExamDTO examDTO = eBLL.getExamByID(json.getInt("examID"));
                 int ExamID = examDTO.getExamID();
@@ -166,6 +178,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng lấy danh sách đề thi theo mã môn
             case "getExam" -> {
                 List list = eBLL.getExamBySubject(json.getInt("subjectID"));
                 JSONArray examlist = new JSONArray();
@@ -187,13 +200,18 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng tạo đề thi
             case "addExam" -> {
+                
+                // Lấy mã đề thi vừa được thêm trong CSDL
                 int result = eBLL.insertExam(json.getString("examTitle"), json.getInt("creator"),
                         json.getInt("subjectID"), json.getInt("numOfQuiz"), json.getInt("limitTime"));
                 if (result == 0) {
                     json.put("status", false);
                     json.put("message", "add exam fail!");
                 } else {
+                    
+                    // Thêm đề thành công sẽ thêm tiếp bộ câu hỏi vào đề
                     JSONArray questionlist = json.getJSONArray("questionlist");
 
                     for (int i = 0; i < questionlist.length(); i++) {
@@ -212,16 +230,21 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng cập nhật đề thi
             case "editExam" -> {
+                
+                // Lấy mã đề thi
                 int examID = json.getInt("examID");
                 if (eBLL.updateExam(examID, json.getString("examTitle"), json.getInt("subjectID"),
                         json.getInt("limitTime")) == 0) {
                     json.put("status", false);
                     json.put("message", "update exam fail!");
-                } else if (examQuestionBLL.deleteAllQ(examID) == 0) {
+                } else if (examQuestionBLL.deleteAllQ(examID) == 0) { // Xóa tất cả câu hỏi đang có trong đề thi
                     json.put("status", false);
                     json.put("message", "delete all question fail!");
                 } else {
+                    
+                    // Thêm lại bộ câu hỏi mới vào đề thi
                     JSONArray questionlist = json.getJSONArray("questionlist");
                     for (int i = 0; i < questionlist.length(); i++) {
                         JSONObject jQuestion = questionlist.getJSONObject(i);
@@ -240,6 +263,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng xóa / ẩn đề thi khỏi hệ thống
             case "deleteExam" -> {
                 if (eBLL.deleteExam(json.getInt("examID")) == 0) {
                     json.put("status", false);
@@ -251,6 +275,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng lấy 1 câu hỏi trong đề thi 
             case "getExamQuest" -> {
 
                 ArrayList<String> mylist = new ArrayList<String>();
@@ -271,6 +296,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng lấy tất cả câu hỏi trong đề thi
             case "getExamDetailByID" -> {
                 ArrayList<String> mylist = new ArrayList<String>();
                 mylist.add("choice1");
@@ -295,13 +321,17 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng lấy đáp án trong câu hỏi
             case "receiveAnswer" -> {
                 ExamQuestionDTO eq = examQuestionBLL.getExamAnswer(json.getInt("examID"), json.getInt("number"));
+                
+                // Kiểm tra câu trả lời có khớp với đáp án không
                 int correct = checkAnswer(eq.getAnswer(), json.getString("answer"), json.getInt("correct"));
                 json.put("correct", correct);
                 break;
             }
 
+            // Chức năng lấy danh sách môn học
             case "getSubject" -> {
                 List list = sBLL.readSubject();
                 JSONArray subjectlist = new JSONArray();
@@ -314,6 +344,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng lưu kết quả thi
             case "addResult" -> {
                 if (rBLL.insertResult(json.getInt("examID"), json.getString("examinee"), json.getFloat("score"),
                         json.getString("date"), json.getInt("correct"), json.getInt("wrong")) == 0) {
@@ -328,6 +359,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng lấy danh sách kết quả thi
             case "getResultAll" -> {
                 List list = rBLL.getResult();
                 JSONArray examlist = new JSONArray();
@@ -345,6 +377,7 @@ public class Controller_Server {
                 break;
             }
 
+            // Chức năng đăng xuất
             case "logout" -> {
                 if (uBLL.Logout(json.getInt("userID")) == 0) {
                     json.put("status", false);
@@ -361,6 +394,7 @@ public class Controller_Server {
         return json;
     }
 
+    // Kiểm tra câu trả lời có khớp với đáp án không 
     public int checkAnswer(String answer, String receive, int correct) {
         if (answer.equals(receive)) {
             correct++;

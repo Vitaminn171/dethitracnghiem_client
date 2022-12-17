@@ -1,83 +1,59 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package GUI;
 
 import BLL.Controller;
-import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONObject;
-import java.time.LocalDateTime;  
-import java.time.format.DateTimeFormatter;  
-import java.util.Date;
-import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 
-/**
- *
- * @author Quoc An
- */
 public class ExamDetail extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Result
-     */
-    //update 16/12 by Quoc An
-    
     public ExamDetail(int examid, String username) throws Exception {
         initComponents();
         this.setTitle("Quiz Exam Result Detail");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+
         jButton_close.putClientProperty("JButton.buttonType", "roundRect");
         jButton_close.putClientProperty("JButton.focusWidth", 1);
-        
+
+        // Thực hiện yêu cầu lấy chi tiết đề thi
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("username", username);
         jsonSend.put("func", "getExamByID");
         jsonSend.put("examID", examid);
-        
         Controller controller = new Controller();
         String receive = controller.SendReceiveData(jsonSend.toString());
         JSONObject jsonReceiveExam = new JSONObject(receive);
-        
-        //set data to label
-        
-       jLabel_examid_data.setText(String.valueOf(jsonReceiveExam.getInt("examID")));
-       jLabel_avg_data.setText(String.valueOf(jsonReceiveExam.getInt("avg"))); 
-       jLabel_creator_data.setText(jsonReceiveExam.getString("creator"));
-       jLabel_subject_data.setText(jsonReceiveExam.getString("subject"));
-       jLabel_title_data.setText(jsonReceiveExam.getString("title"));
-       jLabel_numofquiz_data.setText(String.valueOf(jsonReceiveExam.getInt("numOfQuiz")));
-       jLabel_highest_data.setText(String.valueOf(jsonReceiveExam.getInt("highest")));
-       jLabel_lowest_data.setText(String.valueOf(jsonReceiveExam.getInt("lowest")));
-       jLabel_time_data.setText(String.valueOf(jsonReceiveExam.getInt("time"))); 
-        
-       //set data to label
+
+        // Hiển thị chi tiết đề thi trên các label
+        jLabel_examid_data.setText(String.valueOf(jsonReceiveExam.getInt("examID")));
+        jLabel_avg_data.setText(String.valueOf(jsonReceiveExam.getInt("avg")));
+        jLabel_creator_data.setText(jsonReceiveExam.getString("creator"));
+        jLabel_subject_data.setText(jsonReceiveExam.getString("subject"));
+        jLabel_title_data.setText(jsonReceiveExam.getString("title"));
+        jLabel_numofquiz_data.setText(String.valueOf(jsonReceiveExam.getInt("numOfQuiz")));
+        jLabel_highest_data.setText(String.valueOf(jsonReceiveExam.getInt("highest")));
+        jLabel_lowest_data.setText(String.valueOf(jsonReceiveExam.getInt("lowest")));
+        jLabel_time_data.setText(String.valueOf(jsonReceiveExam.getInt("time")));
+
+        // Thực hiện yêu cầu lấy bộ câu hỏi trong đề thi
         jsonSend.remove("func");
         jsonSend.put("func", "getExamDetailByID");
         String receiveQuiz = controller.SendReceiveData(jsonSend.toString());
         JSONObject jsonReceiveQuiz = new JSONObject(receiveQuiz);
-        
+
         JSONArray arrayQuiz = jsonReceiveQuiz.getJSONArray("data");
-        
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        
         setDataToTable(arrayQuiz, model);
-        
+
         jButton_close.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -87,50 +63,8 @@ public class ExamDetail extends javax.swing.JFrame {
                 }
             }
         });
-        
-        
-        
-
-        
-//        jButton1.putClientProperty( "JButton.buttonType", "roundRect" );
-//        jButton1.putClientProperty( "JButton.focusWidth", 1 );
-        
-//        jLabel_examid_data.setText(jsonResult.getString("examinee"));
-//        jLabel_title_data.setText(String.valueOf(jsonResult.getDouble("score")));
-//        jLabel_creator_data.setText(String.valueOf(jsonResult.getInt("correct")));
-//        jLabel_subject_data.setText(String.valueOf(jsonResult.getInt("wrong")));
-        
-        
-       
-//        LocalDate date = java.time.LocalDate.now();
-//        jsonResult.put("date", date.toString());
-//        jsonResult.put("func", "addResult");
-//        Controller controller = new Controller();
-//        String dataReceive = controller.SendReceiveData(jsonResult.toString());
-//        System.out.println(dataReceive);
-//        jButton1.addActionListener(new ActionListener() {
-//         public void actionPerformed(ActionEvent e) {
-//            try {
-//            // TODO add your handling code here:
-//            //this.dispose();
-//            Dashboard dashboard = new Dashboard(jsonResult.getString("examinee"));
-//            dashboard.setVisible(true);
-//            getContentPane().setVisible(false);
-//        } catch (IOException ex) {
-//            Logger.getLogger(ExamDetail.class.getName()).log(Level.SEVERE, null, ex);
-//        }    catch (Exception ex) {
-//                 Logger.getLogger(ExamDetail.class.getName()).log(Level.SEVERE, null, ex);
-//             }
-//         }
-//      });
-        
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -398,27 +332,9 @@ public class ExamDetail extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_closeActionPerformed
-        // TODO add your handling code here:
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jButton_closeActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        FlatLightLaf.setup();
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                try {
-//                    new ExamDetail().setVisible(true);
-//                } catch (Exception ex) {
-//                    Logger.getLogger(ExamDetail.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//        });
-    }
-    
-    
     private void setDataToTable(JSONArray jSONArray, DefaultTableModel model) {
         for (int i = 0; i < jSONArray.length(); i++) {
             JSONObject jOBJ = jSONArray.getJSONObject(i);
@@ -428,10 +344,9 @@ public class ExamDetail extends javax.swing.JFrame {
                 jOBJ.get("choice2").toString(),
                 jOBJ.get("choice3").toString(),
                 jOBJ.get("choice4").toString(),
-                jOBJ.get("answer").toString(),
-                };
+                jOBJ.get("answer").toString(),};
 
-            //add exam to each row
+            // Add exam to each row
             model.addRow(row);
         }
     }

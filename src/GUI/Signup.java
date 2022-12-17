@@ -2,7 +2,6 @@ package GUI;
 
 import BLL.Controller;
 import BLL.MD5;
-import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -324,18 +323,6 @@ public class Signup extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_eyeActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        FlatLightLaf.setup();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Signup().setVisible(true);
-            }
-        });
-    }
-
     // Kiểm tra thông tin đăng ký
     private void checkValidate(String username, String password, String fullname, Date birthDate, boolean gender) {
         try {
@@ -383,7 +370,7 @@ public class Signup extends javax.swing.JFrame {
         }
     }
 
-    // Gửi thông tin đăng ký sang server
+    // Gửi yêu cầu đăng ký sang server
     public void Signup(String data, Controller controller) throws Exception {
         try {
             String dataReceive = controller.SendReceiveData(data);

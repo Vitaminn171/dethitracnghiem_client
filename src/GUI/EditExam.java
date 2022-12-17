@@ -1,28 +1,17 @@
 package GUI;
 
 import BLL.Controller;
-import BLL.MD5;
-import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import org.apache.poi.ss.usermodel.Cell;
@@ -32,16 +21,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- *
- * @author Quoc An
- */
 public class EditExam extends javax.swing.JFrame {
-
     String path = "";
 
     public EditExam(JSONObject json) {
-
         initComponents();
         this.setTitle("Quiz Exam");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -53,6 +36,7 @@ public class EditExam extends javax.swing.JFrame {
         jFormattedTextField_limitTime.putClientProperty("JComponent.roundRect", true);
         jFormattedTextField_limitTime.setText(json.getString("limitTime"));
 
+        // Gửi yêu cầu lấy danh sách môn
         Controller controller = new Controller();
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("func", "getSubject");
@@ -61,6 +45,8 @@ public class EditExam extends javax.swing.JFrame {
             JSONObject jSONObject = new JSONObject(dataReceive);
             JSONArray arrayReceive = jSONObject.getJSONArray("subjectlist");
             ArrayList listSubject = new ArrayList();
+            
+            // Load danh sách môn vào jComboBox
             for (int i = 0; i < arrayReceive.length(); i++) {
                 JSONObject jSubjectList = arrayReceive.getJSONObject(i);
                 listSubject.add(jSubjectList.get("subjectName").toString());
@@ -69,10 +55,12 @@ public class EditExam extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(EditExam.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         jComboBox_subject.setSelectedItem(json.getString("subjectName"));
         jButton_cancel.putClientProperty("JButton.buttonType", "roundRect");
 
         jButton_submit.putClientProperty("JButton.buttonType", "roundRect");
+        
         jButton_submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String examTitle = jFormattedTextField_examTitle.getText();
@@ -100,7 +88,6 @@ public class EditExam extends javax.swing.JFrame {
                     } catch (Exception ex) {
                         Logger.getLogger(EditExam.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 }
             }
         });
@@ -111,43 +98,43 @@ public class EditExam extends javax.swing.JFrame {
         this.dispose();
     }
 
+    // Đọc dữ liệu file excel khi sửa bộ câu hỏi
     private JSONArray readExcel() {
         JSONArray arrQuestion = new JSONArray();
         try {
             File file = new File(path);
-            FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
-            //creating Workbook instance that refers to .xlsx file  
+            FileInputStream fis = new FileInputStream(file); // Obtaining bytes from the file  
+            
+            // Creating Workbook instance that refers to .xlsx file  
             XSSFWorkbook wb = new XSSFWorkbook(fis);
-            XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object  
-            Iterator<Row> itr = sheet.iterator();    //iterating over excel file
+            XSSFSheet sheet = wb.getSheetAt(0); // Creating a Sheet object to retrieve object  
+            Iterator<Row> itr = sheet.iterator(); // Iterating over excel file
             String[] questions = new String[7];
-//            numOfQuiz = sheet.getPhysicalNumberOfRows();
             int count;
             while (itr.hasNext()) {
                 Row row = itr.next();
                 count = 0;
-                Iterator<Cell> cellIterator = row.cellIterator();   //iterating over each column  
+                Iterator<Cell> cellIterator = row.cellIterator(); // Iterating over each column  
                 while (cellIterator.hasNext()) {
                     Cell cell = cellIterator.next();
                     switch (cell.getCellType()) {
-                        case Cell.CELL_TYPE_STRING:    //field that represents string cell type 
+                        case Cell.CELL_TYPE_STRING: // Field that represents string cell type 
                             questions[count++] = cell.getStringCellValue();
-//                                        System.out.print(cell.getStringCellValue() + "\t\t\t");
                             break;
-                        case Cell.CELL_TYPE_NUMERIC:    //field that represents number cell type
+                        case Cell.CELL_TYPE_NUMERIC: // Field that represents number cell type
                             questions[count++] = String.valueOf((int) cell.getNumericCellValue());
-//                                        System.out.print(cell.getNumericCellValue() + "\t\t\t");
                             break;
                         default:
                     }
                 }
+                
+                // Đưa dữ liệu đọc được vào mảng JSON
                 arrQuestion.put(new JSONObject().put("number", Integer.parseInt(questions[0]))
                         .put("question", questions[1])
                         .put("choice1", questions[2])
                         .put("choice2", questions[3])
                         .put("choice3", questions[4])
                         .put("choice4", questions[5]));
-                System.out.println("line" + row.getRowNum());
             }
         } catch (IOException x) {
             x.printStackTrace();
@@ -155,9 +142,6 @@ public class EditExam extends javax.swing.JFrame {
         return arrQuestion;
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -205,11 +189,6 @@ public class EditExam extends javax.swing.JFrame {
         jButton_submit.setText("Submit");
         jButton_submit.setBorderPainted(false);
         jButton_submit.setPreferredSize(new java.awt.Dimension(100, 40));
-        jButton_submit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_submitActionPerformed(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel2.setText("Exam Title");
@@ -311,15 +290,11 @@ public class EditExam extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_submitActionPerformed
-
-    }//GEN-LAST:event_jButton_submitActionPerformed
-
     private void jButton_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cancelActionPerformed
-        // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton_cancelActionPerformed
 
+    // Lấy đường dẫn khi thêm file
     private void jButton_fileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_fileActionPerformed
         JFileChooser fc = new JFileChooser();
         File f;
@@ -327,7 +302,6 @@ public class EditExam extends javax.swing.JFrame {
         f = fc.getSelectedFile();
         path = f.getAbsolutePath();
     }//GEN-LAST:event_jButton_fileActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -345,5 +319,4 @@ public class EditExam extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
-
 }

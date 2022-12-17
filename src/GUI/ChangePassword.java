@@ -1,12 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package GUI;
 
 import BLL.Controller;
 import BLL.MD5;
-import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -14,9 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -25,30 +17,27 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
 
-/**
- *
- * @author Quoc An
- */
 public class ChangePassword extends javax.swing.JFrame {
     private JFrame jframe = this;
     private boolean flag = false;
 
-    /**
-     * Creates new form ChangePassword
-     */
     public ChangePassword(String username) {
         initComponents();
         this.setTitle("Quiz Exam Change Password");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        
         jButton_cancel.putClientProperty("JButton.buttonType", "roundRect");
         jButton_submit.putClientProperty("JButton.buttonType", "roundRect");
+        
         jPassword_Old.putClientProperty("JComponent.roundRect", true);
         jPassword_Old.putClientProperty("JTextField.placeholderText", "Old Password");
-        jPasswordField1.putClientProperty("JComponent.roundRect", true);
-        jPasswordField1.putClientProperty("JTextField.placeholderText", "New Password");
-        jPasswordField2.putClientProperty("JComponent.roundRect", true);
-        jPasswordField2.putClientProperty("JTextField.placeholderText", "Confirm New Password");
+        
+        jPasswordField_New.putClientProperty("JComponent.roundRect", true);
+        jPasswordField_New.putClientProperty("JTextField.placeholderText", "New Password");
+        
+        jPasswordField_Retype.putClientProperty("JComponent.roundRect", true);
+        jPasswordField_Retype.putClientProperty("JTextField.placeholderText", "Confirm New Password");
 
         BufferedImage img = null;
         try {
@@ -62,11 +51,11 @@ public class ChangePassword extends javax.swing.JFrame {
 
         jButton_submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (jPassword_Old.getPassword().length != 0 && jPasswordField1.getPassword().length != 0 && jPasswordField2.getPassword().length != 0) {
+                if (jPassword_Old.getPassword().length != 0 && jPasswordField_New.getPassword().length != 0 && jPasswordField_Retype.getPassword().length != 0) {
                     Controller controller = new Controller();
                     String oldpassword = String.valueOf(jPassword_Old.getPassword());
-                    String newpassword = String.valueOf(jPasswordField1.getPassword());
-                    String retypepassword = String.valueOf(jPasswordField2.getPassword());
+                    String newpassword = String.valueOf(jPasswordField_New.getPassword());
+                    String retypepassword = String.valueOf(jPasswordField_Retype.getPassword());
                     if (!newpassword.equals(retypepassword)) {
                         JOptionPane.showMessageDialog(null, "Password doesn't match! Please retype.");
                         if (!Controller.validatePassword(newpassword)) {
@@ -76,31 +65,23 @@ public class ChangePassword extends javax.swing.JFrame {
                         String hashOldPass = MD5.getMd5(oldpassword);
                         String hashNewPass = MD5.getMd5(newpassword);//hash md5 for password
 
-//                Map<String, String> inputMap = new HashMap<String, String>();
-//                inputMap.put("func", "changePass");//push username to inputMap
-//                inputMap.put("password", hashPass);//push password hashed to inputMap
+                        // Mở form nhập OTP
                         JSONObject jsonSend = new JSONObject();
                         jsonSend.put("func", "changePass");
                         jsonSend.put("password_old", hashOldPass);
                         jsonSend.put("password_new", hashNewPass);
                         jsonSend.put("username", username);
-
                         OTP otp = new OTP(jsonSend);
                         otp.setVisible(true);
                         jframe.dispose();
                     }
-
                 } else {
                     JOptionPane.showMessageDialog(null, "Do not leave the password field blank!");
                 }
             }
         });
-
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -108,8 +89,8 @@ public class ChangePassword extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        jPasswordField_New = new javax.swing.JPasswordField();
+        jPasswordField_Retype = new javax.swing.JPasswordField();
         jButton_cancel = new javax.swing.JButton();
         jButton_submit = new javax.swing.JButton();
         jButton_eye = new javax.swing.JButton();
@@ -131,7 +112,7 @@ public class ChangePassword extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(46, 0, 0, 0);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        jPasswordField1.setPreferredSize(new java.awt.Dimension(250, 40));
+        jPasswordField_New.setPreferredSize(new java.awt.Dimension(250, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -140,14 +121,9 @@ public class ChangePassword extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 216;
         gridBagConstraints.ipady = 18;
         gridBagConstraints.insets = new java.awt.Insets(22, 20, 0, 0);
-        jPanel1.add(jPasswordField1, gridBagConstraints);
+        jPanel1.add(jPasswordField_New, gridBagConstraints);
 
-        jPasswordField2.setPreferredSize(new java.awt.Dimension(250, 40));
-        jPasswordField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField2ActionPerformed(evt);
-            }
-        });
+        jPasswordField_Retype.setPreferredSize(new java.awt.Dimension(250, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -155,7 +131,7 @@ public class ChangePassword extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 216;
         gridBagConstraints.ipady = 18;
         gridBagConstraints.insets = new java.awt.Insets(22, 20, 0, 0);
-        jPanel1.add(jPasswordField2, gridBagConstraints);
+        jPanel1.add(jPasswordField_Retype, gridBagConstraints);
 
         jButton_cancel.setBackground(new java.awt.Color(255, 102, 102));
         jButton_cancel.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -237,40 +213,26 @@ public class ChangePassword extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Hiện / ẩn mật khẩu
     private void jButton_eyeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_eyeActionPerformed
-        // TODO add your handling code here:
         if (!flag) {
-            jPasswordField1.setEchoChar((char) 0);
+            jPasswordField_New.setEchoChar((char) 0);
             flag = true;
         } else {
-            jPasswordField1.setEchoChar('•');
+            jPasswordField_New.setEchoChar('•');
             flag = false;
         }
     }//GEN-LAST:event_jButton_eyeActionPerformed
 
     private void jButton_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cancelActionPerformed
-        // TODO add your handling code here:'
         this.dispose();
     }//GEN-LAST:event_jButton_cancelActionPerformed
 
-    private void jPasswordField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField2ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        FlatLightLaf.setup();
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new ChangePassword().setVisible(true);
-//            }
-//        });
-    }
-
+    // Đổi mật khẩu
     public void changePass(String data, Controller controller) throws Exception {
         try {
+            
+            // Gửi yêu cầu đổi mật khẩu sang server
             String dataReceive = controller.SendReceiveData(data);
             JSONObject jsonReceive = new JSONObject(dataReceive);
             if (jsonReceive.getBoolean("status")) {
@@ -279,7 +241,6 @@ public class ChangePassword extends javax.swing.JFrame {
                 dashboard.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Change password fail!");
-
             }
         } catch (IOException ex) {
             Logger.getLogger(Signup.class.getName()).log(Level.SEVERE, null, ex);
@@ -292,8 +253,8 @@ public class ChangePassword extends javax.swing.JFrame {
     private javax.swing.JButton jButton_submit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
+    private javax.swing.JPasswordField jPasswordField_New;
+    private javax.swing.JPasswordField jPasswordField_Retype;
     private javax.swing.JPasswordField jPassword_Old;
     // End of variables declaration//GEN-END:variables
 }
