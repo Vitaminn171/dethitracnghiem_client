@@ -328,8 +328,9 @@ public class Controller_Server {
                     json.put("status", false);
                     json.put("message", "Thêm kết quả thi thất bại!");
                 } else {
-                    //int rank = rBLL.getRank(json.getInt("examID"), json.getString("examinee"), json.getString("date"));
+                    int rank = rBLL.getRank(json.getInt("examID"), json.getString("examinee"), json.getString("date"));
                     json.put("status", true);
+                    json.put("rank", rank);
                     //json.put("time", rank);
 
                     long milisec = json.getLong("time");

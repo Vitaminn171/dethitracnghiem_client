@@ -19,12 +19,17 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.Key;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.crypto.SecretKey;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -44,7 +49,7 @@ public class Controller {
     static ExecutorService excutor;
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX
             = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
+    private static SecretKey key;
     public static final Pattern VALID_PASSWORD_REGEX = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$");
     //^                                   # start of line
     //  (?=.*[0-9])                       # positive lookahead, digit [0-9]
@@ -72,7 +77,40 @@ public class Controller {
         return matcher.find();
     }
 
-    public static void startConnectToServer() {
+    private static byte[] decode(String data) {
+        return Base64.getDecoder().decode(data);
+    }
+    
+    private static void sendKey() throws IOException, Exception{
+        while(true) {
+            
+            String line = in.readLine();
+            if(line!=null){
+//                System.out.println(line);
+                AES aes = new AES();
+                aes.init();
+//                System.out.println(aes.getSecretKey());
+                String key_send = aes.getSecretKey();
+                RSA rsa = new RSA();
+                X509EncodedKeySpec spec= new X509EncodedKeySpec(decode(line));
+                KeyFactory kf = KeyFactory.getInstance("RSA");
+                PublicKey publicKey = kf.generatePublic(spec);
+                String data =rsa.Encrpytion(key_send, publicKey);
+                key = AES.StringtoSecretKey(key_send);
+//                System.out.println("Key :"+key);
+//                System.out.println("En :"+aes.encrypt("Huỳnh Hoàng Huy", aes.getSKey()));
+                out.write(data);
+                out.newLine();
+                out.flush();
+                
+                return;
+            }
+               
+        }
+        
+    }
+    
+    public static void startConnectToServer() throws Exception {
         try {
             //TODO: use api to auto get ip from server
             // Lên trang mà server để local ip để lấy về
@@ -87,6 +125,7 @@ public class Controller {
             System.out.println("connecting...");
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            sendKey();
             new Login().setVisible(true);
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -95,7 +134,6 @@ public class Controller {
             System.out.println("Server not available!");
 
         }
-
     }
 
     public static void closeConnectToServer() throws IOException {
@@ -108,25 +146,12 @@ public class Controller {
     }
 
     public String SendReceiveData(String data) throws IOException, Exception {
-        AES aes = new AES();
-        aes.init();
-        String encryptedData = aes.encryptOld(data);
-        String keyValue = aes.getSecretKey();
-        String IV = aes.getIV();
-        data = keyValue + "///" + IV + "///" + encryptedData;
-        out.write(data);
+        String encryptedData = AES.encrypt(data, key);
+        out.write(encryptedData);
         out.newLine();
         out.flush();
         String dataReceive = in.readLine();
-        if (dataReceive.contains("///")) {
-            String dataReceiveKey = dataReceive.split("///")[0];
-            String dataReceiveIV = dataReceive.split("///")[1];
-            String encryptedDataReceive = dataReceive.split("///")[2];
-            AES aes_client = new AES();
-            aes_client.initFromStrings(dataReceiveKey, dataReceiveIV);
-            dataReceive = aes_client.decrypt(encryptedDataReceive);
-        }
-        return dataReceive;
+        return AES.decrypt(dataReceive, key);
     }
 
     public String convertToJSON(Map<String, String> data) {

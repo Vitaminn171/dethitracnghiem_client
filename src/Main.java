@@ -27,9 +27,8 @@ import javax.swing.JOptionPane;
  * @author Quoc An
  */
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception {
         FlatLightLaf.setup();   
         startConnectToServer();
-        
     }
 }
